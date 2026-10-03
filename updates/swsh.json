@@ -1,14 +1,14 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.4.6",
+  "ui": "1.4.7",
   "core": "3.0.16",
   "testedCore": [
     "3.3.19"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.4.6/versions/swsh/1.4.6/hud.js",
-  "sha256": "c04bb3aa390ece39fc2d311be382fe277c6ac35183a9ba0d8281c33271c57f71",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.4.6/versions/swsh/1.4.6/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.4.6",
-  "notes": "# 剑盾 v1.4.6\n\n- 修复白天主题训练家底色与文字混用；徽章、资料说明恢复清晰对比。\n- 附近宝可梦使用浅色卡片与深色文字，保留属性、稀有标识和彩色顶边。\n- 背包、人际关系使用明确的卡片边框、浅灰蓝标题与红色提示边。\n- 修复战场白底浅字：名字、数值、招式、各方资料及战术分层展示；增益、减益采用适合当前主题的颜色。\n- 集中管理背景、正文、辅助文字、边框和状态颜色；美化 CSS 在原版全部样式生成后追加，避免在线核心更新覆盖主题。\n- 首次安装默认暗色；已保存的白天选择继续保留，可在设置中切换。\n- 设置仅保留白天／暗色切换，删除原版主题预设、选色、深浅及文字颜色控件；旧的自定义主题缓存不再影响固定配色。\n- 修复设置标题、选项与辅助文字的白底浅字问题。\n- 在内置核心和 v3.3.19、桌面与窄屏、明暗两种模式下验证；已测正文与辅助文字对比度均达到 4.5:1。\n\n已有 v1.4.4 远程更新版可通过设置检查更新安装；更早版本可重新导入本版 JSON。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.4.7/versions/swsh/1.4.7/hud.js",
+  "sha256": "6115c1b9085ba400956464227a60a989ca25188a54b013da49102f8e71850500",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.4.7/versions/swsh/1.4.7/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.4.7",
+  "notes": "# 剑盾 v1.4.7\n\n- 修复暗色背包与人际关系标题的强调条误用红色：暗色使用蓝色，白天保留红色。栏目强调色独立管理，避免和品牌色混用。\n\n- 修复白天主题训练家底色与文字混用；徽章、资料说明恢复清晰对比。\n- 附近宝可梦使用浅色卡片与深色文字，保留属性、稀有标识和彩色顶边。\n- 背包、人际关系使用明确的卡片边框、浅灰蓝标题与红色提示边。\n- 修复战场白底浅字：名字、数值、招式、各方资料及战术分层展示；增益、减益采用适合当前主题的颜色。\n- 集中管理背景、正文、辅助文字、边框和状态颜色；美化 CSS 在原版全部样式生成后追加，避免在线核心更新覆盖主题。\n- 首次安装默认暗色；已保存的白天选择继续保留，可在设置中切换。\n- 设置仅保留白天／暗色切换，删除原版主题预设、选色、深浅及文字颜色控件；旧的自定义主题缓存不再影响固定配色。\n- 修复设置标题、选项与辅助文字的白底浅字问题。\n- 在内置核心和 v3.3.19、桌面与窄屏、明暗两种模式下验证；已测正文与辅助文字对比度均达到 4.5:1。\n\n已有 v1.4.4 远程更新版可通过设置检查更新安装；更早版本可重新导入本版 JSON。\n"
 }
