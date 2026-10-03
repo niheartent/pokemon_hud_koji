@@ -1,0 +1,23 @@
+.bw2-host{--bw2-ink:#111a2b;--bw2-paper:#d8e1e6;--bw2-cyan:#45d5e5;--bw2-red:#ba1024;color:#dce4ef}
+.bw2-host .hud{border-radius:6px;border:1px solid #8897b2}
+.bw2-host .hud-inner{padding:16px}
+.bw2-host [hidden]{display:none!important}
+.bw2-host .refresh-ic{color:#dceaf3}
+.bw2-host .grid{gap:15px;margin:0 0 18px}
+.bw2-host .col-right{padding-top:24px}
+.bw2-host .card-frame{cursor:pointer}
+.bw2-host .card-frame:focus-visible{outline:2px solid var(--bw2-cyan);outline-offset:3px}
+.bw2-host .card-frame:hover .card-bg-svg polygon{stroke:#45d5e5;fill:#215f70;fill-opacity:.7}
+.bw2-host .tab-bar{background:#090f19;border-top:1px solid #8192ab;border-radius:0;padding:7px;gap:7px}
+.bw2-host .tab-btn{border-radius:2px;border:1px solid #64728a;background:#263048;color:#c6d0de}
+.bw2-host .tab-btn.active{background:#cbdde4;color:#152332;border-color:#4fd7e3}
+.bw2-host .bw2-menu-screen{background:#dce1de;background-image:var(--bw2-original-grid);padding:14px;color:#232b2d;border:2px solid #829294}
+.bw2-host .bw2-menu-screen *{text-shadow:none;box-sizing:border-box}
+.bw2-host .bw2-menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px}
+.bw2-host .bw2-menu-button{position:relative;min-height:58px;display:flex;align-items:center;gap:12px;padding:8px 16px;text-align:left;color:#f1f3f1;background:linear-gradient(45deg,#282c2d 33%,#414544 33%);border:0;border-radius:0;clip-path:polygon(0 0,29% 0,34% 12%,100% 12%,100% 100%,0 100%);cursor:pointer}
+.bw2-host .bw2-menu-button:after{content:'';position:absolute;inset:4px;border:1px solid #929e9b;pointer-events:none;clip-path:polygon(0 0,28% 0,33% 13%,100% 13%,100% 100%,0 100%)}
+.bw2-host .bw2-menu-icon{color:var(--bw2-accent);flex:0 0 40px;display:flex;align-items:center;justify-content:center}
+.bw2-host .swsh-icon{display:inline-block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
+.bw2-host .swsh-icon-detail{stroke-width:1.35}
+.bw2-host .bw2-menu-button .menu-label{font-size:17px;font-weight:800}
+.bw2-host .bw2-menu-button:focus-visible{outline:none;box-shadow:inset 0 0 0 3px #40d7e7}

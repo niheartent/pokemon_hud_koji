@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "channel": "swsh",
+  "ui": "1.4.4",
+  "core": "3.0.16",
+  "testedCore": [
+    "3.3.19"
+  ],
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.4.4/versions/swsh/1.4.4/hud.js",
+  "sha256": "cede688c342b75bd747da82aa74645a8b15b4d0d9fcf7e9ed2270dc94afde1db",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.4.4/versions/swsh/1.4.4/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.4.4",
+  "notes": "# 剑盾 v1.4.4\n\n- 接入本仓库剑盾美化版远程发布，检查美化版与弦九核心两个来源。\n- 下载校验、通道隔离、兼容合成与安装失败回退。\n- 允许核心版本不变时升级美化版，支持连续美化更新后刷新生效。\n- 保留剑盾原有队伍、主题、尺寸与业务交互。\n\n首次使用远程美化更新，需要重新导入本版剑盾 JSON。\n"
+}

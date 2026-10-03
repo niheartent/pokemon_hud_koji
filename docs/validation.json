@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "scope": "isolated fake host; real browser IndexedDB; no real user role-card writes",
+  "bw2": {
+    "ui": "0.3.9",
+    "visualPages": 16,
+    "firstPaintCases": 8,
+    "attributeCases": 38
+  },
+  "swsh": {
+    "ui": "1.4.4",
+    "emptySlotCases": 24
+  },
+  "remote": {
+    "passed": true,
+    "results": [
+      {
+        "channel": "bw2",
+        "core": "3.3.1",
+        "ui": "0.3.9",
+        "nextUi": "0.3.10",
+        "actualV3319ComposedAndBooted": true,
+        "coreOnly": true,
+        "uiOnlyReloaded": true,
+        "twoConsecutiveUiUpdatesReloaded": true,
+        "both": true,
+        "checksumTamperingBlocked": true,
+        "crossChannelBlocked": true,
+        "incompatibleUpstreamUiFallback": true,
+        "independentNetworkFailures": true,
+        "concurrentInstallSingleWrite": true,
+        "realIndexedDbHealthy": true,
+        "realHostWriteBackTested": false
+      },
+      {
+        "channel": "swsh",
+        "core": "3.0.16",
+        "ui": "1.4.4",
+        "nextUi": "1.4.5",
+        "actualV3319ComposedAndBooted": true,
+        "coreOnly": true,
+        "uiOnlyReloaded": true,
+        "twoConsecutiveUiUpdatesReloaded": true,
+        "both": true,
+        "checksumTamperingBlocked": true,
+        "crossChannelBlocked": true,
+        "incompatibleUpstreamUiFallback": true,
+        "independentNetworkFailures": true,
+        "concurrentInstallSingleWrite": true,
+        "realIndexedDbHealthy": true,
+        "realHostWriteBackTested": false
+      }
+    ]
+  }
+}

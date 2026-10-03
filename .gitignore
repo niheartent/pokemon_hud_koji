@@ -1,0 +1,12 @@
+node_modules/
+artifacts/
+backup/
+*.log
+.env
+.env.*
+__pycache__/
+src/bw2/HUD黑白2版-第一版/
+src/bw2/黑白2双版本-*/
+src/swsh/HUD美化版-交付/
+src/swsh/宝可梦HUD-*.js
+src/swsh/宝可梦HUD-*.json

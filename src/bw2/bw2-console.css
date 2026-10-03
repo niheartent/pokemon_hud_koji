@@ -1,0 +1,346 @@
+/* Narrow bezels and hinge; all screen/page/modal hosts share the console bounds. */
+.bw2-host .hud.bw2-console{container-type:inline-size;position:relative;isolation:isolate;display:flex;flex-direction:column;padding:0;border:1px solid #87929a;border-radius:12px;background:#303a40;box-shadow:0 14px 28px #0006,inset 0 1px #c3cbd14d;overflow:hidden}
+.bw2-host .bw2-console::before{display:none}
+.bw2-host .bw2-console-lid,.bw2-host .bw2-console-base{position:relative;z-index:1;display:flex;flex-direction:column;min-width:0;min-height:0;padding:0 7px;background:linear-gradient(100deg,#454e54,#343e44 32%,#3c464c 80%,#4a5359);box-shadow:inset 1px 0 #d1d8de22,inset -1px 0 #0d141777}
+.bw2-host .bw2-console-lid{padding-bottom:7px;border-radius:11px 11px 2px 2px}
+.bw2-host .bw2-console-base{padding-top:7px;border-radius:2px 2px 11px 11px}
+.bw2-host .bw2-console-bezel{flex:0 0 19px;display:flex;align-items:center;justify-content:center;gap:18px;color:#a8b0b5;font-size:8px;font-weight:700;letter-spacing:2px}
+.bw2-host .bw2-console-bezel i{display:block;width:4px;height:4px;border-radius:50%;background:#172127;border:1px solid #6b787f}
+.bw2-host .bw2-screen{position:relative;display:flex;flex-direction:column;flex:1 1 auto;min-width:0;min-height:0;background-color:#121625;background-image:var(--bw2-original-grid);border:1px solid #8996a0;box-shadow:0 0 0 2px #192126;overflow:hidden}
+.bw2-host .bw2-display-caption{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 32px;min-width:0;padding:0 12px;background:#171e2acc;border-bottom:1px solid #c9e6fb44;color:#c9d4e2;font-size:12px}
+.bw2-host .bw2-display-caption strong{color:#e1e9ef;font-size:14px;letter-spacing:2px}
+.bw2-host .bw2-display-caption span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bw2-host .bw2-console .hud-inner{height:auto!important;flex:1 1 auto;min-height:0;overflow:hidden}
+.bw2-host .bw2-display-area .tab-panel{height:100%;padding:0 3px 0 0;overflow:auto;scrollbar-width:thin;scrollbar-color:#7c8fa4 #121625}
+.bw2-host .bw2-display-area .grid{margin:0;gap:16px}
+.bw2-host .bw2-display-area .col-right{padding-top:0}
+.bw2-host .bw2-console-hinge{position:relative;z-index:2;flex:0 0 20px;margin:0 1px;display:flex;align-items:center;justify-content:space-between;gap:5px;border-top:1px solid #111c21;border-bottom:1px solid #111c21;background:linear-gradient(180deg,#68747c 0,#47545c 17%,#2c363e 55%,#1c282e 80%,#485760 100%);box-shadow:inset 0 1px #dae1e24d,0 1px #afb7bd33}
+.bw2-host .bw2-console-hinge i{flex:0 0 29px;height:100%;border-left:1px solid #b2bcc233;border-right:1px solid #10191dbb;border-radius:4px;background:linear-gradient(180deg,#637078,#35424a 40%,#1c282e 80%,#45535b)}
+.bw2-host .bw2-console-hinge span{width:52px;height:2px;background:#121c22;border-top:1px solid #a6b1b933;opacity:.75}
+.bw2-host .bw2-control-toolbar{display:flex;align-items:center;gap:8px;flex:0 0 32px;padding:0 10px;background:#252a2b;color:#e7eceb;border-bottom:1px solid #c9e6fb44}
+.bw2-host .bw2-control-toolbar>strong{flex:1;min-width:0;font-size:11px;letter-spacing:1.6px;font-weight:800}
+.bw2-host .bw2-control-toolbar .refresh-ic{margin:0;color:#dce4e8}
+.bw2-host .bw2-control-area #tab-4{display:block;flex:1 1 auto;min-height:0;height:auto;overflow:auto;scrollbar-width:thin;scrollbar-color:#7c8fa4 #121625}
+.bw2-host .bw2-control-area .bw2-menu-screen{margin:0;border:1px solid #85969a}
+.bw2-host .bw2-control-area .bw2-menu-button{padding:5px 10px;gap:9px}
+.bw2-host .bw2-control-area .bw2-menu-icon{flex-basis:28px}
+.bw2-host .bw2-control-area .bw2-menu-icon svg{width:27px;height:27px}
+.bw2-host .bw2-control-area .bw2-menu-button .menu-label{font-size:14px}
+.bw2-host .bw2-control-area .tab-bar{flex:0 0 40px;margin:0}
+.bw2-host .bw2-control-area .tab-btn{padding:3px 0;font-size:12px;line-height:1.4}
+.bw2-host .bw2-console-foot{display:flex;align-items:center;justify-content:flex-end;gap:4px;flex:0 0 10px;padding:0 7px}
+.bw2-host .bw2-console-foot span{width:14px;height:2px;background:#19262d;border-top:1px solid #a2afb52b}
+.bw2-host .bw2-console-foot i{width:3px;height:3px;border-radius:50%;background:#62a7b8;box-shadow:0 0 2px #62a7b866}
+.bw2-host .bw2-console>.pkm-hud-overlay,.bw2-host .bw2-console>.pkm-hud-page-overlay{inset:7px;padding:7px;overflow:hidden;background:rgba(8,12,22,.68);backdrop-filter:none;-webkit-backdrop-filter:none}
+.bw2-host .bw2-console .pkm-hud-page-overlay .page{display:flex;flex-direction:column;max-width:100%;max-height:100%;min-height:0;border:1px solid rgba(201,230,251,.55);border-radius:2px;background-color:#121625;box-shadow:none;overflow:hidden}
+.bw2-host .bw2-console .page-head{position:relative;flex:0 0 38px;min-height:38px;padding:4px 10px;background:#252a2b;border-bottom:1px solid #c9e6fb55}
+.bw2-host .bw2-console .page-body{flex:1 1 auto;min-height:0;padding:12px;overflow:auto;overscroll-behavior:contain}
+.bw2-host .bw2-console .page-close{display:flex;align-items:center;justify-content:center;min-width:30px;min-height:30px;color:#e58b75;opacity:1}
+.bw2-host .bw2-console .map-focus .map-viewer-frame{min-height:190px;max-height:100%}
+.bw2-host .bw2-console :is(button,input,select,textarea):focus-visible{outline:2px solid #45d5e5;outline-offset:2px}
+#pkm-hud-win:has(.bw2-console)>#pkm-hud-close{top:1px;right:8px;width:18px;height:17px;min-height:0;padding:0;border:0;border-radius:0;background:none;color:#e58b75;font-size:16px;line-height:17px}
+#pkm-hud-win:has(.bw2-console)>#pkm-hud-close:hover{background:#ffffff12}
+.bw2-host .bw2-control-area .nearby-frame{margin:0 0 8px}
+.bw2-host .bw2-control-area .nearby-frame .nb-grid{gap:8px}
+.bw2-host .bw2-control-area .nb-grid>.nb-cell{width:calc((100% - 24px)/4);min-width:68px}
+.bw2-host .bw2-control-area .nearby-frame .nb-cell{gap:3px;padding:5px 3px;border-radius:5px}
+.bw2-host .bw2-control-area .nearby-frame .nb-icon{width:45px;height:45px}
+.bw2-host .bw2-control-area .nearby-frame .nb-name{font-size:11px}
+.bw2-host .bw2-control-area .nearby-frame .type-tag{font-size:10px}
+@media(max-width:430px){.bw2-host .bw2-console-lid{height:356px}.bw2-host .bw2-console-base{height:374px}.bw2-host .bw2-control-area .nearby-frame .nb-icon{width:38px;height:38px}}
+@media(max-width:430px){.bw2-host .hud.bw2-console{border-radius:9px}.bw2-host .bw2-console-lid,.bw2-host .bw2-console-base{padding-left:5px;padding-right:5px}.bw2-host .bw2-console .hud-inner{padding:10px 7px 7px}.bw2-host .bw2-display-area .grid{gap:10px}.bw2-host .bw2-display-area .col{gap:10px}.bw2-host .bw2-display-area .col+.col{margin-top:12px}.bw2-host .bw2-console-hinge{flex-basis:17px}.bw2-host .bw2-control-area #tab-4{padding:7px}.bw2-host .bw2-control-area .bw2-menu-grid{gap:6px}.bw2-host .bw2-control-area .bw2-menu-button{padding:5px 7px;gap:5px}.bw2-host .bw2-control-area .bw2-menu-button .menu-label{font-size:13px}.bw2-host .bw2-display-caption{padding:0 8px}.bw2-host .bw2-console>.pkm-hud-overlay,.bw2-host .bw2-console>.pkm-hud-page-overlay{inset:5px;padding:5px}}
+
+@media(max-width:340px){.bw2-host .bw2-console-lid{height:380px}}
+.bw2-host .bw2-display-area #tab-1{position:relative}
+.bw2-host .bw2-display-area #badge-entry{display:flex;flex-direction:row;align-items:center;gap:6px;padding:3px 0;min-width:0}
+.bw2-host .bw2-display-area #badge-entry>.k{flex:0 0 auto;margin:0}
+.bw2-host .bw2-display-area #badge-entry>.v{flex:1;min-width:0}
+.bw2-host .bw2-display-area .badge-line{margin:0;padding:0;gap:5px;flex-wrap:nowrap}
+.bw2-host .bw2-display-area .badge-row{flex:1;min-width:0;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none}
+.bw2-host .bw2-display-area .badge-row>*{flex-shrink:0}
+.bw2-host .bw2-display-area .badge-region{font-size:10px}
+.bw2-host .bw2-display-area .badge-more{display:none}
+/* Main detail is a screen route. The hinge and bezel remain visible. */
+.bw2-host .bw2-console>.pkm-hud-overlay.open:has(>.bw2-detail){inset:0;padding:0;background:transparent;backdrop-filter:none;pointer-events:none}
+.bw2-host .bw2-console .bw2-detail{position:absolute;inset:0;width:100%!important;max-width:none!important;height:100%;max-height:none!important;border:0;border-radius:0;box-shadow:none;background:transparent;pointer-events:none;overflow:visible}
+.bw2-host .bw2-console .bw2-detail>.modal-body,.bw2-host .bw2-console .bw2-detail-canvas{display:contents}
+.bw2-host .bw2-console .bw2-detail-header,.bw2-host .bw2-console .bw2-summary-scene,.bw2-host .bw2-console .bw2-detail-data{position:absolute;left:50%;transform:translateX(-50%);margin:0;container-type:inline-size;pointer-events:auto}
+.bw2-host .bw2-console .bw2-detail-header{top:var(--bw2-detail-top);width:var(--bw2-detail-upper-width)}
+.bw2-host .bw2-console .bw2-summary-scene{top:var(--bw2-detail-scene-top);width:var(--bw2-detail-upper-width)}
+.bw2-host .bw2-console .bw2-detail-data{top:var(--bw2-detail-bottom);width:var(--bw2-detail-lower-width)}
+.bw2-host .bw2-console:has(>.pkm-hud-overlay.open>.bw2-detail) .bw2-screen{background-color:#121625}
+.bw2-host .bw2-console:has(>.pkm-hud-overlay.open>.bw2-detail) .bw2-screen>*{visibility:hidden}
+
+/* Compact shell: one heading per information group, consistent 6/8/12px spacing. */
+.bw2-host .bw2-display-area:has(#tab-1.active)>.bw2-display-caption{display:none}
+.bw2-host .bw2-console .hud-inner{padding:8px 10px}
+.bw2-host .bw2-display-area .col{gap:8px}
+.bw2-host .bw2-display-area .col+.col{margin-top:12px}
+.bw2-host .bw2-console-hinge{flex-basis:16px}
+.bw2-host .bw2-control-area #tab-4{padding:8px}
+.bw2-host .bw2-control-area .bw2-menu-screen{padding:6px}
+.bw2-host .bw2-display-area [data-badge-open]{min-height:24px}
+.bw2-host .bw2-display-area .refresh-ic{min-width:24px;min-height:24px}
+.bw2-host .bw2-console .bw2-detail-close{min-width:28px;min-height:24px}
+@media(max-width:430px){.bw2-host .bw2-console .hud-inner{padding:6px}.bw2-host .bw2-console-hinge{flex-basis:14px}.bw2-host .bw2-display-area .col{gap:8px}.bw2-host .bw2-display-area .col+.col{margin-top:10px}.bw2-host .bw2-control-area #tab-4{padding:6px}}
+
+/* Console navigation: four inset hardware keys, anchored to the lower bezel. */
+.bw2-host .bw2-control-area .tab-bar{flex-basis:46px;min-height:46px;padding:5px 9px 7px;gap:8px;background:linear-gradient(#424d53,#273239);border-top:1px solid #aebdc455;box-shadow:inset 0 2px 4px #0008}
+.bw2-host .bw2-control-area .tab-btn{position:relative;min-height:32px;border:1px solid #83929a;border-bottom:3px solid #172027;border-radius:4px 4px 9px 9px;background:linear-gradient(#55646e,#34424b);box-shadow:inset 0 1px #e6efff33,0 2px 3px #0006;color:#e3eaf0;letter-spacing:1px;font-weight:700}
+.bw2-host .bw2-control-area .tab-btn.active{background:linear-gradient(#bad1d5,#83a5af);color:#162a35;border-color:#a6c7ce;border-bottom-color:#4c717c;box-shadow:inset 0 2px 4px #152b3544,0 1px #a9ccd577}
+.bw2-host .bw2-control-area .tab-btn:active{transform:translateY(1px);box-shadow:inset 0 2px 4px #0005}
+/* Complete main menu uses every available row of the lower screen. */
+.bw2-host .bw2-control-area #tab-4.bw2-menu-full{display:flex;padding:6px;overflow:hidden}
+.bw2-host .bw2-menu-full .bw2-menu-screen{flex:1;min-height:0;display:flex;padding:6px}
+.bw2-host .bw2-menu-full .bw2-menu-grid{width:100%;height:100%;grid-template-rows:repeat(4,minmax(0,1fr));gap:6px 8px}
+.bw2-host .bw2-menu-full .bw2-menu-button{min-height:0;height:100%;padding:4px 9px}
+/* Fill the display width; vertical measurements follow each screen's height. */
+.bw2-host .bw2-console .bw2-detail-header{height:var(--bw2-detail-header-height);aspect-ratio:auto}
+.bw2-host .bw2-console .bw2-summary-scene{height:var(--bw2-detail-scene-height);aspect-ratio:auto;--bw2-detail-unit:var(--bw2-detail-upper-unit)}
+.bw2-host .bw2-console .bw2-detail-data{height:var(--bw2-detail-data-height);aspect-ratio:auto;--bw2-detail-unit:var(--bw2-detail-lower-unit)}
+.bw2-host .bw2-console .bw2-detail .modal-name{font-size:clamp(13px,3.8cqw,20px)}
+.bw2-host .bw2-console .bw2-detail .modal-name span{font-size:clamp(12px,3.2cqw,17px)}
+.bw2-host .bw2-console .bw2-detail-header .bw2-title-band{top:12px;height:24px}
+.bw2-host .bw2-console .bw2-detail-close{width:32px;height:24px;font-size:26px}
+.bw2-host .bw2-console .bw2-detail-moves{height:70%}
+.bw2-host .bw2-console .bw2-detail .dt-move-grid{height:100%;grid-template-rows:repeat(4,minmax(0,1fr));gap:calc(.75 * var(--bw2-detail-unit))}
+.bw2-host .bw2-console .bw2-detail .dt-move-cell{aspect-ratio:auto;height:100%;padding:calc(.6 * var(--bw2-detail-unit)) 4.4cqw}
+.bw2-host .bw2-console .bw2-detail .dt-move-cell .move-name{font-size:calc(3.5 * var(--bw2-detail-unit))}
+.bw2-host .bw2-console .bw2-detail .dt-move-cell .move-type,.bw2-host .bw2-console .bw2-detail .dt-move-cell .type-chip{font-size:calc(3 * var(--bw2-detail-unit));height:calc(4.6 * var(--bw2-detail-unit))}
+.bw2-host .bw2-console .bw2-move-meta{font-size:calc(3.4 * var(--bw2-detail-unit))}
+.bw2-host .bw2-console .bw2-name-meta{height:calc(6.8 * var(--bw2-detail-unit))}
+.bw2-host .bw2-console .bw2-scene-nameplate .dt-top{min-height:calc(5.3 * var(--bw2-detail-unit))}
+.bw2-host .bw2-console .bw2-scene-nameplate .dt-name{font-size:clamp(12px,var(--bw2-name-font),calc(4.1 * var(--bw2-detail-unit)))!important}
+.bw2-host .bw2-console .bw2-scene-nameplate .bw2-detail-level{font-size:calc(3.75 * var(--bw2-detail-unit))}
+.bw2-host .bw2-console .bw2-basic-ball,.bw2-host .bw2-console .bw2-state-badge,.bw2-host .bw2-console .bw2-scene-nameplate .item-icon{width:calc(4.7 * var(--bw2-detail-unit))!important;height:calc(4.7 * var(--bw2-detail-unit))!important}
+.bw2-host .bw2-console .bw2-scene-held .dt-hold{font-size:calc(4 * var(--bw2-detail-unit))}
+.bw2-host .bw2-console .bw2-held-name{font-size:calc(3.8 * var(--bw2-detail-unit))}
+.bw2-host .bw2-console .bw2-stats-table{font-size:calc(3.9 * var(--bw2-detail-unit))}
+.bw2-host .bw2-console .bw2-stat-row{height:calc(var(--bw2-detail-data-height) * 20 / 248)}
+.bw2-host .bw2-console .bw2-trait-heading{height:calc(var(--bw2-detail-data-height) * 22 / 248);font-size:calc(3.8 * var(--bw2-detail-unit))}
+.bw2-host .bw2-console .bw2-exp-label{font-size:calc(3.8 * var(--bw2-detail-unit))}
+.bw2-host .bw2-console .bw2-exp-numbers{font-size:calc(3.5 * var(--bw2-detail-unit))}
+
+/* Battle shortcuts: always-visible menu tiles with the existing icon artwork. */
+.bw2-host .bw2-control-area #tab-4.bw2-command-full{display:flex;flex-direction:column;gap:6px;padding:6px}
+.bw2-host .bw2-command-screen{display:flex;flex-direction:column;flex:1 0 274px;min-height:274px;padding:6px!important}
+.bw2-host .bw2-command-grid{flex:1;min-height:0;grid-template-rows:repeat(4,minmax(0,1fr));gap:6px 8px}
+.bw2-host .bw2-command-tile{position:relative;min-width:0;min-height:0}
+.bw2-host .bw2-command-tile>.bw2-menu-button{width:100%;height:100%;min-height:0;padding:5px 34px 5px 9px}
+.bw2-host .bw2-command-screen .bw2-menu-icon{flex-basis:30px}
+.bw2-host .bw2-command-screen .bw2-menu-icon img{width:30px;height:30px;object-fit:contain}
+.bw2-host .bw2-command-screen .menu-label{font-size:14px;white-space:nowrap;min-width:0}
+.bw2-host .bw2-command-help{position:absolute;z-index:2;right:6px;top:50%;transform:translateY(-50%);width:24px;height:28px;min-width:24px;min-height:24px;padding:0;border:1px solid #a5b4b066;border-radius:0;background:#282e2f;color:#d4dedc;font-size:15px;font-weight:700;cursor:pointer}
+.bw2-host .bw2-command-hint{flex:none;margin:5px 0 0;font-size:10px;color:#536164;text-align:center;line-height:1.4}
+.bw2-host .bw2-command-tile .bw2-cmd-filled{background:#3c6664;color:#fff}
+@media(max-width:430px){.bw2-host .bw2-command-screen{flex-basis:268px;min-height:268px}.bw2-host .bw2-command-grid{gap:6px}.bw2-host .bw2-command-screen .bw2-menu-icon{flex-basis:22px}.bw2-host .bw2-command-screen .bw2-menu-icon img{width:22px;height:22px}.bw2-host .bw2-command-screen .menu-label{font-size:12px;letter-spacing:0}.bw2-host .bw2-command-tile>.bw2-menu-button{padding-left:6px;padding-right:30px;gap:5px}.bw2-host .bw2-command-help{right:4px}.bw2-host .bw2-command-hint{font-size:9px}}
+.bw2-host .bw2-control-area #tab-4:is(.bw2-menu-full,.bw2-command-full){padding:6px;gap:0}
+.bw2-host .bw2-control-area .bw2-command-screen{flex:1 0 274px;min-height:274px}
+.bw2-host .bw2-control-area .bw2-command-hint{display:none}
+.bw2-host .bw2-control-area .bw2-command-grid{gap:6px 8px;height:100%}
+
+/* Wider breathing room; common tile heights across home, menu and battle. */
+.bw2-host .bw2-control-area .bw2-menu-grid{gap:12px 14px}
+.bw2-host .bw2-menu-full .bw2-menu-grid,.bw2-host .bw2-command-grid{grid-template-rows:repeat(4,var(--bw2-action-height,54px));align-content:space-between}
+.bw2-host .bw2-control-area #tab-4:not(.bw2-menu-full):not(.bw2-command-full) .bw2-menu-grid{grid-template-rows:repeat(2,var(--bw2-action-height,54px))}
+.bw2-host .bw2-control-area .nearby-frame{border:1px solid #c9e6fb66;border-radius:3px;background:#9088f126;filter:none;margin-bottom:12px}
+.bw2-host .bw2-control-area .nearby-frame>svg{display:none}
+.bw2-host .bw2-control-area .nearby-frame .info-inner{padding:8px}
+.bw2-host .bw2-control-area .nearby-frame .info-title{margin:0 0 7px;padding:0;font-size:12px}
+.bw2-host .bw2-control-area .nearby-frame .nb-grid{padding:0 0 4px}
+@media(max-width:430px){.bw2-host .bw2-control-area .bw2-menu-grid{gap:12px}}
+
+/* Stable operation coordinates: home shortcuts occupy the menu's final two rows. */
+.bw2-host .bw2-console:has(.tab-btn[data-tab="1"].active) .bw2-control-toolbar{display:flex}
+.bw2-host .bw2-control-area #tab-4:has(.bw2-home-screen){display:flex;overflow:hidden}
+.bw2-host .bw2-home-screen{flex:1;min-height:0;overflow:hidden}
+.bw2-host .bw2-home-screen>.bw2-menu-grid{left:6px;right:6px;bottom:10px}
+.bw2-host .bw2-home-nearby{left:7px;right:7px;top:7px;bottom:calc(2 * var(--bw2-action-height,54px) + 31px)}
+.bw2-host .bw2-home-nearby .nearby-frame{height:100%;margin:0;border:0;border-radius:0;background:none;overflow:hidden}
+.bw2-host .bw2-home-nearby .nearby-frame .info-inner{height:100%;padding:0;overflow:hidden}
+.bw2-host .bw2-home-nearby .info-title{display:none}
+.bw2-host .bw2-home-nearby .nb-grid{box-sizing:border-box;overflow-x:auto;overflow-y:hidden;scrollbar-color:#758895 #c6cfce}
+.bw2-host .bw2-home-nearby .nb-cell{box-sizing:border-box;overflow:hidden}
+.bw2-host .bw2-home-nearby .nb-thumb-wrap{flex:none;padding:0}
+.bw2-host .bw2-command-typechart .bw2-menu-icon{flex-basis:28px}
+.bw2-host .bw2-command-typechart .bw2-menu-icon svg{width:27px;height:27px}
+.bw2-host .bw2-command-typechart .menu-label{font-size:14px}
+@media(max-width:430px){.bw2-host .bw2-home-screen>.bw2-menu-grid{gap:12px}.bw2-host .bw2-command-typechart .menu-label{font-size:13px}}
+.bw2-host .bw2-home-nearby :is(.nb-name,.nb-count){color:#e3eaf0;text-shadow:none}
+@media(max-width:430px){.bw2-host .bw2-home-screen>.bw2-menu-grid{bottom:6px}}
+.bw2-host .bw2-control-area .bw2-command-full>.bw2-command-screen{flex:1 1 0;min-height:0}
+.bw2-host .bw2-control-area .bw2-menu-button{box-sizing:border-box!important;height:var(--bw2-action-height,54px)!important;min-height:var(--bw2-action-height,54px)!important;max-height:var(--bw2-action-height,54px)!important}
+.bw2-host .bw2-home-nearby .nb-grid{height:100%;scrollbar-width:none;-ms-overflow-style:none;scroll-behavior:smooth}
+.bw2-host .bw2-home-nearby .nb-grid::-webkit-scrollbar{display:none;width:0;height:0}
+.bw2-host .bw2-home-nearby .nb-cell{flex:0 0 var(--bw2-nearby-edge,112px)!important;width:var(--bw2-nearby-edge,112px)!important;min-width:var(--bw2-nearby-edge,112px)!important;height:var(--bw2-nearby-edge,112px)!important;max-height:var(--bw2-nearby-edge,112px);aspect-ratio:1;gap:2px;padding:4px 3px}
+.bw2-host .bw2-home-nearby .nb-name{line-height:1.1}
+.bw2-host .bw2-home-nearby .nb-count{line-height:1.1}
+.bw2-host .bw2-home-nearby .nb-type-chip,.bw2-host .bw2-home-nearby .type-chip{padding:2px 4px;min-width:0}
+.bw2-host .bw2-home-nearby .bw2-nearby-arrows{position:relative}
+.bw2-host .bw2-home-nearby .bw2-nearby-arrows .nb-grid{width:100%;margin:0}
+.bw2-host .bw2-nearby-arrow{position:absolute;z-index:5;top:50%;bottom:auto;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;width:40px;height:48px;padding:0;border:0;border-radius:0;background:transparent!important;box-shadow:none!important;color:#fff;cursor:pointer;touch-action:manipulation}
+.bw2-host .bw2-nearby-arrow svg{width:28px;height:36px;overflow:visible;filter:drop-shadow(0 2px 3px #000a);transition:filter .15s,transform .15s}
+.bw2-host .bw2-nearby-arrow:hover:not(:disabled) svg{filter:drop-shadow(0 2px 4px #000d);transform:scale(1.08)}
+.bw2-host .bw2-nearby-arrow:active:not(:disabled) svg{transform:scale(.94)}
+.bw2-host .bw2-nearby-arrow:focus-visible{outline:2px solid #fff;outline-offset:-2px}
+.bw2-host .bw2-nearby-arrow.previous{left:0}
+.bw2-host .bw2-nearby-arrow.next{right:0}
+.bw2-host .bw2-nearby-arrow:disabled{opacity:.4;cursor:default}
+
+/* One fixed canvas, scaled as a whole. Home uses the same four rows as the menu. */
+.bw2-host .hud.bw2-console{container-name:bw2-layout;width:600px!important;max-width:none!important;height:812px!important;max-height:none!important;margin:0 auto;flex:none}
+.bw2-host .bw2-console-lid{height:410px;flex:0 0 410px;min-height:0}
+.bw2-host .bw2-console-base{height:384px;flex:0 0 384px;min-height:0}
+#pkm-hud-inline.bw2-host{padding:16px 0;overflow:visible}
+#pkm-hud-win:has(.bw2-console){overflow:visible!important;max-height:none!important}
+.bw2-host .bw2-control-area #tab-4:has(.bw2-home-screen){padding:6px;gap:0}
+.bw2-host .bw2-home-screen{display:flex;position:relative;padding:6px!important}
+.bw2-host .bw2-home-screen>.bw2-menu-grid{position:static;width:100%;height:100%;grid-template-rows:repeat(4,var(--bw2-action-height,54px))!important;align-content:space-between;gap:12px 14px}
+.bw2-host .bw2-home-nearby{position:relative;inset:auto;grid-column:1 / -1;grid-row:1 / span 2;min-height:0;overflow:hidden}
+.bw2-host .bw2-home-nearby .nb-thumb-wrap{height:52px;min-height:52px!important}
+.bw2-host .bw2-home-nearby .nb-icon{width:52px!important;height:52px!important}
+.bw2-host .bw2-home-nearby .nb-name{font-size:13px}
+.bw2-host .bw2-home-nearby .nb-count{font-size:12px}
+.bw2-host .bw2-home-nearby .nb-type-chip,.bw2-host .bw2-home-nearby .type-chip{font-size:11px}
+.bw2-host .bw2-control-area{overflow:clip}
+.bw2-host .bw2-home-nearby .nb-grid{scroll-snap-type:x mandatory}
+.bw2-host .bw2-home-nearby .nb-cell{scroll-snap-align:none}
+
+/* Operation pages occupy the upper display; settings keeps the full console. */
+.bw2-host .bw2-console>.pkm-hud-page-overlay.bw2-upper-page{inset:auto;left:var(--bw2-page-left,8px);top:var(--bw2-page-top,20px);width:var(--bw2-page-width,584px);height:var(--bw2-page-height,383px);padding:0;background:#121625;align-items:stretch;justify-content:stretch;overflow:hidden}
+.bw2-host .bw2-console>.bw2-upper-page>.page{width:100%;height:100%;max-width:none;max-height:none;border-radius:0}
+.bw2-host .bw2-page-title{flex:1;min-width:0;font-size:15px;color:#e7eceb}
+.bw2-host .bw2-upper-page .page-head{display:flex;align-items:center;gap:10px}
+.bw2-host .bw2-upper-page .page-body{padding:10px}
+.bw2-host .bw2-upper-page[data-bw2-page-key="box"] .page-body{display:flex;overflow:hidden}
+.bw2-host .bw2-box-page{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0;gap:10px}
+.bw2-host .bw2-box-tools{display:flex;align-items:center;gap:6px;flex:none;min-width:0}
+.bw2-host .bw2-box-tabs{display:flex;flex:1;min-width:0;gap:6px;overflow-x:auto;white-space:nowrap;scrollbar-width:thin}
+.bw2-host .bw2-box-tab{flex:none;min-height:30px;padding:5px 10px;border:1px solid #8996a0;background:#323c4d;color:#dce6ef;cursor:pointer;font-family:inherit;font-size:12px;font-weight:700}
+.bw2-host .bw2-box-tab.active{background:#a9c4cb;color:#263a44;border-color:#d2e6ee}
+.bw2-host .bw2-box-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#7c8fa4 #121625;padding:0 3px 5px 0}
+.bw2-host .bw2-box-team{margin:0;gap:16px}
+.bw2-host .bw2-box-team .col{gap:8px}
+.bw2-host .bw2-box-team .col-right{padding-top:24px}
+.bw2-host .bw2-box-team .col+.col{margin-top:0}
+.bw2-host .bw2-box-card{flex:none;cursor:pointer}
+.bw2-host .bw2-box-tools [hidden]{display:none!important}
+
+/* Map and type chart use the viewport, independently of console zoom. */
+.bw2-external-page.pkm-hud-page-overlay.popout{font-family:"Segoe UI","Microsoft YaHei",sans-serif;color:var(--text);padding:10px;background:#080c16bb;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.bw2-external-page.pkm-hud-page-overlay.popout .page{display:flex;flex-direction:column;width:100%;max-width:min(94vw,900px);height:auto;max-height:86vh!important;overflow:hidden;border:1px solid #c9e6fb88;border-radius:2px;background:#121625;background-image:var(--bw2-original-grid)}
+.bw2-external-page .page-head{display:flex;align-items:center;gap:10px;flex:none;min-height:44px;padding:5px 12px;background:#252a2b;border-bottom:1px solid #c9e6fb55}
+.bw2-external-page .page-close{flex:none;width:32px;min-height:32px;color:#e58b75;font-size:24px}
+.bw2-external-page .page-body{flex:1;min-height:0;max-height:calc(86vh - 44px)!important;padding:12px;overflow:auto;overscroll-behavior:contain}
+.bw2-external-page [data-tc-big]{width:100%;max-width:none;border-radius:0!important}
+
+/* One upper-screen surface for ordinary dialogs; detail keeps the two screens. */
+.bw2-host .bw2-console>.pkm-hud-overlay.bw2-upper-dialog{inset:auto;left:var(--bw2-dialog-left,8px);top:var(--bw2-dialog-top,20px);width:var(--bw2-dialog-width,584px);height:var(--bw2-dialog-height,383px);padding:0;background:#121625;align-items:stretch;justify-content:stretch}
+.bw2-host .bw2-upper-dialog>.bw2-popup{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;min-height:0;border:1px solid #c9e6fb88;background:#121625}
+.bw2-host .bw2-upper-dialog>.bw2-popup>.modal-head{margin:0;padding:5px 12px;min-height:38px;border:0;border-bottom:1px solid #c9e6fb55}
+.bw2-host .bw2-upper-dialog>.bw2-popup>.modal-body{margin:0;padding:12px;border:0;min-height:0;max-height:none;flex:1;overflow:auto}
+.bw2-host .bw2-console:has(>.pkm-hud-overlay.open>.bw2-detail)>.pkm-hud-page-overlay,.bw2-host .bw2-console:has(>.bw2-upper-dialog.open)>.pkm-hud-page-overlay{visibility:hidden;pointer-events:none!important}
+.bw2-host .bw2-console:has(>.bw2-upper-dialog.open) .bw2-display-area>*{visibility:hidden}
+.bw2-host .bw2-console:has(>.pkm-hud-sub.bw2-upper-dialog.open) .bw2-detail-header,.bw2-host .bw2-console:has(>.pkm-hud-sub.bw2-upper-dialog.open) .bw2-summary-scene{visibility:hidden}
+
+/* The page body owns vertical scrolling for bag and dex; the box owns its list. */
+.bw2-host .bw2-console .page{overflow:hidden}
+.bw2-host .bw2-upper-page :is(.bag-list,#pokedex-grid,.pokedex){height:auto!important;max-height:none!important;overflow:visible!important;padding-right:0}
+.bw2-host .bw2-upper-page[data-bw2-page-key="bag"] .info-title{display:none}
+.bw2-host .bw2-upper-dialog .modal-body :is(.bag-list,#pokedex-grid,.pokedex){height:auto!important;max-height:none!important;overflow:visible!important}
+
+/* Shared cut-corner buttons for all secondary operation pages. */
+.bw2-host .bw2-console .page-body button:not(.page-close),.bw2-host .bw2-upper-dialog .modal-body button:not(.close),.bw2-external-page .page-body button{border:1px solid #a3b3be!important;border-radius:0!important;background:#414544!important;color:#e3eaf0!important;min-height:30px;padding:5px 10px;font-family:inherit;font-weight:700;clip-path:polygon(6px 0,calc(100% - 6px) 0,100% 50%,calc(100% - 6px) 100%,6px 100%,0 50%);box-shadow:none!important}
+.bw2-host .bw2-console .page-body button:is(.active,.on,[aria-pressed="true"]),.bw2-host .bw2-upper-dialog .modal-body button:is(.active,.on),.bw2-external-page .page-body button:is(.active,.on){background:#a9c4cb!important;color:#263a44!important}
+.bw2-host .bw2-command-help{clip-path:polygon(4px 0,calc(100% - 4px) 0,100% 50%,calc(100% - 4px) 100%,4px 100%,0 50%)}
+@media screen and (max-width:600px){.bw2-external-page.pkm-hud-page-overlay.popout{padding:6px 4px}.bw2-external-page.pkm-hud-page-overlay.popout .page{width:96vw;max-width:96vw;max-height:90dvh!important}.bw2-external-page .page-body{max-height:calc(90dvh - 44px)!important}}
+
+/* A continuous row: the final advance moves only the remaining card widths. */
+.bw2-host .bw2-home-nearby .nb-grid{display:flex;justify-content:flex-start;align-items:center;gap:12px!important;padding:0 var(--bw2-nearby-pad,12px)!important;scroll-padding-left:var(--bw2-nearby-pad,12px)}
+.bw2-host .bw2-home-nearby .nb-grid{margin:0 auto!important}
+.bw2-host .bw2-home-nearby .nb-grid::after{display:none}
+.bw2-host .bw2-home-nearby .nb-grid.bw2-nearby-short{justify-content:center;scroll-snap-type:none;overflow-x:hidden}
+
+/* One polygon outline, without competing clipped borders and pseudo layers. */
+.bw2-host .bw2-console .page-body button:not(.page-close),.bw2-host .bw2-upper-dialog .modal-body button:not(.close),.bw2-host .bw2-popup .act-btn,.bw2-external-page .page-body button{position:relative;isolation:isolate;border:0!important;clip-path:none!important;background:transparent!important;filter:drop-shadow(0 2px 2px #08101a55);box-shadow:none!important}
+.bw2-button-rim{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;overflow:visible}
+.bw2-button-rim polygon{fill:#414544;stroke:#a3b3be;stroke-width:2.4;stroke-linejoin:miter;vector-effect:non-scaling-stroke}
+button:is(.active,.on,[aria-pressed="true"])>.bw2-button-rim polygon{fill:#a9c4cb;stroke:#d2e6ee}
+button:hover:not(:disabled)>.bw2-button-rim polygon{fill:#3b5664;stroke:#c9e6fb}
+.bw2-host .bw2-move-frame polygon{stroke-width:2.3}
+.bw2-host .bw2-box-frame polygon{stroke-width:2.2}
+.bw2-host :is(.bw2-move-frame,.bw2-box-frame){filter:drop-shadow(0 2px 2px #080d1880)}
+.bw2-host .bw2-menu-button{box-shadow:inset 0 0 0 3px #758080, inset 0 -4px 5px #0003}
+.bw2-host .bw2-menu-button:after{border-width:2px}
+
+/* Badge dimensions belong to the upper screen, not the native off-screen measurement. */
+.bw2-host .bw2-upper-page[data-bw2-page-key="badge"] .page-body{display:flex;overflow:hidden}
+.bw2-host .bw2-upper-page[data-bw2-page-key="badge"] .info-frame{flex:1;min-width:0;min-height:0;overflow:hidden}
+.bw2-host .bw2-upper-page[data-bw2-page-key="badge"] .info-inner{height:100%;min-height:0;display:flex;flex-direction:column;gap:8px;padding:8px}
+.bw2-host .bw2-upper-page[data-bw2-page-key="badge"] .info-title{flex:none;margin:0;padding:0;font-size:14px;line-height:1.4}
+.bw2-host .bw2-upper-page .badge-tabs{flex:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:0;margin:0;overflow:visible}
+.bw2-host .bw2-upper-page .badge-tab{min-width:0;font-size:11px;padding:4px 6px}
+.bw2-host .bw2-upper-page .badge-grid{flex:1;min-height:0!important;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(var(--bw2-badge-rows,2),minmax(0,1fr));gap:6px;align-items:center;overflow:hidden}
+.bw2-host .bw2-upper-page .badge-item{min-width:0;min-height:0;gap:2px}
+.bw2-host .bw2-upper-page .badge-item img{width:36px;height:36px}
+.bw2-host .bw2-upper-page .badge-name{font-size:11px;line-height:1.25}
+.bw2-host .badge-tab.active:hover>.bw2-button-rim polygon{fill:#b9d6dc;stroke:#e0f0f7}
+
+/* A single frame owner for every upper-screen operation page. */
+.bw2-host .bw2-upper-page .info-frame{border:0;border-radius:0;box-shadow:none;filter:none;background:none;margin:0;overflow:visible}
+.bw2-host .bw2-upper-page:not([data-bw2-page-key="badge"]) .info-inner{padding:0}
+.bw2-host .bw2-upper-page[data-bw2-page-key="pokedex"] .info-title.bw2-dex-toolbar{position:static;display:flex;justify-content:flex-end;align-items:center;min-height:32px;margin:0 0 14px;padding:0;background:none;border:0;z-index:auto}
+.bw2-host .bw2-upper-page .dex-thumb-btn{float:none;margin:0;min-height:32px;padding:5px 12px}
+.bw2-host .bw2-upper-page .dex-tabs-scroll{padding:0;margin:0 0 14px;overflow:visible}
+.bw2-host .bw2-upper-page .dex-tabs-grid{width:100%;min-width:0;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.bw2-host .bw2-upper-page .dex-tabs-grid>[data-dexregion]{min-width:0;min-height:32px;font-size:11px;padding:5px 4px;white-space:nowrap}
+.bw2-host .bw2-upper-page .dex-search{padding:0;margin:0 0 12px}
+.bw2-host .bw2-upper-page .dex-search input{box-sizing:border-box;width:100%;max-width:320px;min-height:30px;border-radius:0}
+.bw2-host .bw2-upper-page .dex-filter-bar{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0 0 10px;overflow:visible}
+.bw2-host .bw2-upper-page .dex-count{padding:0;margin:0 0 12px}
+.bw2-host .bw2-upper-page .pokedex{padding:0;gap:8px}
+
+/* One scrollbar theme, matching the world tab in Chromium and Firefox. */
+.bw2-host{--bw2-scroll-thumb:#7c8fa4;--bw2-scroll-track:#121625}
+.bw2-host,.bw2-host *,#pkm-hud-win:has(.bw2-console){scrollbar-width:thin!important;scrollbar-color:#7c8fa4 #121625!important}
+.bw2-host ::-webkit-scrollbar{width:8px;height:8px}
+.bw2-host ::-webkit-scrollbar-track,.bw2-host ::-webkit-scrollbar-corner{background:#121625}
+.bw2-host ::-webkit-scrollbar-thumb{background:#7c8fa4;border:2px solid #121625;border-radius:4px}
+.bw2-host ::-webkit-scrollbar-thumb:hover{background:#9bb1c5}
+.bw2-host ::-webkit-scrollbar-button{display:none;width:0;height:0}
+/* Intentionally hidden bars stay hidden, including the nearby carousel. */
+.bw2-host :is(.bw2-home-nearby .nb-grid,.badge-row,.dex-tabs-scroll,.dex-filter-bar){scrollbar-width:none!important}
+.bw2-host :is(.bw2-home-nearby .nb-grid,.badge-row,.dex-tabs-scroll,.dex-filter-bar)::-webkit-scrollbar{display:none;width:0;height:0}
+
+/* Battle command drawer: one continuous display while the controls are stowed. */
+.bw2-host .bw2-battle-toggle{flex:none;min-height:24px;padding:3px 10px;border:1px solid #9eafb9;border-bottom:2px solid #172027;border-radius:3px;background:linear-gradient(#566670,#35434b);box-shadow:inset 0 1px #fff3,0 2px 3px #0005;color:#e3ebf3;font:700 11px 'Microsoft YaHei',sans-serif;cursor:pointer}
+.bw2-host .bw2-battle-toggle[hidden]{display:none}
+.bw2-host .bw2-battle-expanded .bw2-console-lid{position:absolute;inset:0 0 90px;height:auto;min-height:0;padding-bottom:0;z-index:3}
+.bw2-host .bw2-battle-expanded .bw2-console-hinge{display:none}
+.bw2-host .bw2-battle-expanded .bw2-console-base{position:absolute;inset:auto 0 0;height:90px;min-height:0;padding-top:0;z-index:3}
+.bw2-host .bw2-battle-expanded .bw2-control-area{border-top:0;box-shadow:0 0 0 2px #192126}
+.bw2-host .bw2-battle-expanded .bw2-control-area #tab-4{display:none}
+.bw2-host .bw2-battle-expanded .bw2-display-area{border-bottom:0}
+/* Breeding status: a quiet illustration, clear state, and readable native data. */
+.bw2-host .bw2-breeding{display:flex;flex-direction:column;gap:14px;color:#e3ebf3;min-width:0}
+.bw2-host .bw2-breeding-overview{display:grid;grid-template-columns:210px minmax(0,1fr);gap:18px;min-height:240px}
+.bw2-host .bw2-breeding-visual{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:18px 12px;border:2px solid #899eac;border-radius:4px;background:radial-gradient(ellipse at center,#445c65,#263443);box-shadow:inset 0 1px #fff4,0 4px 8px #0004}
+.bw2-host .bw2-breeding-visual svg{width:105px;height:132px;filter:drop-shadow(0 5px 5px #0b152666)}
+.bw2-host .bw2-breeding-visual span{font-size:12px;color:#c7d6de;text-align:center}
+.bw2-host .bw2-breeding.no-egg .bw2-breeding-visual svg{opacity:.6;filter:grayscale(.6) drop-shadow(0 5px 5px #0b152666)}
+.bw2-host .bw2-breeding-summary{display:flex;flex-direction:column;justify-content:center;gap:10px;min-width:0}
+.bw2-host .bw2-breeding-label{color:#a9cbd4;font-size:12px;font-weight:700;letter-spacing:1px}
+.bw2-host .bw2-breeding-summary h2{margin:0;font-size:22px;line-height:1.4;color:#e3ebf3;overflow-wrap:anywhere}
+.bw2-host .bw2-breeding-summary p{margin:0;color:#aabccc;font-size:13px;line-height:1.7}
+.bw2-host .bw2-breeding-steps{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;padding:12px 14px;border:1px solid #6f8395;border-left:3px solid #a9cbd4;background:#283747;box-shadow:inset 0 1px #fff1;color:#c6d1e4;font-size:13px}
+.bw2-host .bw2-breeding-steps strong{font-size:28px;line-height:1;font-variant-numeric:tabular-nums;color:#e3ebf3}
+.bw2-host .bw2-breeding-steps small{margin-left:6px;font-size:12px;font-weight:400;color:#aabccc}
+.bw2-host .bw2-breeding-storage{display:flex;align-items:flex-start;gap:18px;padding:14px;border:1px solid #6f8395;border-left:3px solid #a9cbd4;background:#283747;box-shadow:inset 0 1px #fff1}
+.bw2-host .bw2-breeding-storage strong{min-width:0;flex:1;color:#d4e0ea;font-size:14px;font-weight:500;line-height:1.5;overflow-wrap:anywhere}
+/* Full dex retains the same content and single scrolling owner, spanning the hinge. */
+.bw2-host .bw2-full-page .page{height:100%}
+.bw2-host .bw2-full-page .dex-search input{max-width:none}
+/* Type chart opens at 75% of the previous external-window limits. */
+.bw2-external-page[data-bw2-page-key="typechart"].pkm-hud-page-overlay.popout .page{width:75%;max-width:min(70.5vw,675px);max-height:64.5vh!important}
+.bw2-external-page[data-bw2-page-key="typechart"] .page-body{max-height:calc(64.5vh - 44px)!important}
+@media screen and (max-width:600px){.bw2-external-page[data-bw2-page-key="typechart"].pkm-hud-page-overlay.popout .page{width:72vw;max-width:72vw;max-height:67.5dvh!important}.bw2-external-page[data-bw2-page-key="typechart"] .page-body{max-height:calc(67.5dvh - 44px)!important}}

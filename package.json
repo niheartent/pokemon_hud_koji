@@ -1,0 +1,26 @@
+{
+  "name": "pokemon-hud-koji",
+  "private": true,
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build:bw2": "npm --prefix src/bw2 run build",
+    "build:swsh": "npm --prefix src/swsh run build",
+    "build": "npm run build:bw2 && npm run build:swsh",
+    "test:bw2": "npm --prefix src/bw2 test && npm --prefix src/bw2 run test:detail",
+    "test:swsh": "npm --prefix src/swsh test",
+    "test": "npm run test:bw2 && npm run test:swsh && node tests/remote-update.cjs",
+    "package": "node tools/package-release.cjs",
+    "verify": "node tools/verify-release.cjs"
+  },
+  "dependencies": {
+    "acorn": "8.18.0",
+    "postcss": "8.5.28"
+  },
+  "devDependencies": {
+    "fflate": "0.8.2",
+    "playwright": "1.62.1"
+  }
+}

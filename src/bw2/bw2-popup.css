@@ -1,0 +1,45 @@
+/* Shared secondary dialogs, scoped to the full BW2 package. */
+.bw2-host .pkm-hud-overlay{background:rgba(8,12,22,.68);backdrop-filter:none;-webkit-backdrop-filter:none}
+.bw2-host .bw2-popup{--text:#3e494d;--dim:#596a70;--frame:rgba(201,230,251,.55);position:relative;isolation:isolate;display:flex;flex-direction:column;width:100%;max-width:460px;max-height:100%;min-height:70px;padding:0;border:0;border-radius:0;background:none;box-shadow:none;overflow:hidden;color:var(--text);font-family:'Microsoft YaHei','SimHei',sans-serif}
+.bw2-host .bw2-popup *{box-sizing:border-box;text-shadow:none}
+.bw2-host .bw2-popup>.modal-head,.bw2-host .bw2-popup>.modal-body,.bw2-host .bw2-popup>.action-btns{position:relative;z-index:2;flex-shrink:0}
+.bw2-host .bw2-popup>.modal-head{display:flex;align-items:center;gap:12px;min-height:44px;margin:12px 12px 0;padding:6px 8px 6px 12px;border:1px solid rgba(201,230,251,.35);background:#252a2b}
+.bw2-host .bw2-popup .modal-name{flex:1;min-width:0;color:#e7eceb;font-size:17px;font-weight:800;line-height:1.4;overflow-wrap:anywhere}
+.bw2-host .bw2-popup .close{display:flex;align-items:center;justify-content:center;flex:0 0 32px;min-width:32px;min-height:32px;margin:0;padding:0;border:0;border-radius:0;background:none;color:#e58b75;font-size:24px;font-family:Arial,sans-serif;line-height:1;opacity:1;cursor:pointer}
+.bw2-host .bw2-popup>.modal-body{flex:1 1 auto;min-height:0;margin:10px 12px 12px;padding:12px;border:1px solid rgba(201,230,251,.35);background:#cbd3d7;color:#3e494d;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#7f9099 #cbd3d7;font-size:14px;line-height:1.6}
+.bw2-host .bw2-popup .row{display:flex;align-items:stretch;gap:0;margin:0 0 8px;padding:0;border:1px solid #a9b4ba;background:#d8dfe2;color:#3e494d;font-size:14px;line-height:1.6}
+.bw2-host .bw2-popup .row:last-child{margin-bottom:0}
+.bw2-host .bw2-popup .row .k{flex:0 0 104px;display:flex;align-items:center;padding:7px 10px;background:#858f94;color:#f2f5f5;font-weight:700;white-space:normal}
+.bw2-host .bw2-popup .row .v{flex:1;min-width:0;padding:7px 10px;overflow-wrap:anywhere;text-align:left}
+.bw2-host .bw2-popup .row.block{flex-direction:column;align-items:stretch;gap:0}
+.bw2-host .bw2-popup .row.block .k,.bw2-host .bw2-popup .row.block .v{flex:0 0 auto}
+.bw2-host .bw2-popup .row.block .k{padding:4px 10px}
+.bw2-host .bw2-popup .dim,.bw2-host .bw2-popup .empty,.bw2-host .bw2-popup .modal-sub{color:#596a70;text-shadow:none}
+.bw2-host .bw2-popup .empty{padding:14px 8px;text-align:center;font-size:14px;line-height:1.6}
+.bw2-host .bw2-popup .abi-link{color:#315f77;text-underline-offset:3px}
+.bw2-host .bw2-popup .action-btns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.bw2-host .bw2-popup>.action-btns{margin:0 12px 12px;padding:0}
+.bw2-host .bw2-popup .action-btns>.act-btn:only-child{grid-column:1/-1}
+.bw2-host .bw2-popup .act-btn{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;width:100%;min-height:42px;padding:9px 18px;border:0;border-radius:0;background:none;color:#edf1f1;font-family:inherit;font-size:14px;font-weight:700;line-height:1.5;white-space:normal;overflow-wrap:anywhere;box-shadow:none;cursor:pointer}
+.bw2-host .bw2-popup .act-btn:disabled{opacity:.5;cursor:default}
+.bw2-host .bw2-popup :is(button,input,select,textarea):focus-visible{outline:2px solid #32b7ed;outline-offset:2px}
+.bw2-host .bw2-popup :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]):not([type=color]),select,textarea){max-width:100%;border:1px solid #8d9da6!important;border-radius:0!important;background:#e5eaec!important;color:#35444d!important;font-family:inherit;line-height:1.5;box-shadow:none!important}
+.bw2-host .bw2-popup :is(input[type=checkbox],input[type=radio],input[type=range]){accent-color:#3680a0}
+.bw2-host .bw2-popup :is(.pkm-form-btn,.btn-small){border-radius:0;box-shadow:none}
+.bw2-host .bw2-popup :is(.pkm-big,.pkm-forms){border-bottom-style:solid;border-color:#a9b4ba}
+.bw2-host .bw2-popup .dt-move-grid{gap:8px}
+.bw2-host .bw2-popup .dt-move-cell{border-radius:0;border:1px solid #a17bbb;background:#414544;box-shadow:none}
+.bw2-host .bw2-popup .dt-move-cell .move-name{color:#edf1f1}
+.bw2-host .bw2-popup .dt-move-cell .move-type{border-radius:0;text-shadow:none}
+@media(max-width:420px){.bw2-host .bw2-popup>.modal-head{margin:10px 10px 0}.bw2-host .bw2-popup>.modal-body{margin:8px 10px 10px;padding:10px}.bw2-host .bw2-popup>.action-btns{margin:0 10px 10px}.bw2-host .bw2-popup .row .k{flex-basis:88px}.bw2-host .bw2-popup .action-btns{gap:8px}}
+/* Nearby encounter: close-up on the left, information and actions on the right. */
+.bw2-host .bw2-upper-dialog>.bw2-encounter>.modal-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;overflow:hidden;background:#cbd3d7}
+.bw2-host .bw2-encounter-portrait{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;padding:18px;background:#283445;background-image:var(--bw2-original-grid);border:2px solid #91a5b6;border-radius:4px;box-shadow:inset 0 1px #fff5,0 3px 6px #0003;overflow:hidden}
+.bw2-host .bw2-encounter-portrait .action-img{width:100%;height:100%;min-height:0;background-size:contain;background-position:center;background-repeat:no-repeat;image-rendering:pixelated}
+.bw2-host .bw2-encounter-side{display:flex;flex-direction:column;justify-content:center;gap:16px;min-width:0;min-height:0}
+.bw2-host .bw2-encounter-info{display:flex;flex-direction:column;gap:10px;padding:14px;background:linear-gradient(#536475,#293241);border:1px solid #91a5b6;border-radius:4px;box-shadow:inset 0 1px #fff4,0 3px 6px #0003;color:#e3ebf3}
+.bw2-host .bw2-encounter-info .nearby-name{font-size:18px;font-weight:800;line-height:1.4;color:#e3ebf3;overflow-wrap:anywhere}
+.bw2-host .bw2-encounter-info .nearby-sub{font-size:14px;color:#c6d1e4}
+.bw2-host .bw2-encounter-info .nb-pillbar{display:flex;flex-wrap:wrap;gap:5px}
+.bw2-host .bw2-encounter-side .action-btns{display:grid;grid-template-columns:1fr;gap:10px;margin:0}
+.bw2-host .bw2-encounter-side .act-btn{min-height:44px;font-size:16px}

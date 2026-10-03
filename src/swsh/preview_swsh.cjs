@@ -1,0 +1,10 @@
+/* Standalone fixture preview; never connects to an actual chat. */
+const fs=require('node:fs'),path=require('node:path');
+const out=path.join(__dirname,'HUD美化版-交付'),sample=JSON.parse(fs.readFileSync(path.join(__dirname,'sample-state.json'),'utf8')),manifest=JSON.parse(fs.readFileSync(path.join(out,'构建信息.json'),'utf8'));
+let code=fs.readFileSync(path.join(out,'宝可梦HUD-剑盾风格.js'),'utf8');
+code=code.replace('try{pkReadUpdateCache();}catch(e){}',"window.__SWSH_TEST={refresh:pkRefreshData,build:pkBeautyBuildRemote,state:function(){return pkmHudClone(stat_data);},diagnostics:hudDiagSnapshot};\ntry{pkReadUpdateCache();}catch(e){}");
+const fixture=`localStorage.setItem('pk_winmode','0');var previewState=${JSON.stringify(sample)},previewWrites=0,previewHandlers={};window.Mvu={getMvuData:()=>({stat_data:JSON.parse(JSON.stringify(previewState))}),replaceMvuData:d=>{previewState=d.stat_data;previewWrites++;return Promise.resolve();}};window.SillyTavern={getContext:()=>({chatId:'SWSH_PREVIEW_ONLY',chat:[],characters:[],eventSource:{on:(n,f)=>{(previewHandlers[n]||(previewHandlers[n]=[])).push(f)},off:(n,f)=>{previewHandlers[n]=(previewHandlers[n]||[]).filter(x=>x!==f)}},eventTypes:{},setExtensionPrompt:()=>{}})};`;
+const script=s=>'<script>'+s.replaceAll('</script','<\\/script')+'</script>';
+const html='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>剑盾 HUD 更新兼容预览</title><style>body{margin:0;background:#262e40;font-family:Arial,"Microsoft YaHei",sans-serif}.preview-note{color:#bec7d8;font-size:12px;max-width:900px;margin:20px auto 10px;padding:0 12px}.mes{max-width:940px;margin:0 auto 30px;padding:0 12px}.mes_text{margin:0}*{box-sizing:border-box}</style></head><body><p class="preview-note">剑盾美化版 v'+manifest.ui+' · 核心 v'+manifest.core+' · 示例数据，未连接真实聊天。</p><div class="mes" mesid="0" is_user="false"><div class="mes_text"></div></div>'+script(fixture)+script(code)+'</body></html>';
+fs.writeFileSync(path.join(out,'剑盾版预览.html'),html);console.log('Sword/Shield fixture preview written');
+

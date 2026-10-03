@@ -1,0 +1,39 @@
+name: Publish HUD release
+on:
+  push:
+    tags: ['bw2-v*', 'swsh-v*']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm test
+      - run: npm run package
+      - run: npm run verify
+      - name: Check tag matches source version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          node -e "const [channel,v]=process.env.RELEASE_TAG.split('-v');const actual=require('./src/'+channel+'/package.json').version;if(v!==actual)throw Error('Tag and UI version differ')"
+      - name: Publish assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release already published; keeping existing assets."
+          else
+            assets=("artifacts/$RELEASE_TAG.zip" "artifacts/$RELEASE_TAG-hud.json")
+            if [[ "$RELEASE_TAG" == bw2-* ]]; then assets+=("artifacts/$RELEASE_TAG-independent.json"); fi
+            gh release create "$RELEASE_TAG" "${assets[@]}" --verify-tag --title "$RELEASE_TAG" --notes-file "artifacts/$RELEASE_TAG-notes.md"
+          fi

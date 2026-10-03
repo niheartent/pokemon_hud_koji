@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "channel": "bw2",
+  "ui": "0.3.9",
+  "core": "3.3.1",
+  "testedCore": [
+    "3.3.19"
+  ],
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.3.9/versions/bw2/0.3.9/hud.js",
+  "sha256": "bc510e156ffa4dda79a6dc3803cc1e3d2a5239071e6b8574b056e98d2bb99003",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.3.9/versions/bw2/0.3.9/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.3.9",
+  "notes": "# 黑白2 v0.3.9\n\n- 接入本仓库黑白美化版远程发布，检查美化版与弦九核心两个来源。\n- 校验下载文件 SHA-256 与通道，合成后用户点击安装。\n- 核心不兼容时仍可采用已验证的美化发布包，禁止降低当前核心版本。\n- 修复只有美化更新及连续两次美化更新的缓存启动判断。\n- 保留 v0.3.8 详情背景首次绘制修复与黑白配色。\n- 独立版继续手动导入升级。\n\n首次使用远程美化更新，需要重新导入本版完整版 JSON。\n"
+}
