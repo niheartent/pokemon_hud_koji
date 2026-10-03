@@ -26,6 +26,10 @@
   --swsh-selected-bg:#b82e46;
   --swsh-panel-shadow:0 4px 12px rgba(30,48,66,.09);
   --swsh-nearby-shadow:0 3px 8px rgba(30,48,66,.12);
+  --swsh-detail-bg:#e8edf0;
+  --swsh-detail-head:#dce4e9;
+  --swsh-detail-move:#d9e2e8;
+  --swsh-detail-name:#a12e40;
   --swsh-graphite:#3f484e;
   --swsh-party-fill:linear-gradient(90deg,#dfe4e8 0%,#e8ecef 100%);
   --swsh-party-selected-fill:linear-gradient(90deg,var(--swsh-graphite) 0%,#454e54 100%);
@@ -145,3 +149,26 @@
 :is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .swsh-party-list>.card-frame:hover{
   box-shadow:var(--swsh-party-shadow),0 4px 10px rgba(45,23,28,.12);
 }
+
+/* Day Pokémon detail uses a silver field with restrained red accents. */
+:is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal{
+  background:var(--swsh-detail-bg);color:var(--swsh-on-surface);border-color:var(--swsh-border);
+}
+:is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal .modal-head{
+  background:var(--swsh-detail-head);border-color:var(--swsh-border);box-shadow:inset 4px 0 var(--swsh-accent);
+}
+:is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal :is(.modal-name,.dt-hold,.row,.row .v,.move-name){color:var(--swsh-on-surface);text-shadow:none}
+:is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal .dt-name{color:var(--swsh-detail-name);text-shadow:none}
+:is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal :is(.dt-lv,.row .k){color:var(--swsh-muted)}
+:is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal .row{border-color:#cbd5dd}
+:is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal .dt-sep{background:var(--swsh-accent);opacity:.22}
+:is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal .dt-move-cell{
+  background:var(--swsh-detail-move);border-color:var(--swsh-border);box-shadow:0 2px 4px rgba(30,48,66,.06);
+}
+:is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal .act-btn{
+  background:#dce5eb;color:var(--swsh-on-surface);border-color:var(--swsh-border);
+}
+:is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal :is([data-pkm-store],[data-pkm-withdraw]){
+  background:#eedfe3;color:var(--swsh-detail-name);border-color:#c9939e;
+}
+:is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal .act-btn:hover{border-color:var(--swsh-accent)}
