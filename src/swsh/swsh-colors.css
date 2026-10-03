@@ -1,0 +1,108 @@
+/* Semantic colors: this file owns trainer, nearby, fold and battle colors.
+   Background/text/border travel together when the theme changes. */
+:is(#pkm-hud-win,#pkm-hud-inline){
+  --swsh-canvas:#f1f4f7;
+  --swsh-surface:#ffffff;
+  --swsh-surface-soft:#edf2f6;
+  --swsh-surface-hover:#e3ebf2;
+  --swsh-border:#bac7d3;
+  --swsh-divider:#d4dde5;
+  --swsh-on-surface:#24313e;
+  --swsh-muted:#536577;
+  --swsh-accent:#b82e46;
+  --swsh-accent-soft:#fce9ed;
+  --swsh-on-accent:#943047;
+  --swsh-nearby-top:#ffffff;
+  --swsh-nearby-bottom:#e9eff5;
+  --swsh-nearby-border:#9eafbf;
+  --swsh-scene:#eaf3fa;
+  --swsh-scene-text:#284c69;
+  --swsh-warning:#fff5dc;
+  --swsh-warning-text:#6e4d0d;
+  --swsh-positive:#187638;
+  --swsh-negative:#b53642;
+  --swsh-selected-bg:#b82e46;
+  --swsh-panel-shadow:0 4px 12px rgba(30,48,66,.09);
+  --swsh-nearby-shadow:0 3px 8px rgba(30,48,66,.12);
+  --text:var(--swsh-on-surface);
+  --dim:var(--swsh-muted);
+  --frame:var(--swsh-border);
+  color-scheme:light;
+}
+:is(#pkm-hud-win,#pkm-hud-inline).swsh-dark{
+  --swsh-canvas:#12192a;
+  --swsh-surface:rgba(31,44,70,.88);
+  --swsh-surface-soft:#1b2941;
+  --swsh-surface-hover:#354768;
+  --swsh-border:#8192b4;
+  --swsh-divider:rgba(154,173,209,.28);
+  --swsh-on-surface:#dce5f6;
+  --swsh-muted:#a9b9d2;
+  --swsh-accent:#f08b9c;
+  --swsh-accent-soft:#293653;
+  --swsh-on-accent:#e1e9f6;
+  --swsh-nearby-top:#303b53;
+  --swsh-nearby-bottom:#1f2c46;
+  --swsh-nearby-border:#8192b4;
+  --swsh-scene:#23314f;
+  --swsh-scene-text:#dce5f6;
+  --swsh-warning:#3b352b;
+  --swsh-warning-text:#ffe9a8;
+  --swsh-positive:#4ade80;
+  --swsh-negative:#f87171;
+  --swsh-selected-bg:#536b9e;
+  --swsh-panel-shadow:0 5px 15px rgba(0,0,0,.16);
+  --swsh-nearby-shadow:0 4px 11px rgba(0,0,0,.22);
+  color-scheme:dark;
+}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-trainer{
+  background:var(--swsh-surface);
+  color:var(--swsh-on-surface);
+  border-color:var(--swsh-border);
+  box-shadow:var(--swsh-panel-shadow);
+}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.swsh-trainer-id strong,.swsh-money,.swsh-trainer-details summary){color:var(--swsh-on-surface)}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-eyebrow{color:var(--swsh-accent)}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-badges{background:var(--swsh-surface)}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-trainer :is(.k,.dim,.badge-region,.badge-more,.swsh-trainer-details summary span){color:var(--swsh-muted)}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-trainer-details{border-color:var(--swsh-divider)}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-trainer-details summary{background:var(--swsh-surface-soft)}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-trainer-details summary:hover{background:var(--swsh-surface-hover)}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-trainer-details summary:before{background:var(--swsh-accent-soft);color:var(--swsh-on-accent)}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-trainer-details-body{background:var(--swsh-surface);color:var(--swsh-on-surface)}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-trainer .info-row{color:var(--swsh-on-surface);border-color:var(--swsh-divider)}
+:is(#pkm-hud-win,#pkm-hud-inline) .fold-box{background:var(--swsh-surface);border-color:var(--swsh-border);box-shadow:var(--swsh-panel-shadow)}
+:is(#pkm-hud-win,#pkm-hud-inline) .fold-head{background:var(--swsh-surface-soft);color:var(--swsh-on-surface);box-shadow:inset 4px 0 var(--swsh-accent)}
+:is(#pkm-hud-win,#pkm-hud-inline) .fold-head:hover{background:var(--swsh-surface-hover)}
+:is(#pkm-hud-win,#pkm-hud-inline) .fold-body{background:var(--swsh-surface);color:var(--swsh-on-surface)}
+:is(#pkm-hud-win,#pkm-hud-inline) .fold-box :is(.swsh-fold-label .swsh-icon,.rel-name,.rel-val){color:var(--swsh-on-surface)}
+:is(#pkm-hud-win,#pkm-hud-inline) .rel-bar{background:var(--swsh-surface-soft);box-shadow:inset 0 0 0 1px var(--swsh-border)}
+:is(#pkm-hud-win,#pkm-hud-inline) .rel-fill{background:var(--swsh-accent)}
+:is(#pkm-hud-win,#pkm-hud-inline) .bag-tab[data-bag].active{background:var(--swsh-selected-bg);border-color:var(--swsh-selected-bg);color:#fff}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.battle-frame,.plain-frame,.bt-card,.bt-card.foe,.bt-side){background:var(--swsh-surface);border-color:var(--swsh-border);color:var(--swsh-on-surface);box-shadow:var(--swsh-panel-shadow)}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.bt-pk,.bt-line,.bt-hpn,.bt-text,.bt-side-b){color:var(--swsh-on-surface);text-shadow:none}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.bt-lv,.bt-tr,.bt-k,.bt-meta){color:var(--swsh-muted)}
+:is(#pkm-hud-win,#pkm-hud-inline) .bt-meta{border-color:var(--swsh-divider)}
+:is(#pkm-hud-win,#pkm-hud-inline) .bt-side-h{background:var(--swsh-surface-soft);color:var(--swsh-on-surface)}
+:is(#pkm-hud-win,#pkm-hud-inline) .bt-scene{background:var(--swsh-scene);color:var(--swsh-scene-text)}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.bt-rule,.bt-tactic){background:var(--swsh-warning);color:var(--swsh-warning-text)}
+:is(#pkm-hud-win,#pkm-hud-inline) .st-up{color:var(--swsh-positive)}
+:is(#pkm-hud-win,#pkm-hud-inline) .st-dn{color:var(--swsh-negative)}
+:is(#pkm-hud-win,#pkm-hud-inline) .bt-card.self{border-left-color:var(--swsh-positive)}
+:is(#pkm-hud-win,#pkm-hud-inline) .bt-card.ally{border-left-color:#4781ad}
+:is(#pkm-hud-win,#pkm-hud-inline) .bt-card.foe{border-left-color:var(--swsh-negative)}
+:is(#pkm-hud-win,#pkm-hud-inline) .bt-card.neu{border-left-color:var(--swsh-muted)}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.nb-cell,.nearby-grid .nearby-cell,.nearby-action-head){
+  background:linear-gradient(160deg,var(--swsh-nearby-top),var(--swsh-nearby-bottom));
+  color:var(--swsh-on-surface);
+  border-color:var(--swsh-nearby-border);
+  box-shadow:var(--swsh-nearby-shadow);
+}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.nb-cell,.nearby-grid .nearby-cell)::before{background:linear-gradient(135deg,rgba(255,255,255,.08),transparent 44%)}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.nb-name,.nearby-action-name){color:var(--swsh-on-surface);text-shadow:none}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.nb-cnt,.nearby-sub){color:var(--swsh-muted)}
+:is(#pkm-hud-win,#pkm-hud-inline) .nb-pill{color:var(--swsh-on-accent);background:var(--swsh-accent-soft);border-color:var(--swsh-divider)}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.nb-cell,.nearby-grid .nearby-cell):hover{border-color:var(--swsh-accent);box-shadow:var(--swsh-panel-shadow)}
+/* Rarity uses the existing metadata edge and icons, on a readable neutral field. */
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.nb-cell,.nearby-cell):is(.is-legendary,.is-mythical,.is-ultra,.is-boss,.is-mega,.is-dynamax){border-color:var(--nb-accent1,var(--swsh-accent))}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.swsh-trainer-details summary,.fold-head,.nb-cell):focus-visible{outline:2px solid var(--swsh-accent);outline-offset:2px}

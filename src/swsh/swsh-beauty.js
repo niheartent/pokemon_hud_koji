@@ -22,8 +22,9 @@ function swshStepPartyCard(app,button){
   swshSelectPartyCard(app,rows[(index+step+rows.length)%rows.length]);
 }
 
-var swshDarkTheme=false;
-try{swshDarkTheme=localStorage.getItem('pk_swsh_dark_theme')==='1';}catch(e){}
+var swshDarkTheme=true;
+// Missing preference uses dark; an explicit day preference survives upgrades.
+try{swshDarkTheme=localStorage.getItem('pk_swsh_dark_theme')!=='0';}catch(e){}
 function swshApplyTheme(app){
   if(app)app.classList.toggle('swsh-dark',swshDarkTheme);
   var win=document.getElementById('pkm-hud-win');if(win)win.classList.toggle('swsh-dark',swshDarkTheme);
@@ -51,4 +52,3 @@ function swshResetHudWidth(){
   swshHudWidth=null;try{localStorage.removeItem('pk_swsh_hud_width');}catch(e){}
   swshApplyWidth();swshCenterWidth();resizeFrame();
 }
-

@@ -30,8 +30,11 @@ function pkBeautyBuildRemote(raw){
   if(!db||!db.init||db.init.type!=='Literal'||db.init.value!=='pk_hud_runtime_v1')fail('PK_RUNTIME_DB');
   if(!inner.variables.css.init)fail('css 初始化');
   pkg.coreNotice=((raw.match(/\/\*PK_NOTICE_BEGIN([\s\S]*?)PK_NOTICE_END\*\//)||[])[1]||'').trim();
-  var injected='\nvar PK_BEAUTY_PACKAGE='+JSON.stringify(pkg)+';\n'+pkg.runtime+'\n'+pkg.beauty+'\n'+(pkg.updateRuntime||'')+'\ncss += '+JSON.stringify(pkg.css)+';\n';
-  var edits=[{start:top.statements.PK_VER.end,end:top.statements.PK_VER.end,text:"\nvar PK_BEAUTY_VER='"+pkg.version+"';"},{start:db.init.start,end:db.init.end,text:JSON.stringify(pkg.runtimeDb)},{start:inner.statements.css.end,end:inner.statements.css.end,text:injected}];
+  // Apply presentation CSS after every native CSS addition, immediately before injection.
+  var styleAssignments=run.body.body.filter(function(n){var e=n.expression;return n.type==='ExpressionStatement'&&e&&e.type==='AssignmentExpression'&&e.left.type==='MemberExpression'&&!e.left.computed&&e.left.property.name==='textContent'&&e.right.type==='Identifier'&&e.right.name==='css';});
+  if(styleAssignments.length!==1)fail('css → style.textContent');
+  var injected='\nvar PK_BEAUTY_PACKAGE='+JSON.stringify(pkg)+';\n'+pkg.runtime+'\n'+pkg.beauty+'\n'+(pkg.updateRuntime||'')+'\n';
+  var edits=[{start:styleAssignments[0].start,end:styleAssignments[0].start,text:'css += '+JSON.stringify(pkg.css)+';\n'},{start:top.statements.PK_VER.end,end:top.statements.PK_VER.end,text:"\nvar PK_BEAUTY_VER='"+pkg.version+"';"},{start:db.init.start,end:db.init.end,text:JSON.stringify(pkg.runtimeDb)},{start:inner.statements.css.end,end:inner.statements.css.end,text:injected}];
   edits.sort(function(a,b){return b.start-a.start;});var code=kojiPatchBootstrap(raw);
   edits.forEach(function(e){code=code.slice(0,e.start)+e.text+code.slice(e.end);});
   try{new Function(code);}catch(e){throw new Error('合成后的脚本语法错误：'+e.message);}

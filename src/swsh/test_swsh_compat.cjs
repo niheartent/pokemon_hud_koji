@@ -8,6 +8,7 @@ try{
  const logFixture='测试上游更新日志\n第二行 <img src=x onerror="window.__logExecuted=1">';remote=remote.replace(/\/\*PK_NOTICE_BEGIN[\s\S]*?PK_NOTICE_END\*\//,'/*PK_NOTICE_BEGIN\n'+logFixture+'\nPK_NOTICE_END*/');
  page.on('pageerror',e=>errors.push(e.message));
  await page.route('**/*',r=>{const url=r.request().url();if(url.startsWith('http://swsh-preview.test'))return r.fulfill({contentType:'text/html',body:html});if(r.request().url().includes('/updates/swsh.json'))return r.fulfill({contentType:'application/json',body:JSON.stringify({schema:1,channel:'swsh',ui:manifest.ui,core:manifest.core})});if(r.request().resourceType()==='image')return r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"/>'});return r.fulfill({contentType:url.includes('pkm-hud.js')?'text/javascript':'application/json',body:url.includes('pkm-hud.js')?remote:'{"data":[]}'});});
+ await page.addInitScript(()=>localStorage.setItem('pk_swsh_dark_theme','0'));
  await page.goto('http://swsh-preview.test');await page.locator('.swsh-team').waitFor();
  assert.equal(await page.locator('.swsh-party-list .card-frame').count(),6);
  await page.locator('.swsh-party-list .card-frame[data-slot="2"]').hover();assert.equal(await page.locator('.swsh-selected').getAttribute('data-slot'),'2');
@@ -24,7 +25,7 @@ try{
  await page.locator('[data-swsh-hud-width-reset]').click();assert.equal(await page.evaluate(()=>localStorage.getItem('pk_swsh_hud_width')),null);
  await page.locator('[data-pk-check-update]').click();await page.waitForFunction(()=>document.querySelector('[data-pk-do-update]').style.display==='block');
  const compatible=await page.locator('.page-overlay.open').innerText();assert(compatible.includes('已合成并检查')); 
- const logs=page.locator('[data-swsh-update-logs]');assert.equal((await logs.locator('.swsh-update-log-text').first().textContent()).trim(),logFixture);assert.equal(await logs.locator('img').count(),0);assert.equal(await page.evaluate(()=>!!window.__logExecuted),false);assert.equal(await logs.locator('details').first().getAttribute('open'),'');await logs.locator('details').nth(1).locator('summary').click();assert((await logs.innerText()).includes('优化：复用未变化的美化转换结果'));
+ const logs=page.locator('[data-swsh-update-logs]');assert.equal((await logs.locator('.swsh-update-log-text').first().textContent()).trim(),logFixture);assert.equal(await logs.locator('img').count(),0);assert.equal(await page.evaluate(()=>!!window.__logExecuted),false);assert.equal(await logs.locator('details').first().getAttribute('open'),'');await logs.locator('details').nth(1).locator('summary').click();assert((await logs.innerText()).includes('修复白天主题的训练家'));
  remote=remote.replace('function teamHTML()','function teamNewHTML()');await page.locator('[data-pk-check-update]').click();await page.waitForFunction(()=>document.querySelector('.page-overlay.open').textContent.includes('不兼容'));
  assert.equal(await page.locator('[data-pk-do-update]').evaluate(el=>el.style.display),'none');
  assert((await logs.locator('.swsh-update-log-text').first().textContent()).includes('测试上游更新日志'));
