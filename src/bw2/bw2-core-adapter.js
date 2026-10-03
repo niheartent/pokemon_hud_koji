@@ -19,8 +19,10 @@ function collectStyles(node){
   for(const value of Object.values(node))if(Array.isArray(value))value.forEach(collectStyles);else if(value&&value.type)collectStyles(value);
 }collectStyles(ast);
 if(!cssInit)throw new Error('Missing native style initialization');
-replace(original.slice(cssInit.start,cssInit.end),JSON.stringify(nativeVisualCss));
-for(const statement of cssAdditions)replace(original.slice(statement.start,statement.end),'');
+// Edit syntax ranges, including identical CSS additions, without text anchors.
+const styleEdits=[{start:cssInit.start,end:cssInit.end,text:JSON.stringify(nativeVisualCss)}].concat(cssAdditions.map(statement=>({start:statement.start,end:statement.end,text:''})));
+styleEdits.sort((a,b)=>b.start-a.start);
+for(const edit of styleEdits){patches.push([original.slice(edit.start,edit.end),edit.text]);code=code.slice(0,edit.start)+edit.text+code.slice(edit.end);}
 baseCss=nativeVisualCss;
 replace("var PK_VER='"+core+"';","var PK_VER='"+core+"';\nvar PK_BEAUTY_VER='"+version+"';",false);
 // A newer manually imported UI must not delegate to an older UI's cached core.

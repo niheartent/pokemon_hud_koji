@@ -1,0 +1,18 @@
+/* Owned BW2 palette and typography; the core never supplies these values. */
+:is(#pkm-hud-win,#pkm-hud-inline){
+  --bw2-font-ui:"Segoe UI","Helvetica Neue","PingFang SC","Microsoft YaHei",monospace;
+  --bw2-text:#c6d1e4;
+  --bw2-muted:#8ba0b8;
+  --bw2-border:#7d95b5;
+  --frame:var(--bw2-border);
+  --text:var(--bw2-text);
+  --dim:var(--bw2-muted);
+  font-family:var(--bw2-font-ui);
+}
+.bw2-host{
+  --bw2-ink:#111a2b;
+  --bw2-paper:#d8e1e6;
+  --bw2-cyan:#45d5e5;
+  --bw2-red:#ba1024;
+  color:#dce4ef;
+}

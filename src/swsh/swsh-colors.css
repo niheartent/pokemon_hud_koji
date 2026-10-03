@@ -1,6 +1,7 @@
 /* Semantic colors: this file owns trainer, nearby, fold and battle colors.
    Background/text/border travel together when the theme changes. */
 :is(#pkm-hud-win,#pkm-hud-inline){
+  --swsh-font-ui:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
   --swsh-canvas:#f1f4f7;
   --swsh-surface:#ffffff;
   --swsh-surface-soft:#edf2f6;
@@ -36,6 +37,7 @@
   --pk-blue:var(--swsh-scene-text);
   --pk-yellow:var(--swsh-warning-text);
   --pk-green:var(--swsh-positive);
+  font-family:var(--swsh-font-ui);
   color-scheme:light;
 }
 :is(#pkm-hud-win,#pkm-hud-inline).swsh-dark{

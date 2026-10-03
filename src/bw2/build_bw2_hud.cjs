@@ -4,7 +4,7 @@ const acorn=require('acorn');
 const root=__dirname,out=path.join(root,'HUD黑白2版-第一版');fs.mkdirSync(out,{recursive:true});
 const payload=JSON.parse(fs.readFileSync(path.join(root,'pkm-hud-upstream.json'),'utf8').replace(/^\uFEFF/,''));
 const original=payload.content;let code=original;const patches=[];
-const version='0.3.9';
+const version='0.3.10';
 const nativeVisualCss=fs.readFileSync(path.join(root,'bw2-native-base.css'),'utf8');
 const adapted=require('./bw2-core-adapter.js')(original,acorn,{version,nativeCss:nativeVisualCss});
 code=require('../shared/koji-bootstrap.js')(adapted.code);patches.push(...adapted.patches);
@@ -17,10 +17,10 @@ const beauty=fs.readFileSync(path.join(root,'bw2-move-icons.js'),'utf8')+'\n'+fs
 // Reuse the exact grid from upstream; never stack a second synthetic grid on .hud.
 const gridBlock=baseCss.match(/\.hud::before\{([^}]+)\}/)[1];
 const originalGrid=gridBlock.match(/background-image:([^;]+)(?:;|$)/)[1];
-const css=('.bw2-host{--bw2-original-grid:'+originalGrid+';}\n'+fs.readFileSync(path.join(root,'bw2-hud.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-detail.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-popup.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-console.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-trainer.css'),'utf8')).replace(/@media\s*\(max-width:/g,'@container bw2-layout (max-width:');
+const css=('.bw2-host{--bw2-original-grid:'+originalGrid+';}\n'+fs.readFileSync(path.join(root,'bw2-theme.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-hud.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-detail.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-popup.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-console.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-trainer.css'),'utf8')).replace(/@media\s*\(max-width:/g,'@container bw2-layout (max-width:');
 const parserLicense=fs.readFileSync(path.join(path.dirname(require.resolve('acorn')),'../LICENSE'),'utf8');
 const parser='(function(){var exports={},module={exports:exports};\n/* '+parserLicense+' */\n'+fs.readFileSync(require.resolve('acorn'),'utf8')+'\nreturn module.exports;})()';
-const pkg={schema:2,channel:'bw2',updateUrl:'https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/main/updates/bw2.json',updateRuntime,version,parser,nativeCss:nativeVisualCss,runtime,beauty,css};
+const pkg={schema:2,styleOwnership:'bw2',channel:'bw2',updateUrl:'https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/main/updates/bw2.json',updateRuntime,version,parser,nativeCss:nativeVisualCss,runtime,beauty,css};
 const marker='\n\ntry{\n  var _deadIds=';
 replace(marker,'\nvar PK_BEAUTY_PACKAGE='+JSON.stringify(pkg)+';\n'+runtime+'\n'+beauty+'\n'+updateRuntime+'\ncss += '+JSON.stringify(css)+';'+marker,false);
 new Function(code);acorn.parse(code,{ecmaVersion:'latest'});

@@ -29,12 +29,14 @@ function pkBeautyBuildRemote(raw){
   if(!version||!version.init||version.init.type!=='Literal'||!/^\d+\.\d+\.\d+(?:-[\w.-]+)?$/.test(version.init.value))fail('PK_VER');
   if(!db||!db.init||db.init.type!=='Literal'||db.init.value!=='pk_hud_runtime_v1')fail('PK_RUNTIME_DB');
   if(!inner.variables.css.init)fail('css 初始化');
+  if(typeof pkg.css!=='string'||pkg.styleOwnership!=='swsh')fail('独立剑盾样式包');
   pkg.coreNotice=((raw.match(/\/\*PK_NOTICE_BEGIN([\s\S]*?)PK_NOTICE_END\*\//)||[])[1]||'').trim();
-  // Apply presentation CSS after every native CSS addition, immediately before injection.
+  // Replace the native stylesheet with our owned foundation and theme layers.
   var styleAssignments=run.body.body.filter(function(n){var e=n.expression;return n.type==='ExpressionStatement'&&e&&e.type==='AssignmentExpression'&&e.left.type==='MemberExpression'&&!e.left.computed&&e.left.property.name==='textContent'&&e.right.type==='Identifier'&&e.right.name==='css';});
   if(styleAssignments.length!==1)fail('css → style.textContent');
   var injected='\nvar PK_BEAUTY_PACKAGE='+JSON.stringify(pkg)+';\n'+pkg.runtime+'\n'+pkg.beauty+'\n'+(pkg.updateRuntime||'')+'\n';
-  var edits=[{start:styleAssignments[0].start,end:styleAssignments[0].start,text:'css += '+JSON.stringify(pkg.css)+';\n'},{start:top.statements.PK_VER.end,end:top.statements.PK_VER.end,text:"\nvar PK_BEAUTY_VER='"+pkg.version+"';"},{start:db.init.start,end:db.init.end,text:JSON.stringify(pkg.runtimeDb)},{start:inner.statements.css.end,end:inner.statements.css.end,text:injected}];
+  var edits=[{start:inner.variables.css.init.start,end:inner.variables.css.init.end,text:"''"},{start:styleAssignments[0].start,end:styleAssignments[0].start,text:'css = PK_BEAUTY_PACKAGE.css;\n'},{start:top.statements.PK_VER.end,end:top.statements.PK_VER.end,text:"\nvar PK_BEAUTY_VER='"+pkg.version+"';"},{start:db.init.start,end:db.init.end,text:JSON.stringify(pkg.runtimeDb)},{start:inner.statements.css.end,end:inner.statements.css.end,text:injected}];
+  run.body.body.forEach(function(statement){var e=statement.expression;if(statement.start<styleAssignments[0].start&&statement.type==='ExpressionStatement'&&e&&e.type==='AssignmentExpression'&&e.left.type==='Identifier'&&e.left.name==='css'&&e.operator==='+=')edits.push({start:statement.start,end:statement.end,text:''});});
   edits.sort(function(a,b){return b.start-a.start;});var code=kojiPatchBootstrap(raw);
   edits.forEach(function(e){code=code.slice(0,e.start)+e.text+code.slice(e.end);});
   try{new Function(code);}catch(e){throw new Error('合成后的脚本语法错误：'+e.message);}
