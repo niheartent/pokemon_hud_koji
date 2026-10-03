@@ -27,6 +27,14 @@
   --text:var(--swsh-on-surface);
   --dim:var(--swsh-muted);
   --frame:var(--swsh-border);
+  --pk-bg:var(--swsh-canvas);
+  --pk-surface:var(--swsh-surface);
+  --pk-surface-2:var(--swsh-surface-soft);
+  --pk-surface-3:var(--swsh-surface-hover);
+  --pk-red:var(--swsh-accent);
+  --pk-blue:var(--swsh-scene-text);
+  --pk-yellow:var(--swsh-warning-text);
+  --pk-green:var(--swsh-positive);
   color-scheme:light;
 }
 :is(#pkm-hud-win,#pkm-hud-inline).swsh-dark{
@@ -106,3 +114,9 @@
 /* Rarity uses the existing metadata edge and icons, on a readable neutral field. */
 :is(#pkm-hud-win,#pkm-hud-inline) :is(.nb-cell,.nearby-cell):is(.is-legendary,.is-mythical,.is-ultra,.is-boss,.is-mega,.is-dynamax){border-color:var(--nb-accent1,var(--swsh-accent))}
 :is(#pkm-hud-win,#pkm-hud-inline) :is(.swsh-trainer-details summary,.fold-head,.nb-cell):focus-visible{outline:2px solid var(--swsh-accent);outline-offset:2px}
+/* Settings inherit the same palette; native hardcoded pale labels are replaced. */
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-settings{color:var(--swsh-on-surface)}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-settings :is(.set-title,.set-opt,.src-fold summary){color:var(--swsh-on-surface);text-shadow:none}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-settings :is(.dim,.info-row .k){color:var(--swsh-muted)}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-settings :is(.set-opts,.src-fold){border-color:var(--swsh-divider)}
+:is(#pkm-hud-win,#pkm-hud-inline) .swsh-settings input:is([type=checkbox],[type=radio],[type=range]){accent-color:var(--swsh-selected-bg)}

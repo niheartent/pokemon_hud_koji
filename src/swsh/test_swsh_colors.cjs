@@ -19,8 +19,10 @@ function contrast(a,b){const x=luminance(a),y=luminance(b);return (Math.max(x,y)
 try{
 for(const [core,code] of [['bundled',local],['3.3.19',updated]])for(const width of [1000,360]){
  const context=await browser.newContext({viewport:{width,height:1100}}),page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
+ await page.addInitScript(()=>{localStorage.setItem('pk_theme_hue','#ffee00');localStorage.setItem('pk_theme_light','100');});
  await page.route('**/*',r=>r.request().url().startsWith('http://colors.test')?r.fulfill({contentType:'text/html',body:htmlFor(code)}):r.request().resourceType()==='image'?r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><circle cx="30" cy="30" r="20" fill="#60abd0"/></svg>'}):r.fulfill({contentType:'application/json',body:'{"data":[]}'}));
  await page.goto('http://colors.test');await page.locator('.swsh-trainer').waitFor();
+ assert.equal(await page.locator('#pkm-hud-inline').evaluate(el=>el.style.getPropertyValue('--pk-bg')),'','old saved color engine must not inject inline colors');
  assert(await page.locator('#pkm-hud-inline').evaluate(el=>el.classList.contains('swsh-dark')),'new install defaults to dark');
  await page.locator('.swsh-trainer-details summary').click();
  for(const dark of [false,true]){
@@ -45,7 +47,18 @@ for(const [core,code] of [['bundled',local],['3.3.19',updated]])for(const width 
   results.push({core,width,theme,minContrast:Math.min(...checks.map(x=>x.ratio)),checks});
  }
  // Use the actual settings handler to persist day mode, then reload.
- await page.locator('[data-tab="4"]').click();await page.locator('#tab-4 [data-page="settings"]').click();await page.locator('[data-toggle="swsh-dark"]').uncheck();
+ await page.locator('[data-tab="4"]').click();await page.locator('#tab-4 [data-page="settings"]').click();
+ assert.equal(await page.locator('.swsh-settings input[type="color"],.swsh-settings [data-theme-preset],.swsh-settings [data-theme-light],.swsh-settings [data-theme-color-reset],.swsh-settings [data-text-color]').count(),0,'obsolete native color controls must be absent');
+ assert.equal(await page.locator('.swsh-settings .set-title').filter({hasText:/^(主题颜色|文字颜色|文本颜色|字体颜色)$/}).count(),0);
+ assert.equal(await page.locator('[data-toggle="swsh-dark"]').count(),1);
+ for(const dark of [false,true]){
+  await page.locator('[data-toggle="swsh-dark"]').setChecked(dark);await page.mouse.move(width-1,1099);
+  const settingsChecks=await page.evaluate(()=>{const root=document.getElementById('pkm-hud-inline'),probe=document.createElement('span');probe.style.color='var(--swsh-surface)';root.appendChild(probe);const bg=getComputedStyle(probe).color;probe.remove();return Array.from(document.querySelectorAll('.swsh-settings .set-title,.swsh-settings .set-opt,.swsh-settings .dim')).filter(el=>el.getClientRects().length&&el.textContent.trim()).map(el=>({fg:getComputedStyle(el).color,bg}));});
+  for(const check of settingsChecks)assert(contrast(check.fg,check.bg)>=4.5,'settings text must contrast with its surface');
+  await page.locator('.page-overlay.open').evaluate(el=>{const body=el.querySelector('.page-body');if(body)body.scrollTop=0;});
+  await page.locator('.page-overlay.open .page').screenshot({path:path.join(out,`颜色-${core}-${width}-${dark?'dark':'light'}-设置.png`)});
+ }
+ await page.locator('[data-toggle="swsh-dark"]').uncheck();
  assert.equal(await page.evaluate(()=>localStorage.getItem('pk_swsh_dark_theme')),'0');await page.reload();await page.locator('.swsh-trainer').waitFor();assert(!(await page.locator('#pkm-hud-inline').evaluate(el=>el.classList.contains('swsh-dark'))),'saved day survives reload');
  assert.equal(await page.evaluate(()=>previewWrites),0);await context.close();
 }

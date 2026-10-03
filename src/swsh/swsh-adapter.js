@@ -1,5 +1,7 @@
 /* Decorate freshly rendered native HTML; keep upstream functions and handlers. */
 var swshNative={teamHTML:teamHTML,trainerHTML:trainerHTML,quickHTML:quickHTML,homeFoldHTML:homeFoldHTML,menuHTML:menuHTML,worldHTML:worldHTML,cmdPanelHTML:cmdPanelHTML,settingsHTML:settingsHTML,render:render,pkCheckUpdate:pkCheckUpdate,pkDoUpdate:pkDoUpdate,pkRepair:pkRepair,showNoticeModal:showNoticeModal,pkSetUpdateMsg:pkSetUpdateMsg};
+// Newer cores have a hue/lightness engine; the two fixed palettes replace it.
+if(typeof pkThemeApplyScheme==='function')pkThemeApplyScheme=function(){};
 function swshDOM(html){var el=document.createElement('div');el.innerHTML=html;return el;}
 // One last result per renderer: bounded, in-memory, and native generation still runs.
 var swshDecorationCache=Object.create(null);
@@ -65,11 +67,17 @@ function swshRefreshUpdateLog(){
 }
 function swshNativeSettings(html){
   var dom=swshDOM(html),check=dom.querySelector('[data-pk-check-update]'),update=dom.querySelector('[data-pk-do-update]'),copy=dom.querySelector('[data-pk-show-content]');
+  var settings=dom.querySelector('.info-inner');if(settings)settings.classList.add('swsh-settings');
+  // Fixed day/night palettes own all colors. Remove native controls from the
+  // generated DOM so no obsolete color handlers can bind to them after updates.
+  function removeColorGroup(group){if(!group||!group.parentNode)return;var title=group.previousElementSibling;if(title&&title.classList.contains('set-title'))title.remove();group.remove();}
+  dom.querySelectorAll('.set-title').forEach(function(title){if(/^(主题颜色|主题色|文字颜色|文本颜色|字体颜色)$/.test(title.textContent.trim())){var group=title.nextElementSibling;if(group&&group.classList.contains('set-opts'))removeColorGroup(group);else title.remove();}});
+  dom.querySelectorAll('[data-theme-hue],[data-theme-preset],[data-theme-light],[data-theme-light-toggle],[data-theme-color-reset],[data-text-color],[data-font-color]').forEach(function(control){removeColorGroup(control.closest('.set-opts'));});
   if(check&&update){update.textContent='⬆️ 更新已验证的美化版';if(copy)copy.textContent='📋 复制已合成的美化版';var repair=dom.querySelector('[data-pk-repair]');if(repair)repair.remove();
     var box=check.closest('.set-opts');if(box){var row=swshDOM('<div class="info-row"><span class="k">HUD 美化版</span><span class="v">v'+PK_BEAUTY_VER+'</span></div><div class="dim" style="font-size:.72rem">先检查上游接口，通过后才可安装。普通文案、排版和功能改动保留。</div>');var first=box.querySelector('.info-row');while(row.firstChild)box.insertBefore(row.firstChild,first?first.nextSibling:check);}
     if(box){var logs=document.createElement('div');logs.setAttribute('data-swsh-update-logs','');logs.innerHTML=swshUpdateLogHTML();box.appendChild(logs);}
   }
-  var toggle=dom.querySelector('[data-toggle="winmode"]'),mode=toggle&&toggle.closest('.set-opts');if(mode){var title=mode.previousElementSibling,extras=swshDOM('<div class="set-title">界面配色</div><div class="set-opts"><label class="set-opt"><input type="checkbox" data-toggle="swsh-dark"'+(swshDarkTheme?' checked':'')+'>暗色 UI（原版深蓝配色）</label></div><div class="set-title">HUD 宽度</div><div class="set-opts"><label class="swsh-width-control"><input type="range" data-swsh-hud-width aria-label="HUD 宽度" min="480" max="900" step="10" value="'+swshWidthDisplayValue()+'"><output data-swsh-hud-width-value>'+swshWidthDisplayValue()+' px</output></label><button type="button" class="act-btn" data-swsh-hud-width-reset>恢复默认宽度</button></div>');while(extras.firstChild)mode.parentNode.insertBefore(extras.firstChild,title||mode);}
+  var toggle=dom.querySelector('[data-toggle="winmode"]'),mode=toggle&&toggle.closest('.set-opts');if(mode){var title=mode.previousElementSibling,extras=swshDOM('<div class="set-title">界面配色</div><div class="set-opts"><label class="set-opt"><input type="checkbox" data-toggle="swsh-dark"'+(swshDarkTheme?' checked':'')+'>暗色模式（关闭使用白天配色）</label></div><div class="set-title">HUD 宽度</div><div class="set-opts"><label class="swsh-width-control"><input type="range" data-swsh-hud-width aria-label="HUD 宽度" min="480" max="900" step="10" value="'+swshWidthDisplayValue()+'"><output data-swsh-hud-width-value>'+swshWidthDisplayValue()+' px</output></label><button type="button" class="act-btn" data-swsh-hud-width-reset>恢复默认宽度</button></div>');while(extras.firstChild)mode.parentNode.insertBefore(extras.firstChild,title||mode);}
   return dom.innerHTML;
 }
 teamHTML=function(){return swshDecorate(swshNative.teamHTML,swshNativeTeam,arguments,this,'team',swshTeamDependency);};
