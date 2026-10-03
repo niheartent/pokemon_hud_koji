@@ -1,5 +1,5 @@
 {
-  "name":"swsh-hud-workspace", "version":"1.4.8", "private":true,
+  "name":"swsh-hud-workspace", "version":"1.4.9", "private":true,
   "scripts":{
     "build":"node build_swsh_hud.cjs && node preview_swsh.cjs",
     "test":"node test_swsh_compat.cjs && node test_swsh_slots.cjs && node test_swsh_optimization.cjs && node test_swsh_colors.cjs"

@@ -278,6 +278,7 @@
 /* Occupied and empty slots reserve the same space in the six-slot party. */
 .swsh-party-list{--swsh-party-row-height:68px}
 .swsh-party-list>.card-frame,.swsh-party-list>.empty-frame{min-height:var(--swsh-party-row-height);flex-shrink:0}
+.swsh-party-list>.empty-frame{visibility:hidden;pointer-events:none}
 .swsh-party-list .card-inner,.swsh-party-list .empty-inner{min-height:var(--swsh-party-row-height)}
 @media(max-width:520px){.swsh-party-list{--swsh-party-row-height:64px}}
 @container pkm-hud-layout (max-width:560px){.swsh-party-list{--swsh-party-row-height:64px}}
