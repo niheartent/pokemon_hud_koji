@@ -2,6 +2,12 @@ name: Publish HUD release
 on:
   push:
     tags: ['bw2-v*', 'swsh-v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag, such as bw2-v0.3.9
+        required: true
+        type: string
 permissions:
   contents: write
 jobs:
@@ -10,6 +16,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && 'main' || github.ref }}
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
@@ -22,13 +30,13 @@ jobs:
       - run: npm run verify
       - name: Check tag matches source version
         env:
-          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
         run: |
           node -e "const [channel,v]=process.env.RELEASE_TAG.split('-v');const actual=require('./src/'+channel+'/package.json').version;if(v!==actual)throw Error('Tag and UI version differ')"
       - name: Publish assets
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
         run: |
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             echo "Release already published; keeping existing assets."
