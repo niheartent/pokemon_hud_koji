@@ -1,5 +1,9 @@
 /* HUD beauty layer, injected inside the upstream HUD scope. */
 function swshPartyFocusHTML(c){return c?'<div class="swsh-focus-art">'+pkImgHTML(c.species,c.icon,c.shiny,'swsh-focus-sprite')+'</div>':'<div class="swsh-focus-empty">暂无同行宝可梦</div>';}
+function swshPartyBallHTML(c){
+  var name=c&&c.ball||'',label=name||'未记录捕获球种';
+  return '<span class="swsh-preview-ball" role="img" aria-label="'+esc(label)+'" title="'+esc(label)+'" data-ball="'+esc(name)+'">'+(name?'<span class="swsh-capture-ball item-wiki" data-item="'+esc(name)+'" data-item-en="'+esc(c.ballEn||'')+'" data-cls="swsh-capture-ball">?</span>':'<span class="swsh-capture-ball">?</span>')+'</span>';
+}
 
 function swshSelectPartyCard(app,row){
   if(!row||row.classList.contains('swsh-selected'))return;
@@ -11,6 +15,8 @@ function swshSelectPartyCard(app,row){
   row.classList.add('swsh-selected');
   var focus=party.querySelector('.swsh-party-focus');if(!focus)return;
   focus.innerHTML=swshPartyFocusHTML(c);
+  var ball=party.querySelector('.swsh-preview-ball');
+  if(ball){ball.outerHTML=swshPartyBallHTML(c);resolveItemImgs(party.querySelector('.swsh-preview-ball'));}
   pkImgFix(focus);resolvePkmImgs(focus);hudResolvePkidbImages(focus);
 }
 function swshStepPartyCard(app,button){
