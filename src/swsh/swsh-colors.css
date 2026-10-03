@@ -10,6 +10,9 @@
   --swsh-divider:#d4dde5;
   --swsh-on-surface:#24313e;
   --swsh-muted:#536577;
+  --swsh-link:#245c86;
+  --swsh-input:#e9eff3;
+  --swsh-on-selected:#ffffff;
   --swsh-accent:#b82e46;
   --swsh-fold-accent:#b82e46;
   --swsh-accent-soft:#fce9ed;
@@ -59,6 +62,8 @@
   --swsh-divider:rgba(154,173,209,.28);
   --swsh-on-surface:#dce5f6;
   --swsh-muted:#a9b9d2;
+  --swsh-link:#9dcff4;
+  --swsh-input:#1b2941;
   --swsh-accent:#f08b9c;
   --swsh-fold-accent:#8fb9d9;
   --swsh-accent-soft:#293653;
@@ -135,6 +140,35 @@
 :is(#pkm-hud-win,#pkm-hud-inline) .swsh-settings :is(.set-opts,.src-fold){border-color:var(--swsh-divider)}
 :is(#pkm-hud-win,#pkm-hud-inline) .swsh-settings input:is([type=checkbox],[type=radio],[type=range]){accent-color:var(--swsh-selected-bg)}
 
+/* Shared page and control roles, covering every native renderer. */
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.page,.modal,.plain-frame,.battle-frame,.info-frame){
+  background:var(--swsh-surface);color:var(--swsh-on-surface)!important;border-color:var(--swsh-border)!important;
+}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.page-head,.modal-head){background:var(--swsh-surface-soft);color:var(--swsh-on-surface)!important;border-color:var(--swsh-divider)}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.page-close,.close,.modal-name,.info-title,.badge-name,.box-name,.item-name,.task-text,.event-item p,.dt-name,.dt-hold,.dt-move-cell .move-name,.mv-name,.dex-name){color:var(--swsh-on-surface);text-shadow:none}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.row .k,.modal-sub,.dt-lv,.dex-no,.dex-count,.dex-types,.dex-cell.unknown .dex-name,.item-count,.empty,.dim){color:var(--swsh-muted)}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.btn-small,.cmd-btn,.cmd-tip,.bag-tab,.badge-tab,.map-tab,.dex-filter-btn,.dex-thumb-btn,.map-size-btn,.map-eye,.map-back-btn,.map-pad-toggle,.map-manual-btn,.map-size-done,.mv-tab,.pkm-form-btn,.dt-more-btn,.act-btn){
+  background:var(--swsh-surface-soft)!important;color:var(--swsh-on-surface)!important;border-color:var(--swsh-border)!important;text-shadow:none;box-shadow:none;
+}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.btn-small,.cmd-btn,.cmd-tip,.bag-tab,.badge-tab,.map-tab,.dex-filter-btn,.dex-thumb-btn,.map-size-btn,.map-eye,.map-back-btn,.map-pad-toggle,.map-manual-btn,.map-size-done,.mv-tab,.pkm-form-btn,.dt-more-btn,.act-btn):hover{
+  background:var(--swsh-surface-hover)!important;color:var(--swsh-on-surface)!important;border-color:var(--swsh-accent)!important;filter:none;
+}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.bag-tab,.badge-tab,.map-tab,.dex-filter-btn,.mv-tab,.pkm-form-btn).active,
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.map-eye,.map-pad-toggle).on{
+  background:var(--swsh-selected-bg)!important;color:var(--swsh-on-selected)!important;border-color:var(--swsh-selected-bg)!important;
+}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(input[type=text],input[type=search],input[type=password],input[type=number],textarea,select){
+  background:var(--swsh-input)!important;color:var(--swsh-on-surface)!important;border-color:var(--swsh-border)!important;
+}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(input,textarea)::placeholder{color:var(--swsh-muted);opacity:1}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(input,textarea,select):focus{border-color:var(--swsh-link)!important;outline-color:var(--swsh-link)}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.dex-cell,.box-cell,.src-fold,.cmd-panel,.dt-move-cell,.dt-hex,.map-size-pop){background:var(--swsh-surface-soft);border-color:var(--swsh-border)!important;color:var(--swsh-on-surface)!important}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.dex-cell,.box-cell):hover{background:var(--swsh-surface-hover);border-color:var(--swsh-accent)!important}
+:is(#pkm-hud-win,#pkm-hud-inline) .dex-cell.caught{background:var(--swsh-accent-soft);border-color:var(--swsh-accent)!important}
+:is(#pkm-hud-win,#pkm-hud-inline) .dex-cell.seen{background:var(--swsh-scene);border-color:var(--swsh-border)!important}
+:is(#pkm-hud-win,#pkm-hud-inline) .dex-cell.unknown{background:var(--swsh-surface-soft);border-color:var(--swsh-divider)}
+:is(#pkm-hud-win,#pkm-hud-inline) :is(.item-icon.placeholder,.map-manual-controls){background:var(--swsh-surface-soft);color:var(--swsh-muted)}
+
 /* Day party surfaces: soft molded shells and a graphite selection. */
 :is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .swsh-party-foot,
 :is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .tab-bar{
@@ -168,10 +202,10 @@
   background:var(--swsh-detail-move);border-color:var(--swsh-border);box-shadow:0 2px 4px rgba(30,48,66,.06);
 }
 :is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal .act-btn{
-  background:#dce5eb;color:var(--swsh-on-surface);border-color:var(--swsh-border);
+  background:#dce5eb!important;color:var(--swsh-on-surface)!important;border-color:var(--swsh-border)!important;
 }
 :is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal :is([data-pkm-store],[data-pkm-withdraw]){
-  background:#eedfe3;color:var(--swsh-detail-name);border-color:#c9939e;
+  background:#eedfe3!important;color:var(--swsh-detail-name)!important;border-color:#c9939e;
 }
 :is(#pkm-hud-win,#pkm-hud-inline):not(.swsh-dark) .detail-modal .act-btn:hover{border-color:var(--swsh-accent)}
 

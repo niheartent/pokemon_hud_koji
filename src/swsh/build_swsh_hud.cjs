@@ -4,7 +4,7 @@ const acorn=require('acorn');
 const root=__dirname,out=path.join(root,'HUD美化版-交付'),sourcePath=path.join(root,'pkm-hud-swsh-upstream.json');
 const payload=JSON.parse(fs.readFileSync(sourcePath,'utf8').replace(/^\uFEFF/,'')),source=payload.content;
 const read=name=>fs.readFileSync(path.join(root,name),'utf8').replace(/\r\n/g,'\n');
-const version='1.5.0',sourceAst=acorn.parse(source,{ecmaVersion:'latest'});
+const version='1.5.1',sourceAst=acorn.parse(source,{ecmaVersion:'latest'});
 const outer=sourceAst.body[0].expression.callee.body,versionDeclaration=outer.body.filter(n=>n.type==='VariableDeclaration').flatMap(n=>n.declarations).find(n=>n.id.name==='PK_VER');
 const core=versionDeclaration.init.value;
 const license=fs.readFileSync(path.join(path.dirname(require.resolve('acorn')),'../LICENSE'),'utf8');

@@ -10,7 +10,7 @@ visit(acorn.parse(local,{ecmaVersion:'latest'}));
 const scope={PK_BEAUTY_PACKAGE:pkg};vm.createContext(scope);vm.runInContext(pkg.runtime,scope);
 const updated=scope.pkBeautyBuildRemote(fs.readFileSync(path.join(__dirname,'../bw2/upstream-update-fixture.js'),'utf8'));
 const fixture={人际关系:{小霞:65,小刚:42},战场:{规则:'野生霸主狂暴战｜胜负:击倒或收服',场景:'第1回合｜暴雨:水×1.5 火×0.5',场上:{'伯劳·钢铠鸦(我方)':'Lv.72 251/251｜攻181 防190 特攻82 特防143 速130｜特性:镜甲｜招式:勇鸟猛攻/急速折返｜阶级:攻+1 防-1','红色暴鲤龙(敌方)':'Lv.74 496/496｜特性:威吓｜招式:攀瀑/龙之舞｜阶级:防+1｜状态:霸主狂暴'},各方:{红色暴鲤龙:'战术:狂暴攻击｜后备0'}}};
-const bridge='window.__COLOR_TEST={theme:function(value){swshDarkTheme=value;swshApplyTheme(document.getElementById("pkm-hud-inline"));},refresh:pkRefreshData};';
+const bridge='window.__COLOR_TEST={theme:function(value){swshDarkTheme=value;swshApplyTheme(document.getElementById("pkm-hud-inline"));},open:openPage,refresh:pkRefreshData};loadDexList=function(region,callback){callback(Array.from({length:30},function(_,i){return {id:String(i+1),ndex:String(i+1),name:i===0?"君主蛇":"测试精灵"+i};}));};';
 function htmlFor(code){code=code.replace('try{pkReadUpdateCache();}catch(e){}',bridge+'\ntry{pkReadUpdateCache();}catch(e){}');const start=template.lastIndexOf('<script>'),end=template.lastIndexOf('</script>');return template.slice(0,start+8)+'Object.assign(previewState,'+JSON.stringify(fixture)+');'+code.replaceAll('</script','<\\/script')+template.slice(end);}
 function rgb(s){const nums=s.match(/[\d.]+/g).map(Number);return nums.slice(0,3).map(v=>v/255);}
 function luminance(c){return rgb(c).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);}
@@ -56,7 +56,24 @@ for(const [core,code] of [['bundled',local],['3.3.19',updated]])for(const width 
    await page.locator('.detail-modal').screenshot({path:path.join(out,`颜色-${core}-${width}-${theme}-详情.png`)});
    await page.locator('.detail-modal [data-close]').click();
   }
-  results.push({core,width,theme,minContrast:Math.min(...checks.map(x=>x.ratio)),checks});
+  const auditedPages=[];
+  for(const key of ['pokedex','bag','box','badge','breeding','map','typechart','settings']){
+   await page.evaluate(key=>__COLOR_TEST.open(key),key);await page.locator('.page-overlay.open .page').waitFor();
+   if(key==='pokedex')await page.waitForFunction(()=>document.querySelectorAll('#pokedex-grid .dex-cell').length===30);
+   const controlChecks=await page.locator('.page-overlay.open').evaluate(root=>{
+    const parse=s=>(s.match(/[\d.]+/g)||[]).map(Number);
+    function background(el){let stack=[];for(let n=el;n;n=n.parentElement)stack.push(parse(getComputedStyle(n).backgroundColor));let out=[255,255,255];stack.reverse().forEach(v=>{if(v.length<3)return;const a=v.length===4?v[3]:1;out=out.map((x,i)=>x*(1-a)+v[i]*a);});return 'rgb('+out.join(',')+')';}
+    return Array.from(root.querySelectorAll('.badge-tab,.dex-filter-btn,.dex-thumb-btn,.btn-small,.act-btn,.box-select,.info-title,.item-name,.item-count,.dex-name,.dex-no,.dex-count,.row .k,.row .v,.set-title,.set-opt,.dim')).filter(el=>el.getClientRects().length&&getComputedStyle(el).visibility==='visible'&&el.textContent.trim()).map(el=>({selector:el.className,text:el.textContent.trim().slice(0,40),fg:getComputedStyle(el).color,bg:background(el)}));
+   });
+   for(const check of controlChecks){check.ratio=contrast(check.fg,check.bg);assert(check.ratio>=4.5,`page ${key} ${core} ${width} ${theme} ${check.selector} ${check.text}: ${check.ratio} (${check.fg}/${check.bg})`);}
+   auditedPages.push({key,checks:controlChecks.length});checks.push(...controlChecks);
+   if(key==='pokedex'){
+    for(const filter of ['caught','seen','unknown','all']){await page.locator('[data-dexfilter="'+filter+'"]').click();await page.mouse.move(width-1,1099);await page.waitForTimeout(160);const active=await scan(['.dex-filter-btn.active'],'--swsh-selected-bg');assert(contrast(active[0].fg,active[0].bg)>=4.5,JSON.stringify({core,width,theme,filter,active}));}
+    await page.locator('.page-overlay.open .page').screenshot({path:path.join(out,`颜色-${core}-${width}-${theme}-图鉴.png`)});
+   }
+   await page.locator('.page-overlay.open [data-page-close]').click();
+  }
+  results.push({core,width,theme,auditedPages,minContrast:Math.min(...checks.map(x=>x.ratio)),checks});
  }
  // Use the actual settings handler to persist day mode, then reload.
  await page.locator('[data-tab="4"]').click();await page.locator('#tab-4 [data-page="settings"]').click();
