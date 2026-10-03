@@ -46,13 +46,14 @@ for(const [core,code] of [['bundled',local],['3.3.19',updated]])for(const width 
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal overflow');
   const theme=dark?'dark':'light';await page.locator('.hud').screenshot({path:path.join(out,`颜色-${core}-${width}-${theme}-战场.png`)});
   await page.locator('[data-tab="1"]').click();await page.locator('#tab-1').evaluate(el=>el.scrollTop=0);await page.locator('.hud').screenshot({path:path.join(out,`颜色-${core}-${width}-${theme}-主页.png`)});
-  if(!dark){
+  {
    await page.locator('.swsh-party-list>.card-frame').first().click();await page.locator('.detail-modal').waitFor();
-   const detailChecks=await scan(['.detail-modal .dt-name','.detail-modal .dt-hold','.detail-modal .dt-lv','.detail-modal .row .k','.detail-modal .row .v'],'--swsh-detail-bg');
-   detailChecks.push(...await scan(['.detail-modal .move-name'],'--swsh-detail-move'));
+   const detailChecks=dark?[]:await scan(['.detail-modal .dt-name','.detail-modal .dt-hold','.detail-modal .dt-lv','.detail-modal .row .k','.detail-modal .row .v'],'--swsh-detail-bg');
+   if(!dark)detailChecks.push(...await scan(['.detail-modal .move-name'],'--swsh-detail-move'));
+   detailChecks.push(...await scan(['.detail-modal .iv'],'--swsh-iv-bg'));
    for(const check of detailChecks){check.ratio=contrast(check.fg,check.bg);assert(check.ratio>=4.5,`detail ${core} ${width} ${check.selector}: ${check.ratio}`);}
    checks.push(...detailChecks);
-   await page.locator('.detail-modal').screenshot({path:path.join(out,`颜色-${core}-${width}-light-详情.png`)});
+   await page.locator('.detail-modal').screenshot({path:path.join(out,`颜色-${core}-${width}-${theme}-详情.png`)});
    await page.locator('.detail-modal [data-close]').click();
   }
   results.push({core,width,theme,minContrast:Math.min(...checks.map(x=>x.ratio)),checks});
