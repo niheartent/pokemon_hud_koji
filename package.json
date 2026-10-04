@@ -11,7 +11,7 @@
     "build": "npm run build:bw2 && npm run build:swsh",
     "test:bw2": "npm --prefix src/bw2 test && npm --prefix src/bw2 run test:detail",
     "test:swsh": "npm --prefix src/swsh test",
-    "test": "npm run test:bw2 && npm run test:swsh && node tests/remote-update.cjs && node tests/style-isolation.cjs && node tests/upstream-compatibility.cjs",
+    "test": "npm run test:bw2 && npm run test:swsh && node tests/remote-update.cjs && node tests/style-isolation.cjs && node tests/upstream-compatibility.cjs && node tests/upgrade-from-published.cjs",
     "package": "node tools/package-release.cjs",
     "verify": "node tools/verify-release.cjs",
     "check:upstream": "node tools/check-upstream.cjs --fetch"
