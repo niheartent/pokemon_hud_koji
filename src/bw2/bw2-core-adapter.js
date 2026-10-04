@@ -8,22 +8,8 @@ function replace(oldText,newText,record=true){if(code.split(oldText).length!==2)
 function replaceFunction(name,newText){if(!functions[name])throw new Error('Missing function '+name);replace(functions[name],newText);}
 function fragment(source,oldText,newText){if(source.split(oldText).length!==2)throw new Error('Missing/ambiguous function hook: '+oldText.slice(0,75));return source.replace(oldText,function(){return newText;});}
 const version=config.version,core=code.match(/var PK_VER='([^']+)'/)[1];
-// Presentation has one owner. Freeze the verified BW2/native visual foundation;
-// upstream releases may change domain logic without silently recoloring the HUD.
-const nativeVisualCss=config.nativeCss;
-let cssInit;const cssAdditions=[],cssBoundary=original.indexOf('\n\ntry{\n  var _deadIds=');
-function collectStyles(node){
-  if(!node||!node.type||node.start>=cssBoundary)return;
-  if(node.type==='VariableDeclarator'&&node.id.name==='css'&&!cssInit)cssInit=node.init;
-  if(node.type==='ExpressionStatement'&&node.expression.type==='AssignmentExpression'&&node.expression.left.name==='css'&&node.expression.operator==='+=')cssAdditions.push(node);
-  for(const value of Object.values(node))if(Array.isArray(value))value.forEach(collectStyles);else if(value&&value.type)collectStyles(value);
-}collectStyles(ast);
-if(!cssInit)throw new Error('Missing native style initialization');
-// Edit syntax ranges, including identical CSS additions, without text anchors.
-const styleEdits=[{start:cssInit.start,end:cssInit.end,text:JSON.stringify(nativeVisualCss)}].concat(cssAdditions.map(statement=>({start:statement.start,end:statement.end,text:''})));
-styleEdits.sort((a,b)=>b.start-a.start);
-for(const edit of styleEdits){patches.push([original.slice(edit.start,edit.end),edit.text]);code=code.slice(0,edit.start)+edit.text+code.slice(edit.end);}
-baseCss=nativeVisualCss;
+// Templates and CSS have already been supplied by the owned presentation boundary.
+baseCss=config.nativeCss;
 replace("var PK_VER='"+core+"';","var PK_VER='"+core+"';\nvar PK_BEAUTY_VER='"+version+"';",false);
 // A newer manually imported UI must not delegate to an older UI's cached core.
 replace("var PK_RUNTIME_DB='pk_hud_runtime_v1';","var PK_RUNTIME_DB='pk_hud_koji_bw2_runtime_v1';");
@@ -50,9 +36,6 @@ replaceFunction('inlineHStep','function inlineHStep(d){return bw2ScaleStep(d/2);
 replaceFunction('inlineHApply','function inlineHApply(){return bw2ScaleApply(false);}');
 replaceFunction('inlineHReset','function inlineHReset(){return bw2ScaleApply(true);}');
 replace("var inlineOpt=(winMode==='0')?'<label class=\"set-opt\" style=\"cursor:default\">内嵌模式高度：<b>'+inlineH+'</b> px</label><button class=\"act-btn\" data-inline-h-open>📏 调整内嵌模式高度</button>':'';","var inlineOpt='<label class=\"set-opt\">界面缩放：<b>'+bw2ScalePercent+'</b> %</label><button class=\"act-btn\" data-inline-h-open>等比放大／缩小</button>';");
-const themeStart=code.indexOf('<div class="set-title">主题颜色</div>'),themeEnd=code.indexOf('<div class="set-title">图标</div>',themeStart);
-if(themeStart<0||themeEnd<0)throw new Error('Missing theme settings group');
-replace(code.slice(themeStart,themeEnd),'<div class="dim">界面使用黑白2版固定配色。</div>');
 replaceFunction('detailHTML',functions.detailHTML.replace('function detailHTML(c)','function bw2LegacyDetailHTML(c)')+'\nfunction detailHTML(c){return bw2DetailHTML(c);}');
 replaceFunction('refreshHudPanels','function refreshHudPanels(app){return bw2RefreshPanels(app);}');
 let render=functions.render;

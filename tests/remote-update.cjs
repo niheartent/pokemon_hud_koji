@@ -37,7 +37,7 @@ try{for(const channel of ['bw2','swsh']){
   release=futureCode+'\n/*tampered*/';assert.equal(await page.evaluate(()=>__KOJI_TEST.check()),true);
   assert.equal((await page.evaluate(()=>__KOJI_TEST.snapshot())).prepared.ui,version);release=futureCode;
   manifest={...futureManifest,channel:channel==='bw2'?'swsh':'bw2'};upstream=native;assert.equal(await page.evaluate(()=>__KOJI_TEST.check()),false,'cross-channel blocked');
-  manifest=futureManifest;upstream=upstream.replace('function teamHTML()','function missingTeamHTML()');
+  manifest=futureManifest;upstream=upstream.replace('function pkDoUpdate(','function missingCoreUpdate(');
   assert.equal(await page.evaluate(()=>__KOJI_TEST.check()),true,'UI release survives incompatible upstream');
   assert.equal((await page.evaluate(()=>__KOJI_TEST.snapshot())).prepared.core,core);
   coreFail=true;assert.equal(await page.evaluate(()=>__KOJI_TEST.check()),true,'UI release survives upstream network failure');coreFail=false;upstream=native;

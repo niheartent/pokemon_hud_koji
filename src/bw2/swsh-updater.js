@@ -50,13 +50,11 @@ function pkBeautyBuildRemote(raw){
   if(raw.indexOf('pkm-hud-btn')<0)throw new Error('原版 HUD 标识缺失');
   if(!pkBeautyParser)pkBeautyParser=Function('return '+pkg.parser)();
   var adapted;
-  try{adapted=bw2AdaptCore(raw,pkBeautyParser,{version:pkg.version,nativeCss:pkg.nativeCss});}
+  try{adapted=bw2AdaptCore(kojiOwnPresentation(raw,pkBeautyParser,pkg.presentation,pkg.nativeCss,pkg.presentationContract),pkBeautyParser,{version:pkg.version,nativeCss:pkg.nativeCss});}
   catch(e){throw new Error('原版接口不兼容：'+(e&&e.message||e));}
   var code=kojiPatchBootstrap(adapted.code);
   var injected="\nvar PK_BEAUTY_PACKAGE="+JSON.stringify(pkg)+";\n"+pkg.runtime+"\n"+pkg.beauty+"\n"+(pkg.updateRuntime||'')+"\ncss += "+JSON.stringify(pkg.css)+";";
-  var marker="\n\ntry{\n  var _deadIds=";
-  if(code.split(marker).length!==2)throw new Error('原版接口不兼容：美化模块启动');
-  code=code.replace(marker,function(){return injected+marker;});
+  code=kojiInsertPresentationModule(code,pkBeautyParser,injected);
   try{new Function(code);}catch(e){throw new Error('合成后的脚本语法错误：'+(e&&e.message||e));}
   return code;
 }

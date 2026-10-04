@@ -1,9 +1,9 @@
-/* Decorate freshly rendered native HTML; keep upstream functions and handlers. */
-var swshNative={teamHTML:teamHTML,trainerHTML:trainerHTML,quickHTML:quickHTML,homeFoldHTML:homeFoldHTML,menuHTML:menuHTML,worldHTML:worldHTML,cmdPanelHTML:cmdPanelHTML,settingsHTML:settingsHTML,render:render,pkCheckUpdate:pkCheckUpdate,pkDoUpdate:pkDoUpdate,pkRepair:pkRepair,showNoticeModal:showNoticeModal,pkSetUpdateMsg:pkSetUpdateMsg};
+/* Compose our owned view components; core handlers remain the behavior contract. */
+var swshBaseViews={teamHTML:teamHTML,trainerHTML:trainerHTML,quickHTML:quickHTML,homeFoldHTML:homeFoldHTML,menuHTML:menuHTML,worldHTML:worldHTML,cmdPanelHTML:cmdPanelHTML,settingsHTML:settingsHTML,render:render,pkCheckUpdate:pkCheckUpdate,pkDoUpdate:pkDoUpdate,pkRepair:pkRepair,showNoticeModal:showNoticeModal,pkSetUpdateMsg:pkSetUpdateMsg};
 // Newer cores have a hue/lightness engine; the two fixed palettes replace it.
 if(typeof pkThemeApplyScheme==='function')pkThemeApplyScheme=function(){};
 function swshDOM(html){var el=document.createElement('div');el.innerHTML=html;return el;}
-// One last result per renderer: bounded, in-memory, and native generation still runs.
+// One last result per renderer: bounded, in-memory, and owned base generation still runs.
 var swshDecorationCache=Object.create(null);
 function swshDecorate(nativeFn,decorate,args,context,key,extra){
   var html=nativeFn.apply(context,args);
@@ -17,7 +17,7 @@ function swshDecorate(nativeFn,decorate,args,context,key,extra){
 }
 function swshTeamDependency(){var current=buildCards(),lead=current.find(function(c){return !c.empty;});return JSON.stringify(current)+'|'+swshPartyFocusHTML(lead);}
 function swshReplaceIcon(el,key,size){if(!el)return;var icon=swshIcon(key,size);if(icon)el.innerHTML=icon;}
-function swshNativeTeam(html){
+function swshBaseViewsTeam(html){
   var dom=swshDOM(html),grid=dom.querySelector('.grid'),rows=Array.from(dom.querySelectorAll('.card-frame[data-slot],.empty-frame'));
   if(!grid||!rows.length)return html;
   var cards=buildCards(),occupied=cards.filter(function(c){return !c.empty;}),lead=occupied[0];
@@ -26,12 +26,12 @@ function swshNativeTeam(html){
   Array.from(grid.attributes).forEach(function(a){if(a.name==='class')a.value.split(/\s+/).filter(Boolean).forEach(function(c){section.classList.add(c);});else section.setAttribute(a.name,a.value);});
   rows.forEach(function(row,i){row.querySelectorAll('.card-bg-svg').forEach(function(svg){svg.remove();});if(cards[i])row.setAttribute('data-swsh-party-slot',cards[i].slot);if(lead&&String(lead.slot)===row.getAttribute('data-slot'))row.classList.add('swsh-selected');list.appendChild(row);});
   if(!lead)section.querySelectorAll('[data-party-step]').forEach(function(button){button.disabled=true;});
-  // Keep additional native content, including future team annotations.
+  // Keep additional native content, including annotations added to our own templates.
   grid.querySelectorAll('.col').forEach(function(col){while(col.firstChild)grid.insertBefore(col.firstChild,col);col.remove();});
   if(grid.innerHTML.trim()){var extra=document.createElement('div');extra.className='swsh-native-extra';while(grid.firstChild)extra.appendChild(grid.firstChild);section.appendChild(extra);}
   grid.replaceWith(section);return dom.innerHTML;
 }
-function swshNativeTrainer(html){
+function swshBaseViewsTrainer(html){
   var dom=swshDOM(html),frame=dom.querySelector('.trainer-frame'),inner=frame&&frame.querySelector('.info-inner');if(!inner)return html;
   var rows=Array.from(inner.children).filter(function(el){return el.classList.contains('info-row');});
   function take(label){return rows.find(function(row){var key=row.querySelector('.k');return key&&key.textContent.trim()===label;});}
@@ -42,21 +42,21 @@ function swshNativeTrainer(html){
   var refresh=title.querySelector('.hud-refresh-btn');if(refresh)section.querySelector('.swsh-trainer-tools').prepend(refresh);
   var env=title.querySelector('.tr-env'),parts=env?Array.from(env.children):[];section.querySelector('.swsh-place').textContent=parts[0]?parts[0].textContent.replace(/^📍\s*/,''):'地点未记录';section.querySelector('.swsh-time').textContent=parts[1]?parts[1].textContent.replace(/^🕐\s*/,''):'时间未记录';
   if(badges){section.querySelector('.swsh-badges').appendChild(badges);swshReplaceIcon(badges.querySelector('[data-badge-open]'),'badge',16);var badgeButton=badges.querySelector('[data-badge-open]');if(badgeButton)badgeButton.appendChild(document.createTextNode(' 查看'));}
-  // A new native trainer field remains visible in the expandable details.
+  // An owned trainer field remains visible in the expandable details.
   title.remove();while(inner.firstChild)section.querySelector('.swsh-trainer-details-body').appendChild(inner.firstChild);
   Array.from(frame.attributes).forEach(function(a){if(a.name!=='class')section.setAttribute(a.name,a.value);});frame.replaceWith(section);return dom.innerHTML;
 }
-function swshNativeMenu(html){var dom=swshDOM(html);dom.querySelectorAll('.menu-item[data-page]').forEach(function(item){swshReplaceIcon(item.querySelector('.menu-icon-wrap'),item.getAttribute('data-page'),getIconSize('m-'+item.getAttribute('data-page')));});return dom.innerHTML;}
-function swshNativeQuick(html){var dom=swshDOM(html);dom.querySelectorAll('.quick-chip[data-page]').forEach(function(item){var key=item.getAttribute('data-page'),icon=swshIcon(key,getIconSize('q-'+key));if(!icon)return;var old=item.querySelector('img,.quick-emoji');if(old){var span=document.createElement('span');span.className='swsh-quick-icon';span.innerHTML=icon;old.replaceWith(span);}});return dom.innerHTML;}
-function swshNativeFold(html){var dom=swshDOM(html);dom.querySelectorAll('[data-fold]').forEach(function(head){var key=head.getAttribute('data-fold'),label=head.firstElementChild,icon=key==='bagfold'?'bag':key==='relfold'?'rel':'';if(label&&icon){label.classList.add('swsh-fold-label');var text=label.textContent.replace(/^[💬\s]+/u,'');label.innerHTML=swshIcon(icon,20);label.appendChild(document.createTextNode(text));}});return dom.innerHTML;}
-function swshNativeWorld(html){var dom=swshDOM(html),keys=['pin','news','globe'];dom.querySelectorAll('.event-type').forEach(function(label){var text=label.textContent,key=/附近遭遇/.test(text)?keys[0]:/地区新闻/.test(text)?keys[1]:/区域动态/.test(text)?keys[2]:'';if(key){label.innerHTML=swshIcon(key,18);label.appendChild(document.createTextNode(text.replace(/^[📍📰🌍\s]+/u,'')));}});return dom.innerHTML;}
+function swshBaseViewsMenu(html){var dom=swshDOM(html);dom.querySelectorAll('.menu-item[data-page]').forEach(function(item){swshReplaceIcon(item.querySelector('.menu-icon-wrap'),item.getAttribute('data-page'),getIconSize('m-'+item.getAttribute('data-page')));});return dom.innerHTML;}
+function swshBaseViewsQuick(html){var dom=swshDOM(html);dom.querySelectorAll('.quick-chip[data-page]').forEach(function(item){var key=item.getAttribute('data-page'),icon=swshIcon(key,getIconSize('q-'+key));if(!icon)return;var old=item.querySelector('img,.quick-emoji');if(old){var span=document.createElement('span');span.className='swsh-quick-icon';span.innerHTML=icon;old.replaceWith(span);}});return dom.innerHTML;}
+function swshBaseViewsFold(html){var dom=swshDOM(html);dom.querySelectorAll('[data-fold]').forEach(function(head){var key=head.getAttribute('data-fold'),label=head.firstElementChild,icon=key==='bagfold'?'bag':key==='relfold'?'rel':'';if(label&&icon){label.classList.add('swsh-fold-label');var text=label.textContent.replace(/^[💬\s]+/u,'');label.innerHTML=swshIcon(icon,20);label.appendChild(document.createTextNode(text));}});return dom.innerHTML;}
+function swshBaseViewsWorld(html){var dom=swshDOM(html),keys=['pin','news','globe'];dom.querySelectorAll('.event-type').forEach(function(label){var text=label.textContent,key=/附近遭遇/.test(text)?keys[0]:/地区新闻/.test(text)?keys[1]:/区域动态/.test(text)?keys[2]:'';if(key){label.innerHTML=swshIcon(key,18);label.appendChild(document.createTextNode(text.replace(/^[📍📰🌍\s]+/u,'')));}});return dom.innerHTML;}
 function swshDecorateCommands(scope){
   var keys=['training','dodge','initiative','guard','revive','mega','clash'];
   scope.querySelectorAll('.cmd-panel .cmd-btn').forEach(function(button,i){if(button.querySelector('.swsh-cmd-label'))return;var text=button.textContent.replace(/^[^\p{L}\p{N}]+/u,'');button.innerHTML='<span class="swsh-cmd-icon">'+swshIcon(keys[i]||'command',24)+'</span><span class="swsh-cmd-label">'+esc(text)+'</span>';});
   scope.querySelectorAll('.cmd-panel .cmd-tip').forEach(function(button){if(!button.querySelector('svg'))swshReplaceIcon(button,'help',18);});
   scope.querySelectorAll('.cmd-panel summary').forEach(function(summary){if(!summary.querySelector('svg')){var text=summary.textContent.replace(/^⌨️\s*/,'');summary.innerHTML=swshIcon('command',22)+'<span>'+esc(text)+'</span>';}});
 }
-function swshNativeCommands(html){var dom=swshDOM(html);swshDecorateCommands(dom);return dom.innerHTML;}
+function swshBaseViewsCommands(html){var dom=swshDOM(html);swshDecorateCommands(dom);return dom.innerHTML;}
 function swshUpdateLogHTML(){
   var downloaded=!!(pkLatestContent&&pkLatestVer),version=downloaded?pkLatestVer:PK_VER;
   var notice=downloaded?pkLatestNotice:PK_BEAUTY_PACKAGE.coreNotice;
@@ -65,14 +65,9 @@ function swshUpdateLogHTML(){
 function swshRefreshUpdateLog(){
   document.querySelectorAll('[data-swsh-update-logs]').forEach(function(box){var html=swshUpdateLogHTML();if(box._swshUpdateLogHTML!==html){box.innerHTML=html;box._swshUpdateLogHTML=html;}});
 }
-function swshNativeSettings(html){
+function swshBaseViewsSettings(html){
   var dom=swshDOM(html),check=dom.querySelector('[data-pk-check-update]'),update=dom.querySelector('[data-pk-do-update]'),copy=dom.querySelector('[data-pk-show-content]');
   var settings=dom.querySelector('.info-inner');if(settings)settings.classList.add('swsh-settings');
-  // Fixed day/night palettes own all colors. Remove native controls from the
-  // generated DOM so no obsolete color handlers can bind to them after updates.
-  function removeColorGroup(group){if(!group||!group.parentNode)return;var title=group.previousElementSibling;if(title&&title.classList.contains('set-title'))title.remove();group.remove();}
-  dom.querySelectorAll('.set-title').forEach(function(title){if(/^(主题颜色|主题色|文字颜色|文本颜色|字体颜色)$/.test(title.textContent.trim())){var group=title.nextElementSibling;if(group&&group.classList.contains('set-opts'))removeColorGroup(group);else title.remove();}});
-  dom.querySelectorAll('[data-theme-hue],[data-theme-preset],[data-theme-light],[data-theme-light-toggle],[data-theme-color-reset],[data-text-color],[data-font-color]').forEach(function(control){removeColorGroup(control.closest('.set-opts'));});
   if(check&&update){update.textContent='⬆️ 更新已验证的美化版';if(copy)copy.textContent='📋 复制已合成的美化版';var repair=dom.querySelector('[data-pk-repair]');if(repair)repair.remove();
     var box=check.closest('.set-opts');if(box){var row=swshDOM('<div class="info-row"><span class="k">HUD 美化版</span><span class="v">v'+PK_BEAUTY_VER+'</span></div><div class="dim" style="font-size:.72rem">先检查上游接口，通过后才可安装。普通文案、排版和功能改动保留。</div>');var first=box.querySelector('.info-row');while(row.firstChild)box.insertBefore(row.firstChild,first?first.nextSibling:check);}
     if(box){var logs=document.createElement('div');logs.setAttribute('data-swsh-update-logs','');logs.innerHTML=swshUpdateLogHTML();box.appendChild(logs);}
@@ -80,14 +75,14 @@ function swshNativeSettings(html){
   var toggle=dom.querySelector('[data-toggle="winmode"]'),mode=toggle&&toggle.closest('.set-opts');if(mode){var title=mode.previousElementSibling,extras=swshDOM('<div class="set-title">界面配色</div><div class="set-opts"><label class="set-opt"><input type="checkbox" data-toggle="swsh-dark"'+(swshDarkTheme?' checked':'')+'>暗色模式（关闭使用白天配色）</label></div><div class="set-title">HUD 宽度</div><div class="set-opts"><label class="swsh-width-control"><input type="range" data-swsh-hud-width aria-label="HUD 宽度" min="480" max="900" step="10" value="'+swshWidthDisplayValue()+'"><output data-swsh-hud-width-value>'+swshWidthDisplayValue()+' px</output></label><button type="button" class="act-btn" data-swsh-hud-width-reset>恢复默认宽度</button></div>');while(extras.firstChild)mode.parentNode.insertBefore(extras.firstChild,title||mode);}
   return dom.innerHTML;
 }
-teamHTML=function(){return swshDecorate(swshNative.teamHTML,swshNativeTeam,arguments,this,'team',swshTeamDependency);};
-trainerHTML=function(){return swshDecorate(swshNative.trainerHTML,swshNativeTrainer,arguments,this,'trainer');};
-menuHTML=function(){return swshDecorate(swshNative.menuHTML,swshNativeMenu,arguments,this,'menu');};
-quickHTML=function(){return swshDecorate(swshNative.quickHTML,swshNativeQuick,arguments,this,'quick');};
-homeFoldHTML=function(){return swshDecorate(swshNative.homeFoldHTML,swshNativeFold,arguments,this,'fold');};
-worldHTML=function(){return swshDecorate(swshNative.worldHTML,swshNativeWorld,arguments,this,'world');};
-cmdPanelHTML=function(){return swshDecorate(swshNative.cmdPanelHTML,swshNativeCommands,arguments,this,'commands');};
-settingsHTML=function(){return swshDecorate(swshNative.settingsHTML,swshNativeSettings,arguments,this);};
+teamHTML=function(){return swshDecorate(swshBaseViews.teamHTML,swshBaseViewsTeam,arguments,this,'team',swshTeamDependency);};
+trainerHTML=function(){return swshDecorate(swshBaseViews.trainerHTML,swshBaseViewsTrainer,arguments,this,'trainer');};
+menuHTML=function(){return swshDecorate(swshBaseViews.menuHTML,swshBaseViewsMenu,arguments,this,'menu');};
+quickHTML=function(){return swshDecorate(swshBaseViews.quickHTML,swshBaseViewsQuick,arguments,this,'quick');};
+homeFoldHTML=function(){return swshDecorate(swshBaseViews.homeFoldHTML,swshBaseViewsFold,arguments,this,'fold');};
+worldHTML=function(){return swshDecorate(swshBaseViews.worldHTML,swshBaseViewsWorld,arguments,this,'world');};
+cmdPanelHTML=function(){return swshDecorate(swshBaseViews.cmdPanelHTML,swshBaseViewsCommands,arguments,this,'commands');};
+settingsHTML=function(){return swshDecorate(swshBaseViews.settingsHTML,swshBaseViewsSettings,arguments,this);};
 // Guard only these owned panels, never Element.prototype or upstream source.
 // Any live markup change invalidates the shortcut, including native interactions.
 function swshGuardPanels(app){
@@ -122,15 +117,15 @@ function swshBindAdapter(app){
     });if(relevant)swshDecorateCommands(app);
   }));observer.observe(app,{childList:true,subtree:true,characterData:true});
 }
-render=function(){swshGuardPanels(swshCurrentApp());var result=swshNative.render.apply(this,arguments),app=swshCurrentApp();swshGuardPanels(app);swshApplyTheme(app);swshApplyWidth();swshBindAdapter(app);return result;};
-pkSetUpdateMsg=function(){var result=swshNative.pkSetUpdateMsg.apply(this,arguments);swshRefreshUpdateLog();return result;};
-pkCheckUpdate=function(){pkBeautyPreparedContent=null;pkBeautyPreparedVer=null;document.querySelectorAll('[data-pk-show-content]').forEach(function(button){button.style.display='none';});return swshNative.pkCheckUpdate.apply(this,arguments);};
+render=function(){swshGuardPanels(swshCurrentApp());var result=swshBaseViews.render.apply(this,arguments),app=swshCurrentApp();swshGuardPanels(app);swshApplyTheme(app);swshApplyWidth();swshBindAdapter(app);return result;};
+pkSetUpdateMsg=function(){var result=swshBaseViews.pkSetUpdateMsg.apply(this,arguments);swshRefreshUpdateLog();return result;};
+pkCheckUpdate=function(){pkBeautyPreparedContent=null;pkBeautyPreparedVer=null;document.querySelectorAll('[data-pk-show-content]').forEach(function(button){button.style.display='none';});return swshBaseViews.pkCheckUpdate.apply(this,arguments);};
 showNoticeModal=function(ver,notice){
   if(pkLatestContent&&pkLatestVer===ver){var button=document.querySelector('[data-pk-do-update]');if(button)button.style.display='none';try{pkBeautyPreparedContent=pkBeautyBuildRemote(pkLatestContent);pkBeautyPreparedVer=ver;pkSetUpdateMsg('✅ 原版 v'+ver+' 兼容美化层，可点击「更新已验证的美化版」');if(button)button.style.display='block';}catch(e){pkBeautyPreparedContent=null;pkBeautyPreparedVer=null;pkSetUpdateMsg('❌ 不兼容，未更新：'+e.message);}return;}
-  return swshNative.showNoticeModal.apply(this,arguments);
+  return swshBaseViews.showNoticeModal.apply(this,arguments);
 };
 pkDoUpdate=function(){
   if(!pkBeautyPreparedContent||pkBeautyPreparedVer!==pkLatestVer){pkSetUpdateMsg('请先检查兼容性，通过后才能更新');return;}
-  pkLatestContent=pkBeautyPreparedContent;return swshNative.pkDoUpdate.apply(this,arguments);
+  pkLatestContent=pkBeautyPreparedContent;return swshBaseViews.pkDoUpdate.apply(this,arguments);
 };
 pkRepair=function(){pkSetUpdateMsg('请先使用「检查更新」验证美化兼容性，再安装已合成版本。');};

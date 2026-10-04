@@ -5,7 +5,7 @@ const root=path.join(__dirname,'..'),raw=process.env.UPSTREAM_CANDIDATE?fs.readF
 const version=raw.match(/var PK_VER='([^']+)'/)[1];
 function functions(code){const map={};walk(acorn.parse(code,{ecmaVersion:'latest'}),n=>{if(n.type==='FunctionDeclaration')map[n.id.name]=code.slice(n.start,n.end);});return map;}
 function walk(n,f){if(!n||!n.type)return;f(n);for(const v of Object.values(n))if(Array.isArray(v))v.forEach(x=>walk(x,f));else if(v&&v.type)walk(v,f);}
-const business=['ensureSpriteMap','spriteMapBase','slugCandidates','resolvePkmIconRepo','resolvePkmBgRepo','candsFor','pkmSrcSlugs','bindPkmSlider','pkmScheduleRender','updatePkmStats','updatePkmStatsNow','diagInfo','diagHTML'];
+const business=['ensureSpriteMap','spriteMapBase','slugCandidates','resolvePkmIconRepo','resolvePkmBgRepo','candsFor','pkmSrcSlugs','bindPkmSlider','pkmScheduleRender','updatePkmStats','updatePkmStatsNow','diagInfo'];
 (async()=>{const browser=await chromium.launch({headless:true,...launchOptions}),results=[];
 try{for(const channel of ['bw2','swsh']){
  const ui=require(path.join(root,'src',channel,'package.json')).version;
@@ -18,7 +18,7 @@ try{for(const channel of ['bw2','swsh']){
  if(channel==='swsh'){
   assert.doesNotThrow(()=>scope.pkBeautyBuildRemote(raw.replace('st.textContent=css;','try{if(true){st.textContent=css;}}catch(e){}')));
   assert.doesNotThrow(()=>scope.pkBeautyBuildRemote(raw.replace('st.textContent=css;',"function unusedShadow(){var css='shadow';var st={};st.textContent=css;}st.textContent=css;")));
-  assert.throws(()=>scope.pkBeautyBuildRemote(raw.replace('st.textContent=css;','st.textContent=css;st.textContent=css;')),/style.textContent/);
+  assert.doesNotThrow(()=>scope.pkBeautyBuildRemote(raw.replace('st.textContent=css;','st.textContent=css;st.textContent=css;')));
  }
  const template=fs.readFileSync(path.join(folder,channel==='bw2'?'预览与测试.html':'剑盾版预览.html'),'utf8');
  const bridge="window.__UPSTREAM_TEST={core:PK_VER,open:openPage};loadDexList=function(region,cb){cb(Array.from({length:12},function(_,i){return {id:String(i+1),ndex:String(i+1),name:'测试精灵'+i};}));};";

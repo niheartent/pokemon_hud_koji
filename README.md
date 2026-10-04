@@ -6,13 +6,13 @@
 
 | 版本 | 下载入口 | 更新方式 |
 | --- | --- | --- |
-| 黑白2完整版 v0.3.11 | [黑白2发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.3.11) | 设置 → 检查更新，检查美化版与弦九核心 |
-| 黑白2独立版 v0.3.11 | 同一发布页的 independent JSON | 重新导入升级 |
-| 剑盾版 v1.5.2 | [剑盾发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.5.2) | 设置 → 检查更新，检查美化版与弦九核心 |
+| 黑白2完整版 v0.4.0 | [黑白2发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.0) | 设置 → 检查更新，检查美化版与弦九核心 |
+| 黑白2独立版 v0.4.0 | 同一发布页的 independent JSON | 重新导入升级 |
+| 剑盾版 v1.6.0 | [剑盾发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.0) | 设置 → 检查更新，检查美化版与弦九核心 |
 
 下载 Release 附件中的 JSON，导入酒馆助手脚本并替换对应旧版。只启用一个 HUD 脚本。旧版首次接入本仓库更新源需要重新导入一次。
 
-本次发布保持已验证的内置核心基线：黑白2 v3.3.1，剑盾 v3.0.16；检查更新可取得新核心。黑白2已对实际 v3.3.19 验证合成启动，剑盾的原生装饰方式也会先检查接口。内置基线与远程最新核心是两个不同版本字段。
+两套内置核心均为 v3.3.29。页面模板、根布局、属性色表和基础样式由本仓库维护，下载的新核心不提供最终页面模板或 CSS。核心数据、操作、图片解析与宿主交互继续通过功能边界接入。
 
 ## 更新逻辑
 
@@ -44,7 +44,7 @@ Windows 可复用已安装的 Chrome；也可通过 `CHROME_PATH` 指定浏览�
 ```text
 src/bw2/       黑白2源码、核心快照、构建与回归
 src/swsh/      剑盾源码、核心快照、构建与回归
-src/shared/    双来源更新器与双版本启动判断
+src/shared/    固定核心、展示组件、功能契约与共享更新器
 tests/         远程更新、真实浏览器缓存启动测试
 tools/         版本调整、打包、校验
 updates/       各通道固定更新清单
