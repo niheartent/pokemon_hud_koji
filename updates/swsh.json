@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.6.1",
+  "ui": "1.6.2",
   "core": "4.0.1",
   "testedCore": [
     "3.3.19",
     "4.0.1"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.1/versions/swsh/1.6.1/hud.js",
-  "sha256": "0447c27b966b2308e6e16aafbf4cc77ce02b3175e1a3e18b90e53b52affd1658",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.1/versions/swsh/1.6.1/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.1",
-  "notes": "# 剑盾 v1.6.1\r\n\r\n- 内置弦九核心 v4.0.1，保留新版图源解析、数据保护和业务功能。\r\n- 修复新版移除 pkImgFix 后剑盾兼容检查阻止更新及队伍预览调用失效的问题；旧核心存在该函数时仍保留旧图源处理。\r\n- 自有设置页增加 GitHub 直连／镜像加速切换，使用原版的数据源与回退接口。\r\n- 保留本地页面、独立配色、字体和布局，默认暗色及已保存主题选择不变。\r\n- 更新同时检查美化版与弦九核心；最新核心不兼容时仍可采用已验证的发布组合，禁止核心降级。\r\n\r\n在设置中检查更新，出现新版提示后点击安装并刷新。黑白2独立版需重新导入更新。\r\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.2/versions/swsh/1.6.2/hud.js",
+  "sha256": "a4e93fccc884be8aa6d81c0dd20286b889d11432690003121ccf9cfdcf281aa8",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.2/versions/swsh/1.6.2/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.2",
+  "notes": "# 剑盾 v1.6.2\r\n\r\n- 队伍预览下方的精灵球切换控件整体缩小约 25%，包含左右按钮、箭头、球图标、内边距与边框。\r\n- Mega 等队伍标识缩小到 14px，预览球种图标缩小到 22px。\r\n- 队伍卡片显示闪光、头目／霸主、超极巨化和 Mega 标识；从性别左侧往左排列。\r\n- 左右箭头加粗，缩小后仍清晰可辨。\r\n- 同步调整白天和暗色主题以及窄屏尺寸。\r\n- 内置弦九核心 v4.0.1，继续兼容已验证的 v4.0.2 在线核心更新。\r\n\r\n设置中检查更新，安装后刷新；也可导入发布包 hud.json。\r\n"
 }

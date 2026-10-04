@@ -154,16 +154,19 @@
 .swsh-party-preview{min-height:100%;padding:6px 4px 10px}
 .swsh-party-preview .swsh-party-focus:before{border-color:rgba(255,255,255,.2)}
 .swsh-party-preview .swsh-party-focus:after{background:rgba(255,255,255,.2)}
-.swsh-preview-controls{align-items:center;gap:0;width:auto;margin-top:4px;padding:3px;border:2px solid #20242b;border-radius:999px;background:#f8f9fa;box-shadow:0 3px 0 rgba(37,19,25,.32)}
-.swsh-preview-controls button{width:40px;height:40px;border:0;border-radius:999px;background:transparent;color:#1f2a34;box-shadow:none}
-.swsh-preview-controls button .swsh-icon{width:24px;height:24px;stroke-width:3.25}
+.swsh-preview-controls{align-items:center;gap:0;width:auto;margin-top:4px;padding:2.25px;border:1.5px solid #20242b;border-radius:999px;background:#f8f9fa;box-shadow:0 2.25px 0 rgba(37,19,25,.32)}
+.swsh-preview-controls button{width:30px;height:30px;border:0;border-radius:999px;background:transparent;color:#1f2a34;box-shadow:none}
+.swsh-preview-controls button .swsh-icon{width:18px;height:18px;stroke-width:4.5}
 .swsh-preview-controls button:first-child .swsh-icon{transform:rotate(180deg)}
 .swsh-preview-controls button:hover,.swsh-preview-controls button:focus-visible{background:#e3edf1;color:#ad394a;outline:0}
 .swsh-preview-controls button:active{transform:translateY(1px)}
-.swsh-preview-ball{display:grid;place-items:center;width:40px;height:40px;flex:none}
-.swsh-preview-ball .swsh-capture-ball,.swsh-preview-ball .item-icon{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;object-fit:contain;image-rendering:pixelated}
+.swsh-preview-ball{display:grid;place-items:center;width:30px;height:30px;flex:none}
+.swsh-preview-ball .swsh-capture-ball,.swsh-preview-ball .item-icon{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;object-fit:contain;image-rendering:pixelated}
 .swsh-party-list .item-badge{width:16px;height:16px;object-fit:contain;transform:none}
-.swsh-party-list .mega-ic{width:18px;height:18px;object-fit:contain}
+.swsh-party-list .mega-ic{width:14px;height:14px;object-fit:contain}
+.swsh-party-mark{display:inline-flex;align-items:center;justify-content:center;flex:none;width:14px;height:14px;font-size:12px;line-height:1;color:inherit}
+.swsh-party-mark img{width:14px;height:14px;object-fit:contain;image-rendering:pixelated}
+.swsh-party-mark [hidden]{display:none}
 
 :is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .hud{background:#12192a;background-image:none;border-color:#6e7e9b}
 :is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .swsh-team.grid{background:linear-gradient(117deg,#30395d 0%,#30395d 54%,#252e4f 54%,#252e4f 61%,#4c587d 61%,#4c587d 100%)}
@@ -177,7 +180,7 @@
 :is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .swsh-quick-icon{background:#e8eef5;color:#263746}
 :is(#pkm-hud-win,#pkm-hud-inline).swsh-dark #tab-4 .menu-icon-wrap,:is(#pkm-hud-win,#pkm-hud-inline).swsh-dark #tab-4 .menu-item:hover .menu-icon-wrap{background:#edf2f8;color:#202831}
 :is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .swsh-fold-label .swsh-icon,:is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .event-type,:is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .event-type .swsh-icon{color:#d7e4f7}
-@media(max-width:520px){.swsh-party-preview{min-height:92px;padding:2px 4px}.swsh-preview-controls{margin:0 0 0 10px}.swsh-preview-controls button{width:40px;height:40px}}
+@media(max-width:520px){.swsh-party-preview{min-height:92px;padding:2px 4px}.swsh-preview-controls{margin:0 0 0 10px}.swsh-preview-controls button{width:30px;height:30px}}
 
 /* Monochrome transparent pictograms: black on light fields, white on dark fields. */
 .swsh-icon{fill:none;stroke:currentColor;stroke-width:1.65;shape-rendering:geometricPrecision}
@@ -197,7 +200,7 @@
 :is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .swsh-fold-label .swsh-icon,
 :is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .event-type,
 :is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .event-type .swsh-icon{color:#fff}
-:is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .swsh-preview-controls{background:#1b2540;border-color:#fff;box-shadow:0 3px 0 rgba(0,0,0,.28)}
+:is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .swsh-preview-controls{background:#1b2540;border-color:#fff;box-shadow:0 2.25px 0 rgba(0,0,0,.28)}
 :is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .swsh-preview-controls button{color:#fff}
 :is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .swsh-preview-controls button:hover{background:#303b61;color:#fff}
 
