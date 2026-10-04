@@ -20,6 +20,9 @@ jobs:
       - run: node tests/upstream-compatibility.cjs
         env:
           UPSTREAM_CANDIDATE: artifacts/upstream-candidate.js
+      - run: node tests/upgrade-from-published.cjs
+        env:
+          UPSTREAM_CANDIDATE: artifacts/upstream-candidate.js
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -27,3 +30,4 @@ jobs:
           path: |
             artifacts/upstream-compatibility.json
             artifacts/upstream-browser-validation.json
+            artifacts/published-upgrade-tests.json

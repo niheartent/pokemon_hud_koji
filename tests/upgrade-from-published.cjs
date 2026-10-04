@@ -1,9 +1,12 @@
 /* Real published updater -> current release. Isolated host, real IndexedDB. */
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium,launchOptions}=require('../src/swsh/browser-runtime.cjs');
-const root=path.join(__dirname,'..'),upstream=require('../src/shared/upstream-core.cjs')();
+const root=path.join(__dirname,'..'),upstream=process.env.UPSTREAM_CANDIDATE?fs.readFileSync(path.resolve(process.env.UPSTREAM_CANDIDATE),'utf8'):require('../src/shared/upstream-core.cjs')();
+const expectedCore=upstream.match(/var PK_VER='([^']+)'/)[1];
+const targets=[['swsh','1.5.1'],['swsh','1.6.0'],['bw2','0.3.10'],['bw2','0.4.0']];
+if(process.env.UPSTREAM_CANDIDATE&&expectedCore!==require('../src/shared/upstream/manifest.json').version)for(const channel of ['swsh','bw2'])targets.push([channel,require(path.join(root,'src',channel,'package.json')).version]);
 (async()=>{const browser=await chromium.launch({headless:true,...launchOptions}),results=[];
-try{for(const [channel,oldUi] of [['swsh','1.5.1'],['swsh','1.6.0'],['bw2','0.3.10'],['bw2','0.4.0']]){
+try{for(const [channel,oldUi] of targets){
  const manifest=JSON.parse(fs.readFileSync(path.join(root,'updates',channel+'.json'),'utf8'));
  const release=fs.readFileSync(path.join(root,'versions',channel,manifest.ui,'hud.js'),'utf8');
  const old=fs.readFileSync(path.join(root,'versions',channel,oldUi,'hud.js'),'utf8');
@@ -28,13 +31,13 @@ try{for(const [channel,oldUi] of [['swsh','1.5.1'],['swsh','1.6.0'],['bw2','0.3.
   await page.goto('http://localhost:3219/'+channel+'/'+installedCore);await page.locator(channel==='swsh'?'.swsh-team':'.bw2-console').waitFor();
   await page.evaluate(()=>__UPGRADE_TEST.open('settings'));
   assert.equal(await page.evaluate(()=>__UPGRADE_TEST.check()),true);
-  const ready=await page.evaluate(()=>__UPGRADE_TEST.snapshot());assert.equal(ready.ui,manifest.ui);assert.equal(ready.core,manifest.core);
+  const ready=await page.evaluate(()=>__UPGRADE_TEST.snapshot());assert.equal(ready.ui,manifest.ui);assert.equal(ready.core,expectedCore);
   assert.equal(await page.evaluate(()=>__UPGRADE_TEST.install()),true);
-  const record=await page.evaluate(()=>__UPGRADE_TEST.record());assert.equal(record.version,manifest.core);assert(record.content.includes("var PK_BEAUTY_VER='"+manifest.ui+"';"));
+  const record=await page.evaluate(()=>__UPGRADE_TEST.record());assert.equal(record.version,expectedCore);assert(record.content.includes("var PK_BEAUTY_VER='"+manifest.ui+"';"));
   await page.reload();await page.locator(channel==='swsh'?'.swsh-team':'.bw2-console').waitFor();
   await page.locator('.tab-btn[data-tab="4"]').click();await page.locator('#tab-4 [data-page="settings"]').click();await page.locator('.page-overlay.open').waitFor();
-  const text=await page.locator('.page-overlay.open').innerText();assert(text.includes(manifest.ui));assert(text.includes(manifest.core));
-  assert.deepEqual(errors,[]);await page.close();results.push({channel,from:oldUi,installedCore,to:manifest.ui,core:manifest.core,checkedInstalledAndReloaded:true});
+  const text=await page.locator('.page-overlay.open').innerText();assert(text.includes(manifest.ui));assert(text.includes(expectedCore));
+  assert.deepEqual(errors,[]);await page.close();results.push({channel,from:oldUi,installedCore,to:manifest.ui,core:expectedCore,checkedInstalledAndReloaded:true});
  }
 }
 fs.writeFileSync(path.join(root,'artifacts/published-upgrade-tests.json'),JSON.stringify({passed:true,results,realHostWriteBackTested:false},null,2));console.log(JSON.stringify({passed:true,results}));
