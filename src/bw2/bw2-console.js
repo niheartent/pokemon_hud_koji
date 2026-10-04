@@ -49,7 +49,7 @@ function bw2SyncConsoleLabels(app){
 }
 function bw2RefreshControls(app,key){
   key=key||hudActiveTab(app);var panel=app.querySelector('#tab-4');if(!panel)return;
-  var signature=bw2PanelSignature('controls-'+key);if(panel._bw2Signature!==signature){var scroll=panel.scrollTop;panel.innerHTML=bw2ControlHTML(key);panel._bw2Signature=signature;panel.scrollTop=scroll;hudBindRefreshProgrammaticGuard(panel);pkImgFix(panel);resolvePkmImgs(panel);resolveItemImgs(panel);resolveNearbyTypes(panel);hudResolvePkidbImages(panel);}
+  var signature=bw2PanelSignature('controls-'+key);if(panel._bw2Signature!==signature){var scroll=panel.scrollTop;panel.innerHTML=bw2ControlHTML(key);panel._bw2Signature=signature;panel.scrollTop=scroll;hudBindRefreshProgrammaticGuard(panel);if(typeof pkImgFix==='function')pkImgFix(panel);resolvePkmImgs(panel);resolveItemImgs(panel);resolveNearbyTypes(panel);hudResolvePkidbImages(panel);}
   panel.classList.toggle('bw2-menu-full',key==='4');panel.classList.toggle('bw2-command-full',key==='3');bw2SyncConsoleLabels(app);
 }
 function bw2CommandHTML(){

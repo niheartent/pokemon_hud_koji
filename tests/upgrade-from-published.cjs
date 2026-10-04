@@ -3,7 +3,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {chromium,launchOptions}=require('../src/swsh/browser-runtime.cjs');
 const root=path.join(__dirname,'..'),upstream=require('../src/shared/upstream-core.cjs')();
 (async()=>{const browser=await chromium.launch({headless:true,...launchOptions}),results=[];
-try{for(const [channel,oldUi] of [['swsh','1.5.1'],['bw2','0.3.10']]){
+try{for(const [channel,oldUi] of [['swsh','1.5.1'],['swsh','1.6.0'],['bw2','0.3.10'],['bw2','0.4.0']]){
  const manifest=JSON.parse(fs.readFileSync(path.join(root,'updates',channel+'.json'),'utf8'));
  const release=fs.readFileSync(path.join(root,'versions',channel,manifest.ui,'hud.js'),'utf8');
  const old=fs.readFileSync(path.join(root,'versions',channel,oldUi,'hud.js'),'utf8');

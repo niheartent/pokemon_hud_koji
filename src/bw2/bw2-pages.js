@@ -15,7 +15,7 @@ function bw2BoxHTML(){
   var split=Math.ceil(entries.length/2),cards=entries.length?'<div class="grid bw2-box-team"><div class="col col-left">'+entries.slice(0,split).map(card).join('')+'</div><div class="col col-right">'+entries.slice(split).map(card).join('')+'</div></div>':'<div class="empty">这个盒子还没有宝可梦</div>';
   return '<section class="bw2-box-page"><div class="bw2-box-tools"><div class="bw2-box-tabs" aria-label="切换盒子">'+tabs+'</div><button class="btn-small" data-box-new>＋ 新建</button>'+(keys.length?'<button class="btn-small" data-box-del>删除盒子</button>':'')+select+'</div><div class="bw2-box-scroll">'+cards+'</div></section>';
 }
-function bw2SwitchBox(key){if(!stat_data.盒子||!stat_data.盒子[key]||currentPageKey!=='box')return;activeBox=key;pageOverlay.querySelector('.page-body').innerHTML=boxHTML();bindPageInteractions();pkImgFix(pageOverlay);resolvePkmImgs(pageOverlay);resolveItemImgs(pageOverlay);hudResolvePkidbImages(pageOverlay);}
+function bw2SwitchBox(key){if(!stat_data.盒子||!stat_data.盒子[key]||currentPageKey!=='box')return;activeBox=key;pageOverlay.querySelector('.page-body').innerHTML=boxHTML();bindPageInteractions();if(typeof pkImgFix==='function')pkImgFix(pageOverlay);resolvePkmImgs(pageOverlay);resolveItemImgs(pageOverlay);hudResolvePkidbImages(pageOverlay);}
 function bw2PreparePage(key){
   bw2CloseInteractions();
   var upper=['box','bag','breeding','pokedex','badge'].indexOf(key)>=0,external=key==='map'||key==='typechart';

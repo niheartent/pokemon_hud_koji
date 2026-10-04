@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.6.0",
-  "core": "3.3.29",
+  "ui": "1.6.1",
+  "core": "4.0.1",
   "testedCore": [
     "3.3.19",
-    "3.3.29"
+    "4.0.1"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.0/versions/swsh/1.6.0/hud.js",
-  "sha256": "65fc92551b110e85a60bbd467351309a54399b04b7eca0a9daac2fa8100be15d",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.0/versions/swsh/1.6.0/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.0",
-  "notes": "# 剑盾 v1.6.0\n\n- 内置弦九核心 v3.3.29，保留 Mega X/Y/Z 图源修复和刷新调度。\n- 页面模板、根布局、固定属性色表与样式安装由本仓库维护，不再依赖远程原版 HTML 和 CSS。\n- 使用功能与数据接口契约进行兼容检查，保留存取、装备、数据保护和宿主交互。\n- 保持现有布局、主题和交互；剑盾默认暗色，保留已保存的白天偏好。\n- 验证删除原版组件与 CSS 后仍可启动及打开详情、背包、盒子、徽章、繁育、图鉴、设置、地图和克制表。\n- 已验证已发布旧更新器下载新版适配器、安装到真实 IndexedDB 并在刷新后启动新版；模拟宿主中没有写真实角色卡。\n\n在设置中检查更新，出现新版提示后点击安装并刷新。更多边界见 docs/ARCHITECTURE.md。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.1/versions/swsh/1.6.1/hud.js",
+  "sha256": "0447c27b966b2308e6e16aafbf4cc77ce02b3175e1a3e18b90e53b52affd1658",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.1/versions/swsh/1.6.1/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.1",
+  "notes": "# 剑盾 v1.6.1\r\n\r\n- 内置弦九核心 v4.0.1，保留新版图源解析、数据保护和业务功能。\r\n- 修复新版移除 pkImgFix 后剑盾兼容检查阻止更新及队伍预览调用失效的问题；旧核心存在该函数时仍保留旧图源处理。\r\n- 自有设置页增加 GitHub 直连／镜像加速切换，使用原版的数据源与回退接口。\r\n- 保留本地页面、独立配色、字体和布局，默认暗色及已保存主题选择不变。\r\n- 更新同时检查美化版与弦九核心；最新核心不兼容时仍可采用已验证的发布组合，禁止核心降级。\r\n\r\n在设置中检查更新，出现新版提示后点击安装并刷新。黑白2独立版需重新导入更新。\r\n"
 }

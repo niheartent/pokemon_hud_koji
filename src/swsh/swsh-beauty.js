@@ -17,7 +17,8 @@ function swshSelectPartyCard(app,row){
   focus.innerHTML=swshPartyFocusHTML(c);
   var ball=party.querySelector('.swsh-preview-ball');
   if(ball){ball.outerHTML=swshPartyBallHTML(c);resolveItemImgs(party.querySelector('.swsh-preview-ball'));}
-  pkImgFix(focus);resolvePkmImgs(focus);hudResolvePkidbImages(focus);
+  if(typeof pkImgFix==='function')pkImgFix(focus);
+  resolvePkmImgs(focus);hudResolvePkidbImages(focus);
 }
 function swshStepPartyCard(app,button){
   var party=button.closest('.swsh-team');if(!party||!app.contains(party))return;

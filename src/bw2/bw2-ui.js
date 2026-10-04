@@ -127,7 +127,7 @@ function bw2PanelSignature(key){
   return key;
 }
 function bw2RememberHome(panel){panel._bw2TrainerSignature=bw2PanelSignature('trainer');panel._bw2PartySignature=bw2PanelSignature('party');panel._bw2Signature=bw2PanelSignature('1');}
-function bw2Hydrate(root){bw2SyncMoveColors(root);hudBindRefreshProgrammaticGuard(root);pkImgFix(root);resolvePkmImgs(root);resolveItemImgs(root);resolveNearbyTypes(root);hudResolvePkidbImages(root);}
+function bw2Hydrate(root){bw2SyncMoveColors(root);hudBindRefreshProgrammaticGuard(root);if(typeof pkImgFix==='function')pkImgFix(root);resolvePkmImgs(root);resolveItemImgs(root);resolveNearbyTypes(root);hudResolvePkidbImages(root);}
 function bw2RefreshPanel(app,key){
   if(key==='4'){bw2RefreshControls(app,key);return;}
   var panel=app.querySelector('#tab-'+key);if(!panel)return;
@@ -208,7 +208,7 @@ function bw2OpenHeldPicker(card){
 function bw2ReopenDetail(card){
   var p=getCardPkm(card);if(!p)return;
   currentDetailCard=cardFromPkm(p,card.slot,card.where,card.boxName);overlay.innerHTML=detailHTML(currentDetailCard);overlay.classList.add('open');
-  pkImgFix(overlay);resolvePkmImgs(overlay);resolveMoveTypes(overlay);resolveItemImgs(overlay);hudResolvePkidbImages(overlay);
+  if(typeof pkImgFix==='function')pkImgFix(overlay);resolvePkmImgs(overlay);resolveMoveTypes(overlay);resolveItemImgs(overlay);hudResolvePkidbImages(overlay);
   resizeFrame();
 }
 

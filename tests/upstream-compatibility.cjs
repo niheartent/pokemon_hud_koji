@@ -29,6 +29,15 @@ try{for(const channel of ['bw2','swsh']){
  await page.goto('http://candidate.test/'+channel);await page.locator(channel==='bw2'?'.bw2-console':'.swsh-team').waitFor();assert.equal(await page.evaluate(()=>__UPSTREAM_TEST.core),version);
  await page.locator('.card-frame[data-slot]').first().click();await page.locator(channel==='bw2'?'.bw2-detail':'.detail-modal').waitFor();await page.locator((channel==='bw2'?'.bw2-detail':'.detail-modal')+' [data-close]').click();
  for(const key of ['bag','box','badge','breeding','pokedex','settings','map','typechart']){await page.evaluate(key=>__UPSTREAM_TEST.open(key),key);await page.locator('.page-overlay.open .page').waitFor();await page.locator('.page-overlay.open [data-page-close]').click();}
+ if(/function pkmRepoOrder\(/.test(raw)){
+  await page.evaluate(()=>__UPSTREAM_TEST.open('settings'));
+  assert.equal(await page.locator('input[data-repo-order]').count(),2);
+  await page.locator('input[data-repo-order="jsdelivr"]').check();
+  assert.equal(await page.evaluate(()=>localStorage.getItem('pk_repo_order')),'jsdelivr');
+  await page.locator('input[data-repo-order="raw"]').check();
+  assert.equal(await page.evaluate(()=>localStorage.getItem('pk_repo_order')),'raw');
+  await page.locator('.page-overlay.open [data-page-close]').click();
+ }
  assert.deepEqual(errors,[]);assert.equal(await page.evaluate(()=>previewWrites),0);await page.close();results.push({channel,core:version,businessFunctionsPreserved:business.length,pages:10,errors});
 }
 fs.mkdirSync(path.join(root,'artifacts'),{recursive:true});fs.writeFileSync(path.join(root,'artifacts/upstream-browser-validation.json'),JSON.stringify({passed:true,results},null,2));console.log(JSON.stringify({passed:true,results}));

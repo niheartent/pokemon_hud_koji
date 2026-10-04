@@ -1,27 +1,29 @@
 /* Build from original Xianjiu core, not the Sword/Shield delivery. */
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const acorn=require('acorn');
+// Identical release bytes on Windows and Linux.
+const readText=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
 const root=__dirname,out=path.join(root,'HUD黑白2版-第一版');fs.mkdirSync(out,{recursive:true});
-const payload=JSON.parse(fs.readFileSync(path.join(root,'pkm-hud-upstream.json'),'utf8').replace(/^\uFEFF/,''));
+const payload=JSON.parse(readText(path.join(root,'pkm-hud-upstream.json')).replace(/^\uFEFF/,''));
 const upstream=require('../shared/upstream-core.cjs')();let original,code;const patches=[];
-const version='0.4.0';
-const nativeVisualCss=fs.readFileSync(path.join(root,'bw2-native-base.css'),'utf8');
-const presentation=fs.readFileSync(path.join(root,'../shared/presentation.js'),'utf8');
+const version='0.4.1';
+const nativeVisualCss=readText(path.join(root,'bw2-native-base.css'));
+const presentation=readText(path.join(root,'../shared/presentation.js'));
 const presentationContract=require('../shared/presentation-contract.json');
 original=require('../shared/presentation-boundary.js').own(upstream,acorn,presentation,nativeVisualCss,presentationContract);
 const adapted=require('./bw2-core-adapter.js')(original,acorn,{version,nativeCss:nativeVisualCss});
 code=require('../shared/koji-bootstrap.js')(adapted.code);patches.push(...adapted.patches);
 const {functions,baseCss,consoleMenu,core}=adapted;
-const bootstrapRuntime=fs.readFileSync(path.join(root,'../shared/koji-bootstrap.js'),'utf8').replace(/if\(typeof module[^\n]+\n?/,'');
-const updateRuntime=fs.readFileSync(path.join(root,'../shared/koji-updater.js'),'utf8');
-const runtime=fs.readFileSync(path.join(root,'../shared/presentation-boundary.js'),'utf8').replace(/if\(typeof module[^\n]+\n?/,'')+'\n'+bootstrapRuntime+'\n'+fs.readFileSync(path.join(root,'bw2-core-adapter.js'),'utf8').replace(/if\(typeof module[^\n]+\n?/,'')+'\n'+fs.readFileSync(path.join(root,'swsh-updater.js'),'utf8');
-const beauty=fs.readFileSync(path.join(root,'bw2-move-icons.js'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-command-icons.js'),'utf8')+'\n'+fs.readFileSync(path.join(root,'swsh-icons.js'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-detail-identity.js'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-popup-ui.js'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-console.js'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-pages.js'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-ui.js'),'utf8');
+const bootstrapRuntime=readText(path.join(root,'../shared/koji-bootstrap.js')).replace(/if\(typeof module[^\n]+\n?/,'');
+const updateRuntime=readText(path.join(root,'../shared/koji-updater.js'));
+const runtime=readText(path.join(root,'../shared/presentation-boundary.js')).replace(/if\(typeof module[^\n]+\n?/,'')+'\n'+bootstrapRuntime+'\n'+readText(path.join(root,'bw2-core-adapter.js')).replace(/if\(typeof module[^\n]+\n?/,'')+'\n'+readText(path.join(root,'swsh-updater.js'));
+const beauty=readText(path.join(root,'bw2-move-icons.js'))+'\n'+readText(path.join(root,'bw2-command-icons.js'))+'\n'+readText(path.join(root,'swsh-icons.js'))+'\n'+readText(path.join(root,'bw2-detail-identity.js'))+'\n'+readText(path.join(root,'bw2-popup-ui.js'))+'\n'+readText(path.join(root,'bw2-console.js'))+'\n'+readText(path.join(root,'bw2-pages.js'))+'\n'+readText(path.join(root,'bw2-ui.js'));
 // Grid geometry belongs to our fixed foundation, not the downloaded core.
 const gridBlock=baseCss.match(/\.hud::before\{([^}]+)\}/)[1];
 const originalGrid=gridBlock.match(/background-image:([^;]+)(?:;|$)/)[1];
-const css=('.bw2-host{--bw2-original-grid:'+originalGrid+';}\n'+fs.readFileSync(path.join(root,'bw2-theme.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-hud.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-detail.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-popup.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-console.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'bw2-trainer.css'),'utf8')).replace(/@media\s*\(max-width:/g,'@container bw2-layout (max-width:');
-const parserLicense=fs.readFileSync(path.join(path.dirname(require.resolve('acorn')),'../LICENSE'),'utf8');
-const parser='(function(){var exports={},module={exports:exports};\n/* '+parserLicense+' */\n'+fs.readFileSync(require.resolve('acorn'),'utf8')+'\nreturn module.exports;})()';
+const css=('.bw2-host{--bw2-original-grid:'+originalGrid+';}\n'+readText(path.join(root,'bw2-theme.css'))+'\n'+readText(path.join(root,'bw2-hud.css'))+'\n'+readText(path.join(root,'bw2-detail.css'))+'\n'+readText(path.join(root,'bw2-popup.css'))+'\n'+readText(path.join(root,'bw2-console.css'))+'\n'+readText(path.join(root,'bw2-trainer.css'))).replace(/@media\s*\(max-width:/g,'@container bw2-layout (max-width:');
+const parserLicense=readText(path.join(path.dirname(require.resolve('acorn')),'../LICENSE'));
+const parser='(function(){var exports={},module={exports:exports};\n/* '+parserLicense+' */\n'+readText(require.resolve('acorn'))+'\nreturn module.exports;})()';
 const pkg={schema:2,styleOwnership:'bw2',channel:'bw2',updateUrl:'https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/main/updates/bw2.json',updateRuntime,version,parser,presentation,presentationContract,nativeCss:nativeVisualCss,runtime,beauty,css};
 code=require('../shared/presentation-boundary.js').insert(code,acorn,'var PK_BEAUTY_PACKAGE='+JSON.stringify(pkg)+';\n'+runtime+'\n'+beauty+'\n'+updateRuntime+'\ncss += '+JSON.stringify(css)+';');
 new Function(code);acorn.parse(code,{ecmaVersion:'latest'});
