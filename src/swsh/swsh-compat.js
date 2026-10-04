@@ -32,11 +32,19 @@ function pkBeautyBuildRemote(raw){
   if(typeof pkg.css!=='string'||pkg.styleOwnership!=='swsh')fail('独立剑盾样式包');
   pkg.coreNotice=((raw.match(/\/\*PK_NOTICE_BEGIN([\s\S]*?)PK_NOTICE_END\*\//)||[])[1]||'').trim();
   // Replace the native stylesheet with our owned foundation and theme layers.
-  var styleAssignments=run.body.body.filter(function(n){var e=n.expression;return n.type==='ExpressionStatement'&&e&&e.type==='AssignmentExpression'&&e.left.type==='MemberExpression'&&!e.left.computed&&e.left.property.name==='textContent'&&e.right.type==='Identifier'&&e.right.name==='css';});
+  // Walk control-flow blocks in this scope; ignore nested functions.
+  var scopeStatements=[];
+  function visitScope(n){
+    if(!n||!n.type||/^(Function|ArrowFunction)/.test(n.type))return;
+    if(n.type==='ExpressionStatement')scopeStatements.push(n);
+    Object.keys(n).forEach(function(k){var v=n[k];if(Array.isArray(v))v.forEach(visitScope);else if(v&&v.type)visitScope(v);});
+  }
+  visitScope(run.body);
+  var styleAssignments=scopeStatements.filter(function(n){var e=n.expression;return e&&e.type==='AssignmentExpression'&&e.left.type==='MemberExpression'&&!e.left.computed&&e.left.property.name==='textContent'&&e.right.type==='Identifier'&&e.right.name==='css';});
   if(styleAssignments.length!==1)fail('css → style.textContent');
   var injected='\nvar PK_BEAUTY_PACKAGE='+JSON.stringify(pkg)+';\n'+pkg.runtime+'\n'+pkg.beauty+'\n'+(pkg.updateRuntime||'')+'\n';
   var edits=[{start:inner.variables.css.init.start,end:inner.variables.css.init.end,text:"''"},{start:styleAssignments[0].start,end:styleAssignments[0].start,text:'css = PK_BEAUTY_PACKAGE.css;\n'},{start:top.statements.PK_VER.end,end:top.statements.PK_VER.end,text:"\nvar PK_BEAUTY_VER='"+pkg.version+"';"},{start:db.init.start,end:db.init.end,text:JSON.stringify(pkg.runtimeDb)},{start:inner.statements.css.end,end:inner.statements.css.end,text:injected}];
-  run.body.body.forEach(function(statement){var e=statement.expression;if(statement.start<styleAssignments[0].start&&statement.type==='ExpressionStatement'&&e&&e.type==='AssignmentExpression'&&e.left.type==='Identifier'&&e.left.name==='css'&&e.operator==='+=')edits.push({start:statement.start,end:statement.end,text:''});});
+  scopeStatements.forEach(function(statement){var e=statement.expression;if(statement.start<styleAssignments[0].start&&e&&e.type==='AssignmentExpression'&&e.left.type==='Identifier'&&e.left.name==='css'&&e.operator==='+=')edits.push({start:statement.start,end:statement.end,text:''});});
   edits.sort(function(a,b){return b.start-a.start;});var code=kojiPatchBootstrap(raw);
   edits.forEach(function(e){code=code.slice(0,e.start)+e.text+code.slice(e.end);});
   try{new Function(code);}catch(e){throw new Error('合成后的脚本语法错误：'+e.message);}

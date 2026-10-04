@@ -8,7 +8,7 @@ try{for(const channel of ['bw2','swsh']){
   const dir=path.join(root,'src',channel),version=require(path.join(dir,'package.json')).version;
   const folder=channel==='bw2'?path.join(dir,'黑白2双版本-v'+version,'完整版'):path.join(dir,'HUD美化版-交付');
   const code=fs.readFileSync(path.join(folder,channel==='bw2'?'宝可梦HUD-完整版.js':'宝可梦HUD-剑盾风格.js'),'utf8');
-  const native=JSON.parse(fs.readFileSync(path.join(dir,channel==='bw2'?'pkm-hud-upstream.json':'pkm-hud-swsh-upstream.json'),'utf8')).content;
+  const native=require('../src/shared/upstream-core.cjs')();
   const core=native.match(/var PK_VER='([^']+)'/)[1],nextCore=core.replace(/\d+$/,n=>Number(n)+1),nextUi=version.replace(/\d+$/,n=>Number(n)+1);
   const pkg=packageOf(code),future={...pkg,version:nextUi,beauty:pkg.beauty+'\n'+bridge};
   const scope={PK_BEAUTY_PACKAGE:future};vm.createContext(scope);vm.runInContext(future.runtime,scope);const futureCode=scope.pkBeautyBuildRemote(native);
@@ -43,13 +43,13 @@ try{for(const channel of ['bw2','swsh']){
   coreFail=true;assert.equal(await page.evaluate(()=>__KOJI_TEST.check()),true,'UI release survives upstream network failure');coreFail=false;upstream=native;
   manifest=currentManifest;uiFail=true;upstream=native.replace("var PK_VER='"+core+"';","var PK_VER='"+nextCore+"';");
   assert.equal(await page.evaluate(()=>__KOJI_TEST.check()),true,'core survives UI network failure');uiFail=false;
-  manifest=currentManifest;upstream=fs.readFileSync(path.join(root,'src/bw2/upstream-update-fixture.js'),'utf8');
-  assert.equal(await page.evaluate(()=>__KOJI_TEST.check()),true,'actual v3.3.19 compatible');
-  const actual=await page.evaluate(()=>__KOJI_TEST.snapshot());assert.equal(actual.prepared.core,'3.3.19');
+  manifest=currentManifest;upstream=native.replace("var PK_VER='"+core+"';","var PK_VER='"+nextCore+"';");
+  assert.equal(await page.evaluate(()=>__KOJI_TEST.check()),true,'pinned latest interfaces with synthetic core increment');
+  const actual=await page.evaluate(()=>__KOJI_TEST.snapshot());assert.equal(actual.prepared.core,nextCore);
   const bootCode=actual.prepared.content,bootIndex=bootCode.lastIndexOf('try{ensureHud();}catch(e){}'),start=template.lastIndexOf('<script>'),end=template.lastIndexOf('</script>');
   const actualHtml=template.slice(0,start+8)+(bootCode.slice(0,bootIndex)+bridge+bootCode.slice(bootIndex)).replaceAll('</script','<\\/script')+template.slice(end);
   const actualPage=await browser.newPage({viewport:{width:1000,height:1400}});actualPage.on('pageerror',e=>errors.push(channel+': '+e.stack));await actualPage.route('**/*',r=>r.request().url().startsWith('http://localhost:3218/')?r.fulfill({contentType:'text/html',body:actualHtml}):r.fulfill({contentType:r.request().resourceType()==='image'?'image/svg+xml':'application/json',body:r.request().resourceType()==='image'?'<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"/>':'{"data":[]}'}));
-  await actualPage.goto('http://localhost:3218/'+channel);await actualPage.locator(channel==='bw2'?'.bw2-console':'.swsh-team').waitFor();assert.equal((await actualPage.evaluate(()=>__KOJI_TEST.snapshot())).core,'3.3.19');await actualPage.close();
+  await actualPage.goto('http://localhost:3218/'+channel);await actualPage.locator(channel==='bw2'?'.bw2-console':'.swsh-team').waitFor();assert.equal((await actualPage.evaluate(()=>__KOJI_TEST.snapshot())).core,nextCore);await actualPage.close();
   // Persist a UI-only update to real browser IndexedDB, then boot it after reload.
   manifest=futureManifest;upstream=native;await page.evaluate(()=>__KOJI_TEST.failWrite());
   assert.equal(await page.evaluate(()=>__KOJI_TEST.check()),true);
@@ -61,6 +61,6 @@ try{for(const channel of ['bw2','swsh']){
   await page.locator('.tab-btn[data-tab="4"]').click();await page.locator('[data-page="settings"]').click();
   await page.waitForFunction(async()=>{const record=await __KOJI_TEST.record();return record&&record.health==='healthy';});const healthy=await page.evaluate(()=>__KOJI_TEST.record());assert.equal(healthy.health,'healthy');
   const secondUi=nextUi.replace(/\d+$/,n=>Number(n)+1),secondPkg={...future,version:secondUi};const secondScope={PK_BEAUTY_PACKAGE:secondPkg};vm.createContext(secondScope);vm.runInContext(secondPkg.runtime,secondScope);release=secondScope.pkBeautyBuildRemote(native);manifest={...futureManifest,ui:secondUi,sha256:sha(release)};await page.evaluate(()=>__KOJI_TEST.failWrite());assert.equal(await page.evaluate(()=>__KOJI_TEST.check()),true);assert.equal(await page.evaluate(()=>__KOJI_TEST.install()),true);manifest={...currentManifest,ui:secondUi};await page.reload();await page.waitForFunction(v=>window.__KOJI_TEST&&__KOJI_TEST.snapshot().ui===v,secondUi);
-  assert.deepEqual(errors,[]);results.push({channel,core,ui:version,nextUi,actualV3319ComposedAndBooted:true,coreOnly:true,uiOnlyReloaded:true,twoConsecutiveUiUpdatesReloaded:true,both:true,checksumTamperingBlocked:true,crossChannelBlocked:true,incompatibleUpstreamUiFallback:true,independentNetworkFailures:true,concurrentInstallSingleWrite:true,realIndexedDbHealthy:true,realHostWriteBackTested:false});await page.close();
+  assert.deepEqual(errors,[]);results.push({channel,core,ui:version,nextUi,pinnedLatestInterfacesComposedAndBooted:true,coreOnly:true,uiOnlyReloaded:true,twoConsecutiveUiUpdatesReloaded:true,both:true,checksumTamperingBlocked:true,crossChannelBlocked:true,incompatibleUpstreamUiFallback:true,independentNetworkFailures:true,concurrentInstallSingleWrite:true,realIndexedDbHealthy:true,realHostWriteBackTested:false});await page.close();
 }fs.mkdirSync(path.join(root,'artifacts'),{recursive:true});fs.writeFileSync(path.join(root,'artifacts/remote-update-tests.json'),JSON.stringify({passed:true,results},null,2));console.log(JSON.stringify({passed:true,channels:results}));
 }finally{await browser.close();}})().catch(error=>{console.error(error);process.exitCode=1;});

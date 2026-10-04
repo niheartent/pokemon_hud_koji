@@ -1,7 +1,7 @@
 /* Headless fake host, update responses mocked. */
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {chromium}=require('./browser-runtime.cjs');
-const out=path.join(__dirname,'HUD美化版-交付'),html=fs.readFileSync(path.join(out,'剑盾版预览.html'),'utf8'),original=JSON.parse(fs.readFileSync(path.join(__dirname,'pkm-hud-swsh-upstream.json'),'utf8')).content,manifest=JSON.parse(fs.readFileSync(path.join(out,'构建信息.json'),'utf8'));
+const out=path.join(__dirname,'HUD美化版-交付'),html=fs.readFileSync(path.join(out,'剑盾版预览.html'),'utf8'),original=require('../shared/upstream-core.cjs')(),manifest=JSON.parse(fs.readFileSync(path.join(out,'构建信息.json'),'utf8'));
 (async()=>{const browser=await chromium.launch({headless:true,...require('./browser-runtime.cjs').launchOptions}),errors=[];
 try{
  const page=await browser.newPage({viewport:{width:1000,height:1000}});let remote=original.replace("var PK_VER='"+manifest.core+"';","var PK_VER='"+manifest.core.replace(/(\d+)$/,v=>Number(v)+1)+"';");
@@ -30,7 +30,7 @@ try{
  assert.equal(await page.locator('[data-pk-do-update]').evaluate(el=>el.style.display),'none');
  assert((await logs.locator('.swsh-update-log-text').first().textContent()).includes('测试上游更新日志'));
  remote=original.replace("var PK_VER='"+manifest.core+"';","var PK_VER='"+manifest.core.replace(/(\d+)$/,v=>Number(v)+1)+"';").replace(/\/\*PK_NOTICE_BEGIN[\s\S]*?PK_NOTICE_END\*\//,'');await page.locator('[data-pk-check-update]').click();await page.waitForFunction(()=>document.querySelector('[data-pk-do-update]').style.display==='block');assert((await logs.innerText()).includes('上游未提供该版本的更新日志。'));
- remote=original;await page.locator('[data-pk-check-update]').click();await page.waitForFunction(()=>document.querySelector('#pk-update-msg').textContent.includes('已是最新版本'));assert((await logs.innerText()).includes('完全改用仓库 item-alias.json'));assert((await logs.locator('summary').first().innerText()).includes(manifest.core));await page.locator('.set-opts:has([data-pk-check-update])').screenshot({path:path.join(out,'预览-更新日志.png')});
+ remote=original;await page.locator('[data-pk-check-update]').click();await page.waitForFunction(()=>document.querySelector('#pk-update-msg').textContent.includes('已是最新版本'));assert((await logs.innerText()).includes((original.match(/\/\*PK_NOTICE_BEGIN([\s\S]*?)PK_NOTICE_END\*\//)||[])[1].trim()));assert((await logs.locator('summary').first().innerText()).includes(manifest.core));await page.locator('.set-opts:has([data-pk-check-update])').screenshot({path:path.join(out,'预览-更新日志.png')});
  await page.locator('.page-overlay.open [data-page-close]').click();await page.locator('.tab-btn[data-tab="1"]').click();
  await page.locator('.hud').screenshot({path:path.join(out,'预览-剑盾暗色.png')});
  await page.locator('.quick-chip[data-page="box"]').click();await page.locator('.page-overlay.open').waitFor();await page.locator('.page-overlay.open [data-page-close]').click();

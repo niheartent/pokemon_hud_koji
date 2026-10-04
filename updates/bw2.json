@@ -1,14 +1,15 @@
 {
   "schema": 1,
   "channel": "bw2",
-  "ui": "0.3.10",
-  "core": "3.3.1",
+  "ui": "0.3.11",
+  "core": "3.3.29",
   "testedCore": [
-    "3.3.19"
+    "3.3.19",
+    "3.3.29"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.3.10/versions/bw2/0.3.10/hud.js",
-  "sha256": "2c63f8a17ec5f2f4276eececf08387337a3b0fcfcba773c29836e7deaf50483a",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.3.10/versions/bw2/0.3.10/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.3.10",
-  "notes": "# 黑白2 v0.3.10\n\n- 字体及根颜色角色集中在黑白版专属 `bw2-theme.css`，固定样式基础继续由黑白美化包独立维护。\n- 用语法范围禁用原版 CSS 追加，避免多段相同 CSS 文本导致兼容器误判。\n- 验证上游大幅修改字体、背景与文字颜色后，两套界面实际样式保持一致。\n\n- 接入本仓库黑白美化版远程发布，检查美化版与弦九核心两个来源。\n- 校验下载文件 SHA-256 与通道，合成后用户点击安装。\n- 核心不兼容时仍可采用已验证的美化发布包，禁止降低当前核心版本。\n- 修复只有美化更新及连续两次美化更新的缓存启动判断。\n- 保留 v0.3.8 详情背景首次绘制修复与黑白配色。\n- 独立版继续手动导入升级。\n\n首次使用远程美化更新，需要重新导入本版完整版 JSON。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.3.11/versions/bw2/0.3.11/hud.js",
+  "sha256": "9b30d0aa0672d97ae7519c5e3c35ed33c19550474762bb5847aedf32115df043",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.3.11/versions/bw2/0.3.11/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.3.11",
+  "notes": "# 黑白2 v0.3.11\r\n\r\n- 内置弦九核心升级至 v3.3.29，保留新版图源映射、Mega X/Y/Z 形态修复、统计刷新与诊断逻辑。\r\n- 核心快照共用并校验提交与 SHA-256，增加最新版接口及浏览器兼容检查。\r\n- 独立版不再写死核心版本号，随共用核心快照构建。\r\n- 字体及根颜色角色集中在黑白版专属 `bw2-theme.css`，固定样式基础继续由黑白美化包独立维护。\r\n- 用语法范围禁用原版 CSS 追加，避免多段相同 CSS 文本导致兼容器误判。\r\n- 验证上游大幅修改字体、背景与文字颜色后，两套界面实际样式保持一致。\r\n\r\n- 接入本仓库黑白美化版远程发布，检查美化版与弦九核心两个来源。\r\n- 校验下载文件 SHA-256 与通道，合成后用户点击安装。\r\n- 核心不兼容时仍可采用已验证的美化发布包，禁止降低当前核心版本。\r\n- 修复只有美化更新及连续两次美化更新的缓存启动判断。\r\n- 保留 v0.3.8 详情背景首次绘制修复与黑白配色。\r\n- 独立版继续手动导入升级。\r\n\r\n首次使用远程美化更新，需要重新导入本版完整版 JSON。\r\n"
 }

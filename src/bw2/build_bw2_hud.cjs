@@ -3,8 +3,8 @@ const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypt
 const acorn=require('acorn');
 const root=__dirname,out=path.join(root,'HUD黑白2版-第一版');fs.mkdirSync(out,{recursive:true});
 const payload=JSON.parse(fs.readFileSync(path.join(root,'pkm-hud-upstream.json'),'utf8').replace(/^\uFEFF/,''));
-const original=payload.content;let code=original;const patches=[];
-const version='0.3.10';
+const original=require('../shared/upstream-core.cjs')();let code=original;const patches=[];
+const version='0.3.11';
 const nativeVisualCss=fs.readFileSync(path.join(root,'bw2-native-base.css'),'utf8');
 const adapted=require('./bw2-core-adapter.js')(original,acorn,{version,nativeCss:nativeVisualCss});
 code=require('../shared/koji-bootstrap.js')(adapted.code);patches.push(...adapted.patches);
@@ -38,7 +38,7 @@ const lowerPoints=JSON.parse(beauty.match(/var BW2_LOWER_SCREEN_POINTS=(\[.*\]);
 const lowerPath=lowerPoints.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join('')+'Z';
 fs.writeFileSync(path.join(out,'下屏多边形轮廓.svg'),'<svg xmlns="http://www.w3.org/2000/svg" width="386" height="268" viewBox="0 0 386 268"><path d="'+lowerPath+'" fill="#9088f1" fill-opacity=".25"/><path d="'+lowerPath+'" fill="none" stroke="#c9e6fb" stroke-opacity=".55" stroke-width="2"/></svg>');
 fs.writeFileSync(path.join(out,'下屏多边形坐标.json'),JSON.stringify({reference:'设计参考：下多边形底.png',referenceSize:[1330,888],viewBox:[386,268],points:lowerPoints,calibration:{horizontalVertical:true,diagonalAngleDeg:45},sharedBy:['统一精灵详情']},null,2));
-fs.writeFileSync(path.join(out,'构建信息.json'),JSON.stringify({core,ui:version,updateSchema:2,updateAdapter:'bw2-core-adapter.js shared local/browser composer',embeddedParser:'Acorn '+acorn.version,sourceSha256:crypto.createHash('sha256').update(original).digest('hex'),patches:patches.length,source:'pkm-hud-upstream.json',presentationFoundation:'bw2-native-base.css',palette:'BW2 v0.2.27',refreshDependencies:'per-view and trainer/party split',sourceUrl:'https://raw.githubusercontent.com/xianjiu0926/pkm-hud/main/pkm-hud.js',rootLayout:'narrow-dual-screen-with-hinge',screenRoles:['display','controls'],featureMenu:consoleMenu.map(m=>m.key),upperScreenPages:['box','bag','breeding','badge'],fullConsolePages:['settings','pokedex'],externalPages:['map','typechart'],boxUsesPartyCardRenderer:true,mapContainedInConsole:false,detailOrder:['header','pokemon-and-moves','values'],partyRendererUnchanged:code.includes(functions.teamHTML)&&code.includes(functions.cardHTML)},null,2));
+fs.writeFileSync(path.join(out,'构建信息.json'),JSON.stringify({core,ui:version,updateSchema:2,updateAdapter:'bw2-core-adapter.js shared local/browser composer',embeddedParser:'Acorn '+acorn.version,sourceSha256:crypto.createHash('sha256').update(original).digest('hex'),patches:patches.length,source:'../shared/upstream/pkm-hud.js',presentationFoundation:'bw2-native-base.css',palette:'BW2 v0.2.27',refreshDependencies:'per-view and trainer/party split',sourceUrl:'https://raw.githubusercontent.com/xianjiu0926/pkm-hud/main/pkm-hud.js',rootLayout:'narrow-dual-screen-with-hinge',screenRoles:['display','controls'],featureMenu:consoleMenu.map(m=>m.key),upperScreenPages:['box','bag','breeding','badge'],fullConsolePages:['settings','pokedex'],externalPages:['map','typechart'],boxUsesPartyCardRenderer:true,mapContainedInConsole:false,detailOrder:['header','pokemon-and-moves','values'],partyRendererUnchanged:code.includes(functions.teamHTML)&&code.includes(functions.cardHTML)},null,2));
 console.log(JSON.stringify({core,ui:version,patches:patches.length,bytes:Buffer.byteLength(code),out}));
 
 

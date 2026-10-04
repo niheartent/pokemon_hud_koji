@@ -20,7 +20,7 @@ for(const channel of selected){
     fs.writeFileSync(target,data);
   }
   const notes=fs.readFileSync(path.join(root,'docs',channel+'-release.md'),'utf8');
-  const manifest={schema:1,channel,ui,core,testedCore:['3.3.19'],script:`https://raw.githubusercontent.com/${repo}/${tag}/versions/${channel}/${ui}/hud.js`,sha256:sha(files['hud.js']),import:`https://raw.githubusercontent.com/${repo}/${tag}/versions/${channel}/${ui}/hud.json`,release:`https://github.com/${repo}/releases/tag/${tag}`,notes};
+  const manifest={schema:1,channel,ui,core,testedCore:['3.3.19',require('../src/shared/upstream/manifest.json').version],script:`https://raw.githubusercontent.com/${repo}/${tag}/versions/${channel}/${ui}/hud.js`,sha256:sha(files['hud.js']),import:`https://raw.githubusercontent.com/${repo}/${tag}/versions/${channel}/${ui}/hud.json`,release:`https://github.com/${repo}/releases/tag/${tag}`,notes};
   fs.mkdirSync(path.join(root,'updates'),{recursive:true});fs.writeFileSync(path.join(root,'updates',channel+'.json'),JSON.stringify(manifest,null,2)+'\n');
   const archive={};for(const [name,data] of Object.entries(files))archive[`${tag}/${name}`]=[new Uint8Array(data),{mtime:new Date(2020,0,1,0,0,0)}];
   fs.mkdirSync(path.join(root,'artifacts'),{recursive:true});fs.writeFileSync(path.join(root,'artifacts',tag+'.zip'),zipSync(archive,{level:9}));

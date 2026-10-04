@@ -4,9 +4,9 @@ const {chromium,launchOptions}=require('../src/swsh/browser-runtime.cjs');
 const root=path.join(__dirname,'..'),raw=fs.readFileSync(path.join(root,'src/bw2/upstream-update-fixture.js'),'utf8');
 function packageOf(code){let pkg;function visit(n){if(!n||!n.type)return;if(n.type==='VariableDeclarator'&&n.id.name==='PK_BEAUTY_PACKAGE')pkg=JSON.parse(code.slice(n.init.start,n.init.end));for(const value of Object.values(n))if(Array.isArray(value))value.forEach(visit);else if(value&&value.type)visit(value);}visit(acorn.parse(code,{ecmaVersion:'latest'}));return pkg;}
 function recolor(source){const ast=acorn.parse(source,{ecmaVersion:'latest'}),run=ast.body[0].expression.callee.body.body.find(n=>n.type==='FunctionDeclaration'&&n.id.name==='runPkmHud'),edits=[];for(const s of run.body.body){if(s.type==='VariableDeclaration'){const d=s.declarations.find(d=>d.id.name==='css');if(d)edits.push({start:d.init.start,end:d.init.end,text:JSON.stringify('#pkm-hud-inline{--text:#ffff00;--frame:#ff00ff;font-family:Comic Sans MS;font-size:40px}.hud,.trainer-frame,.nb-cell{background:#ff00ff!important;color:#00ff00!important;font-family:Comic Sans MS!important}')} );}const e=s.expression;if(s.type==='ExpressionStatement'&&e?.type==='AssignmentExpression'&&e.left.name==='css'&&e.operator==='+=')edits.push({start:s.start,end:s.end,text:'css += ".page,.modal,.bt-card,.set-opt{background:lime!important;color:magenta!important;font-family:Comic Sans MS!important}";'});}assert(edits.length>=2);edits.sort((a,b)=>b.start-a.start);for(const edit of edits)source=source.slice(0,edit.start)+edit.text+source.slice(edit.end);return source;}
-const changed=recolor(raw);
+const sources=[raw,require('../src/shared/upstream-core.cjs')()];
 (async()=>{const browser=await chromium.launch({headless:true,...launchOptions}),results=[],errors=[];
-try{for(const channel of ['bw2','swsh']){
+try{for(const raw of sources){const changed=recolor(raw);for(const channel of ['bw2','swsh']){
  const dir=path.join(root,'src',channel),folder=channel==='bw2'?path.join(dir,'HUD黑白2版-第一版'):path.join(dir,'HUD美化版-交付');
  const code=fs.readFileSync(path.join(folder,channel==='bw2'?'宝可梦HUD-黑白2版.js':'宝可梦HUD-剑盾风格.js'),'utf8'),pkg=packageOf(code),scope={PK_BEAUTY_PACKAGE:pkg};
  assert.equal(pkg.styleOwnership,channel);vm.createContext(scope);vm.runInContext(pkg.runtime,scope);
@@ -23,6 +23,6 @@ try{for(const channel of ['bw2','swsh']){
  }
  assert.deepEqual(snapshots[1],snapshots[0],channel+' must reject upstream visual changes');
  assert(!snapshots[1].styles.join('').includes('Comic Sans MS'));
- results.push({channel,core:'3.3.19',upstreamCssReplaced:true,computedTypographyAndColorsUnchanged:true,stylesExactlyEqual:true});
-}assert.deepEqual(errors,[]);fs.mkdirSync(path.join(root,'artifacts'),{recursive:true});fs.writeFileSync(path.join(root,'artifacts/style-isolation-tests.json'),JSON.stringify({passed:true,results,errors},null,2));console.log(JSON.stringify({passed:true,results}));
+ results.push({channel,core:raw.match(/var PK_VER='([^']+)'/)[1],upstreamCssReplaced:true,computedTypographyAndColorsUnchanged:true,stylesExactlyEqual:true});
+}}assert.deepEqual(errors,[]);fs.mkdirSync(path.join(root,'artifacts'),{recursive:true});fs.writeFileSync(path.join(root,'artifacts/style-isolation-tests.json'),JSON.stringify({passed:true,results,errors},null,2));console.log(JSON.stringify({passed:true,results}));
 }finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

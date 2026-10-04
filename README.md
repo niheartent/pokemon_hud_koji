@@ -6,9 +6,9 @@
 
 | 版本 | 下载入口 | 更新方式 |
 | --- | --- | --- |
-| 黑白2完整版 v0.3.10 | [黑白2发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.3.10) | 设置 → 检查更新，检查美化版与弦九核心 |
-| 黑白2独立版 v0.3.10 | 同一发布页的 independent JSON | 重新导入升级 |
-| 剑盾版 v1.5.1 | [剑盾发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.5.1) | 设置 → 检查更新，检查美化版与弦九核心 |
+| 黑白2完整版 v0.3.11 | [黑白2发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.3.11) | 设置 → 检查更新，检查美化版与弦九核心 |
+| 黑白2独立版 v0.3.11 | 同一发布页的 independent JSON | 重新导入升级 |
+| 剑盾版 v1.5.2 | [剑盾发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.5.2) | 设置 → 检查更新，检查美化版与弦九核心 |
 
 下载 Release 附件中的 JSON，导入酒馆助手脚本并替换对应旧版。只启用一个 HUD 脚本。旧版首次接入本仓库更新源需要重新导入一次。
 
@@ -57,3 +57,5 @@ docs/          发布说明、代码边界与验证记录
 ## 致谢
 
 核心业务来自 [弦九 pkm-hud](https://github.com/xianjiu0926/pkm-hud)，精灵与道具图像继续使用核心已有在线数据源。本仓库管理美化与适配代码，不包含用户真实聊天存档。
+
+上游核心适配与手动兼容检查见 [UPSTREAM-COMPATIBILITY.md](docs/UPSTREAM-COMPATIBILITY.md)。当前两套内置核心为 v3.3.29。
