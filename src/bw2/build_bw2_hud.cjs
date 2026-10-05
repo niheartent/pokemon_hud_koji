@@ -6,7 +6,7 @@ const readText=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
 const root=__dirname,out=path.join(root,'HUD黑白2版-第一版');fs.mkdirSync(out,{recursive:true});
 const payload=JSON.parse(readText(path.join(root,'pkm-hud-upstream.json')).replace(/^\uFEFF/,''));
 const upstream=require('../shared/upstream-core.cjs')();let original,code;const patches=[];
-const version='0.4.1';
+const version='0.4.2';
 const nativeVisualCss=readText(path.join(root,'bw2-native-base.css'));
 const presentation=readText(path.join(root,'../shared/presentation.js'));
 const presentationContract=require('../shared/presentation-contract.json');
@@ -17,7 +17,7 @@ const {functions,baseCss,consoleMenu,core}=adapted;
 const bootstrapRuntime=readText(path.join(root,'../shared/koji-bootstrap.js')).replace(/if\(typeof module[^\n]+\n?/,'');
 const updateRuntime=readText(path.join(root,'../shared/koji-updater.js'));
 const runtime=readText(path.join(root,'../shared/presentation-boundary.js')).replace(/if\(typeof module[^\n]+\n?/,'')+'\n'+bootstrapRuntime+'\n'+readText(path.join(root,'bw2-core-adapter.js')).replace(/if\(typeof module[^\n]+\n?/,'')+'\n'+readText(path.join(root,'swsh-updater.js'));
-const beauty=readText(path.join(root,'bw2-move-icons.js'))+'\n'+readText(path.join(root,'bw2-command-icons.js'))+'\n'+readText(path.join(root,'swsh-icons.js'))+'\n'+readText(path.join(root,'bw2-detail-identity.js'))+'\n'+readText(path.join(root,'bw2-popup-ui.js'))+'\n'+readText(path.join(root,'bw2-console.js'))+'\n'+readText(path.join(root,'bw2-pages.js'))+'\n'+readText(path.join(root,'bw2-ui.js'));
+const beauty=readText(path.join(root,'../shared/feature-adapter.js'))+'\n'+readText(path.join(root,'bw2-move-icons.js'))+'\n'+readText(path.join(root,'bw2-command-icons.js'))+'\n'+readText(path.join(root,'swsh-icons.js'))+'\n'+readText(path.join(root,'bw2-detail-identity.js'))+'\n'+readText(path.join(root,'bw2-popup-ui.js'))+'\n'+readText(path.join(root,'bw2-console.js'))+'\n'+readText(path.join(root,'bw2-pages.js'))+'\n'+readText(path.join(root,'bw2-ui.js'));
 // Grid geometry belongs to our fixed foundation, not the downloaded core.
 const gridBlock=baseCss.match(/\.hud::before\{([^}]+)\}/)[1];
 const originalGrid=gridBlock.match(/background-image:([^;]+)(?:;|$)/)[1];

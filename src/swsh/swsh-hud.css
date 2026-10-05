@@ -303,3 +303,13 @@
   #pkm-hud-win .quick-bar,#pkm-hud-inline .quick-bar{grid-template-columns:repeat(3,minmax(0,1fr))}
   #pkm-hud-win #tab-4 .menu-grid,#pkm-hud-inline #tab-4 .menu-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
+
+/* Character portraits and relationship controls share the local theme. */
+.rel-click{cursor:pointer;text-decoration:underline;text-underline-offset:3px;color:var(--pk-blue,var(--text))}
+.rel-settings{margin-left:6px}
+.relset-list{max-height:60vh;overflow:auto}
+.relset-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:9px 0;border-bottom:1px solid var(--pk-line,var(--frame));color:var(--text)}
+.relset-name{flex:0 1 96px;font-weight:700;overflow-wrap:anywhere}
+.relset-status{font-size:.75rem;color:var(--dim)}
+.relset-btns{display:flex;flex-wrap:wrap;gap:5px;margin-left:auto}
+.relset-btns button{font:inherit}

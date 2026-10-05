@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "bw2",
-  "ui": "0.4.1",
-  "core": "4.0.1",
+  "ui": "0.4.2",
+  "core": "4.0.22",
   "testedCore": [
     "3.3.19",
-    "4.0.1"
+    "4.0.22"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.1/versions/bw2/0.4.1/hud.js",
-  "sha256": "4220814029509520d896915a06fc32482b69f0e0c6a40e368f761c66a44dae98",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.1/versions/bw2/0.4.1/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.1",
-  "notes": "# 黑白2 v0.4.1\r\n\r\n- 内置弦九核心 v4.0.1，保留新版图源解析、数据保护和业务功能。\r\n- 修复新版移除 pkImgFix 后黑白2刷新和战场切换中调用失效的问题；旧核心存在该函数时仍保留旧图源处理。\r\n- 自有设置页增加 GitHub 直连／镜像加速切换，使用原版的数据源与回退接口。\r\n- 保留本地页面、独立配色、字体和布局，默认暗色及已保存主题选择不变。\r\n- 更新同时检查美化版与弦九核心；最新核心不兼容时仍可采用已验证的发布组合，禁止核心降级。\r\n\r\n在设置中检查更新，出现新版提示后点击安装并刷新。黑白2独立版需重新导入更新。\r\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.2/versions/bw2/0.4.2/hud.js",
+  "sha256": "51124cbc8d9d85b2e75b80cedff5e08a0ef984415e6d0b7a1b1eba1d5ad362f8",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.2/versions/bw2/0.4.2/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.2",
+  "notes": "# 黑白2 v0.4.2\r\n\r\n- 内置弦九核心 v4.0.22，固定提交 37d0c838f1e29578eacc165ed792b05e3d7982d3。\r\n- 人际关系人物名称可点击查看立绘，战场人物名称支持同样入口。\r\n- 自有页面补齐配图管理：本地上传、图片链接、清除配图，使用上游图片存储接口。\r\n- 增加删除人物入口，保留上游确认及发送失败回滚逻辑。\r\n- 数据源改为自动测速选择直连或镜像，移除新版核心已失效的手动切换选项；旧核心仍显示有效旧选项。\r\n- 同步上游数据初始化与清缓存时重置内存数据的修复。\r\n- 保留本地独立主题、布局和现有队伍控件尺寸。\r\n\r\n在设置中检查更新，点击安装后刷新；也可重新导入 hud.json。黑白2独立版需重新导入升级。\r\n"
 }
