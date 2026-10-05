@@ -3,7 +3,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {chromium,launchOptions}=require('../src/swsh/browser-runtime.cjs');
 const root=path.join(__dirname,'..'),upstream=process.env.UPSTREAM_CANDIDATE?fs.readFileSync(path.resolve(process.env.UPSTREAM_CANDIDATE),'utf8'):require('../src/shared/upstream-core.cjs')();
 const expectedCore=upstream.match(/var PK_VER='([^']+)'/)[1];
-const targets=[['swsh','1.5.1'],['swsh','1.6.0'],['bw2','0.3.10'],['bw2','0.4.0'],['swsh','1.6.2'],['bw2','0.4.1']];
+const targets=[['swsh','1.5.1'],['swsh','1.6.0'],['bw2','0.3.10'],['bw2','0.4.0'],['swsh','1.6.2'],['swsh','1.6.3'],['bw2','0.4.1']];
 if(process.env.UPSTREAM_CANDIDATE&&expectedCore!==require('../src/shared/upstream/manifest.json').version)for(const channel of ['swsh','bw2'])targets.push([channel,require(path.join(root,'src',channel,'package.json')).version]);
 (async()=>{const browser=await chromium.launch({headless:true,...launchOptions}),results=[];
 try{for(const [channel,oldUi] of targets){

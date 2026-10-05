@@ -4,7 +4,7 @@ const acorn=require('acorn');
 const root=__dirname,out=path.join(root,'HUD美化版-交付'),sourcePath=path.join(root,'pkm-hud-swsh-upstream.json');
 const payload=JSON.parse(fs.readFileSync(sourcePath,'utf8').replace(/^\uFEFF/,'')),source=require('../shared/upstream-core.cjs')();
 const read=name=>fs.readFileSync(path.join(root,name),'utf8').replace(/\r\n/g,'\n');
-const version='1.6.3',sourceAst=acorn.parse(source,{ecmaVersion:'latest'});
+const version='1.6.4',sourceAst=acorn.parse(source,{ecmaVersion:'latest'});
 const outer=sourceAst.body[0].expression.callee.body,versionDeclaration=outer.body.filter(n=>n.type==='VariableDeclaration').flatMap(n=>n.declarations).find(n=>n.id.name==='PK_VER');
 const core=versionDeclaration.init.value;
 const license=fs.readFileSync(path.join(path.dirname(require.resolve('acorn')),'../LICENSE'),'utf8');
@@ -13,7 +13,7 @@ const pkg={schema:2,version,channel:'swsh',updateUrl:'https://raw.githubusercont
 pkg.viewInterfaces=pkg.interfaces.filter(name=>new RegExp('function '+name+'\\(').test(pkg.presentation));
 pkg.interfaces=pkg.interfaces.filter(name=>!pkg.viewInterfaces.includes(name));
 pkg.coreNotice=((source.match(/\/\*PK_NOTICE_BEGIN([\s\S]*?)PK_NOTICE_END\*\//)||[])[1]||'').trim();
-pkg.beautyNotice='剑盾样式基础、字体和主题完全由美化版管理，原版核心更新不再带入其 CSS。\n修复暗色背包和人际关系栏目误用红色强调条，恢复蓝色；白天保留红色。\n设置只保留白天／暗色切换，移除主题预设、选色、深浅与文字颜色控件，修复白底浅字。\n修复白天主题的训练家、附近宝可梦、背包、人际关系与战场颜色。\n页面模板、根布局、属性颜色与样式安装由本地展示模块管理，原版 CSS 不执行。\n首次使用默认暗色，保留已保存的白天选择。';
+pkg.beautyNotice='修复附近宝可梦列表初次打开、图片加载或尺寸改变时自动横向吸附，保留手动滑动。\n剑盾样式基础、字体和主题完全由美化版管理，原版核心更新不再带入其 CSS。\n修复暗色背包和人际关系栏目误用红色强调条，恢复蓝色；白天保留红色。\n设置只保留白天／暗色切换，移除主题预设、选色、深浅与文字颜色控件，修复白底浅字。\n修复白天主题的训练家、附近宝可梦、背包、人际关系与战场颜色。\n页面模板、根布局、属性颜色与样式安装由本地展示模块管理，原版 CSS 不执行。\n首次使用默认暗色，保留已保存的白天选择。';
 const scope={PK_BEAUTY_PACKAGE:pkg};vm.createContext(scope);vm.runInContext(pkg.runtime,scope);const code=scope.pkBeautyBuildRemote(source);
 acorn.parse(code,{ecmaVersion:'latest'});new Function(code);
 payload.name='宝可梦 HUD 美化版';payload.id='7a84833f-6436-599b-a78a-952d0578c9e7';
