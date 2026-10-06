@@ -32,7 +32,7 @@ function bw2PreparePage(key){
   if(bw2IsTogglePage(key)&&app&&!app.querySelector('.bw2-menu-button[data-page="'+key+'"]'))bw2SelectConsoleTab(app,'4');
   var upper=['box','bag','breeding','pokedex','badge','typechart'].indexOf(key)>=0,external=key==='map';
   pageOverlay.classList.toggle('bw2-upper-page',upper);pageOverlay.classList.toggle('bw2-full-page',key==='pokedex'||key==='typechart');pageOverlay.classList.toggle('bw2-external-page',external);pageOverlay.classList.toggle('bw2-host',external);pageOverlay.setAttribute('data-bw2-page-key',key);
-  if(external&&pageOverlayHost){var style=getComputedStyle(pageOverlayHost);['--frame','--text','--dim','--hp','--male','--female','--bw2-original-grid'].forEach(function(name){pageOverlay.style.setProperty(name,style.getPropertyValue(name));});}
+  if(external&&pageOverlayHost){var style=getComputedStyle(pageOverlayHost);['--frame','--text','--dim','--hp','--male','--female','--bw2-original-grid','--bw2-font-ui'].forEach(function(name){pageOverlay.style.setProperty(name,style.getPropertyValue(name));});}
   if(!pageOverlay._bw2ExternalBound){pageOverlay._bw2ExternalBound=true;hudScope.listen(pageOverlay,'click',function(e){var image=e.target.closest&&e.target.closest('[data-tc-big]');if(!image)return;if(pageOverlay.dataset.bw2PageKey==='typechart'){e.preventDefault();e.stopImmediatePropagation();}},true);}
 }
 function bw2PagePopout(on){

@@ -358,3 +358,28 @@ button:hover:not(:disabled)>.bw2-button-rim polygon{fill:#3b5664;stroke:#c9e6fb}
 .bw2-host .bw2-control-area .bw2-menu-button.bw2-page-close-button{background:linear-gradient(110deg,#643b42,#88535b)!important;border-color:#cf959b!important;color:#fff!important;--bw2-accent:#ffb7b7}
 .bw2-host .bw2-page-close-button .menu-label{color:#fff!important}
 .bw2-host .bw2-page-close-button .bw2-menu-icon svg{width:28px;height:28px}
+
+/* One title strip for display screens, operation pages and the detached map. */
+.bw2-host{
+  --bw2-heading-surface:#171e2acc;
+  --bw2-heading-ink:#e1e9ef;
+  --bw2-heading-line:#c9e6fb44;
+  --bw2-heading-height:32px;
+  --bw2-heading-inset:12px;
+}
+.bw2-host :is(.bw2-display-caption,.bw2-control-toolbar),.bw2-host .bw2-console .page-head,.bw2-external-page.pkm-hud-page-overlay.popout .page-head{
+  display:flex;align-items:center;gap:10px;box-sizing:border-box;
+  flex:0 0 var(--bw2-heading-height);height:var(--bw2-heading-height);min-height:var(--bw2-heading-height);
+  padding:0 var(--bw2-heading-inset);margin:0;
+  background-color:var(--bw2-heading-surface);background-image:var(--bw2-original-grid);
+  border:0;border-bottom:1px solid var(--bw2-heading-line);box-shadow:none;
+  color:var(--bw2-heading-ink);font-family:var(--bw2-font-ui,"Segoe UI","Microsoft YaHei",sans-serif);
+}
+.bw2-host :is(.bw2-display-caption,.bw2-control-toolbar)>strong,.bw2-host .bw2-page-title{
+  flex:1;min-width:0;margin:0;color:var(--bw2-heading-ink);font-family:inherit;
+  font-size:14px;font-weight:700;line-height:1.4;letter-spacing:2px;
+}
+.bw2-host .bw2-console .page-head .page-close,.bw2-external-page .page-head .page-close,
+.bw2-external-page .page-head .map-pad-toggle{flex:none;box-sizing:border-box;width:28px;height:28px;min-width:28px;min-height:28px;margin:0;padding:0;font-size:18px;line-height:1}
+.bw2-external-page .page-body{max-height:calc(86vh - var(--bw2-heading-height))!important}
+@media(max-width:600px){.bw2-external-page .page-body{max-height:calc(90dvh - var(--bw2-heading-height))!important}}
