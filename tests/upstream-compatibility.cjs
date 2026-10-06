@@ -26,10 +26,12 @@ try{for(const target of (process.env.UPSTREAM_CANDIDATE?['bw2','swsh']:['bw2','s
  const start=template.lastIndexOf('<script>'),end=template.lastIndexOf('</script>'),boot=code.lastIndexOf('try{ensureHud();}catch(e){}'),script=code.slice(0,boot)+bridge+code.slice(boot);
  const html=template.slice(0,start+8)+script.replaceAll('</script','<\\/script')+template.slice(end),page=await browser.newPage({viewport:{width:1000,height:1400}}),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
+ async function closePage(){var key=await page.locator('.page-overlay.open').getAttribute('data-bw2-page-key');if(channel==='bw2'&&['bag','box','breeding','badge'].includes(key)){var button=page.locator('.bw2-page-close-button[data-page="'+key+'"]');if(await button.count())await button.click();else await page.locator('.tab-btn[data-tab="4"]').click();}else await page.locator('.page-overlay.open [data-page-close]').click();}
+
  await page.route('**/*',r=>r.fulfill({contentType:r.request().url().startsWith('http://localhost:3299')?'text/html':r.request().resourceType()==='image'?'image/svg+xml':'application/json',body:r.request().url().startsWith('http://localhost:3299')?html:r.request().resourceType()==='image'?'<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"/>':'{"data":[]}'}));
  await page.goto('http://localhost:3299/'+channel);await page.locator(channel==='bw2'?'.bw2-console':'.swsh-team').waitFor();assert.equal(await page.evaluate(()=>__UPSTREAM_TEST.core),version);
  await page.locator('.card-frame[data-slot]').first().click();await page.locator(channel==='bw2'?'.bw2-detail':'.detail-modal').waitFor();await page.locator((channel==='bw2'?'.bw2-detail':'.detail-modal')+' [data-close]').click();
- for(const key of ['bag','box','badge','breeding','pokedex','settings','map','typechart']){await page.evaluate(key=>__UPSTREAM_TEST.open(key),key);await page.locator('.page-overlay.open .page').waitFor();await page.locator('.page-overlay.open [data-page-close]').click();}
+ for(const key of ['bag','box','badge','breeding','pokedex','settings','map','typechart']){await page.evaluate(key=>__UPSTREAM_TEST.open(key),key);await page.locator('.page-overlay.open .page').waitFor();await closePage();}
  if(/function resolveBagItemClick\(/.test(raw)){
   await page.evaluate(()=>{__UPSTREAM_TEST.newFeatures();__UPSTREAM_TEST.open('bag');});
   const row=name=>page.locator('.page-overlay.open .item-entry').filter({has:page.locator('.item-name',{hasText:name})});
@@ -45,7 +47,7 @@ try{for(const target of (process.env.UPSTREAM_CANDIDATE?['bw2','swsh']:['bw2','s
   await row('写错的药').locator('.item-name').click();await page.locator('.overlay.open').waitFor();
   assert((await page.locator('.overlay.open').innerText()).includes('恢复HP20'));
   await page.locator('.overlay.open [data-sub-close]').click();
-  await page.locator('.page-overlay.open [data-page-close]').click();
+  await closePage();
   await page.evaluate(()=>__UPSTREAM_TEST.open('typechart'));
   assert(await page.locator('#tc-def-wrap').isVisible());
   await page.locator('[data-tc-mode="atk"]').click();assert(await page.locator('#tc-atk-wrap').isVisible());
@@ -54,7 +56,7 @@ try{for(const target of (process.env.UPSTREAM_CANDIDATE?['bw2','swsh']:['bw2','s
   await page.locator('[data-tc-mode="def"]').click();await page.locator('#tc-def-1').selectOption('一般');
   assert((await page.locator('#tc-result').innerText()).includes('格斗'));
   assert((await page.locator('[data-tc-big]').getAttribute('data-tc-big')).includes('属性相克表.webp'));
-  await page.locator('.page-overlay.open [data-page-close]').click();
+  await closePage();
   assert.deepEqual(await page.evaluate(()=>__UPSTREAM_TEST.cry()),[9999,25]);
  }
  if(/function pkmRepoOrder\(/.test(raw)&&!/function pkmRepoAutoDetect\(/.test(raw)){
@@ -64,13 +66,13 @@ try{for(const target of (process.env.UPSTREAM_CANDIDATE?['bw2','swsh']:['bw2','s
   assert.equal(await page.evaluate(()=>localStorage.getItem('pk_repo_order')),'jsdelivr');
   await page.locator('input[data-repo-order="raw"]').check();
   assert.equal(await page.evaluate(()=>localStorage.getItem('pk_repo_order')),'raw');
-  await page.locator('.page-overlay.open [data-page-close]').click();
+  await closePage();
  }
  if(/function pkmRepoAutoDetect\(/.test(raw)){
   await page.evaluate(()=>__UPSTREAM_TEST.open('settings'));
   assert.equal(await page.locator('input[data-repo-order]').count(),0);
   assert.equal(await page.locator('[data-repo-auto]').count(),1);
-  await page.locator('.page-overlay.open [data-page-close]').click();
+  await closePage();
   await page.evaluate(()=>{__UPSTREAM_TEST.portrait();__UPSTREAM_TEST.open('rel');});
   await page.locator('.page-overlay.open [data-rel-settings]').click();
   await page.locator('.relset-row[data-relset-name="测试人物"]').waitFor();

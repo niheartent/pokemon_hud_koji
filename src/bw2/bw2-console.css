@@ -344,3 +344,8 @@ button:hover:not(:disabled)>.bw2-button-rim polygon{fill:#3b5664;stroke:#c9e6fb}
 .bw2-external-page[data-bw2-page-key="typechart"].pkm-hud-page-overlay.popout .page{width:75%;max-width:min(70.5vw,675px);max-height:64.5vh!important}
 .bw2-external-page[data-bw2-page-key="typechart"] .page-body{max-height:calc(64.5vh - 44px)!important}
 @media screen and (max-width:600px){.bw2-external-page[data-bw2-page-key="typechart"].pkm-hud-page-overlay.popout .page{width:72vw;max-width:72vw;max-height:67.5dvh!important}.bw2-external-page[data-bw2-page-key="typechart"] .page-body{max-height:calc(67.5dvh - 44px)!important}}
+
+/* Operation toggles stay at their original position on the lower screen. */
+.bw2-host .bw2-control-area .bw2-menu-button.bw2-page-close-button{background:linear-gradient(110deg,#643b42,#88535b)!important;border-color:#cf959b!important;color:#fff!important;--bw2-accent:#ffb7b7}
+.bw2-host .bw2-page-close-button .menu-label{color:#fff!important}
+.bw2-host .bw2-page-close-button .bw2-menu-icon svg{width:28px;height:28px}

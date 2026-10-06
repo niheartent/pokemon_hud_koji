@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "bw2",
-  "ui": "0.4.3",
+  "ui": "0.4.4",
   "core": "4.0.30",
   "testedCore": [
     "3.3.19",
     "4.0.30"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.3/versions/bw2/0.4.3/hud.js",
-  "sha256": "48dc3b9994862696dafddf06da3c20a1519866ddd11315275e9a761830a39b13",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.3/versions/bw2/0.4.3/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.3",
-  "notes": "# 黑白2 v0.4.3\r\n\r\n- 同步弦九核心 v4.0.30，固定提交 66c547db5ad47e2bb650c96b27de673aa2435bbb。\r\n- 自有背包模板接入有效说明判断：没有道具效果和仅有图片的 DIY 道具不可点击；有介绍／效果的 DIY 道具继续可查看。\r\n- 道具名称错误时按图标英文名反查效果，中文名正确时优先使用名称；丢弃和技能机操作继续使用原有接口。\r\n- 修复无效道具图标占位符仍可绕过点击判断的问题。\r\n- 克制表增加攻击方／防御方切换，默认防御方，继续使用本地属性颜色和各通道配色。\r\n- 克制表图片使用仓库 WebP 图源及核心镜像选择，保留放大查看与黑白2原有缩放布局。\r\n- 同步形态专属叫声映射和数据缓存版本，保留人物立绘、配图、自动数据源及现有布局。\r\n\r\n设置 → 检查更新 → 安装后刷新；黑白2独立版需重新导入 JSON。\r\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.4/versions/bw2/0.4.4/hud.js",
+  "sha256": "e0b95ed837e04d3fea2837fbadfd7df0bd1197c9adf563c4b9ad1692c562696f",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.4/versions/bw2/0.4.4/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.4",
+  "notes": "# 黑白2 v0.4.4\r\n\r\n- 背包、盒子、繁育、徽章盒改为原位置按钮开关：打开后显示关闭图标、关闭文字与红灰背景，再点一次关闭并恢复。\r\n- 移除这四个上屏页面边框的关闭红叉；图鉴、设置、地图和其他弹窗保持各自关闭入口。\r\n- 菜单切换、切换上屏页面和刷新后同步按钮状态，保留下屏操作及原有业务接口。\r\n- 完整版与独立版同时更新，内置弦九核心 v4.0.30。\r\n\r\n完整版：设置 → 检查更新 → 安装后刷新。独立版：重新导入 JSON。\r\n"
 }

@@ -18,6 +18,8 @@ function bw2BoxHTML(){
 function bw2SwitchBox(key){if(!stat_data.盒子||!stat_data.盒子[key]||currentPageKey!=='box')return;activeBox=key;pageOverlay.querySelector('.page-body').innerHTML=boxHTML();bindPageInteractions();if(typeof pkImgFix==='function')pkImgFix(pageOverlay);resolvePkmImgs(pageOverlay);resolveItemImgs(pageOverlay);hudResolvePkidbImages(pageOverlay);}
 function bw2PreparePage(key){
   bw2CloseInteractions();
+  var app=pageOverlayHost&&pageOverlayHost.parentElement;
+  if(bw2IsTogglePage(key)&&app&&!app.querySelector('.bw2-menu-button[data-page="'+key+'"]'))bw2SelectConsoleTab(app,'4');
   var upper=['box','bag','breeding','pokedex','badge'].indexOf(key)>=0,external=key==='map'||key==='typechart';
   pageOverlay.classList.toggle('bw2-upper-page',upper);pageOverlay.classList.toggle('bw2-full-page',key==='pokedex');pageOverlay.classList.toggle('bw2-external-page',external);pageOverlay.classList.toggle('bw2-host',external);pageOverlay.setAttribute('data-bw2-page-key',key);
   if(external&&pageOverlayHost){var style=getComputedStyle(pageOverlayHost);['--frame','--text','--dim','--hp','--male','--female','--bw2-original-grid'].forEach(function(name){pageOverlay.style.setProperty(name,style.getPropertyValue(name));});}
@@ -37,6 +39,7 @@ function bw2SyncPageScreens(app,metrics){
   var values={'--bw2-page-left':(screen.left-r.left)/scale-root.clientLeft+'px','--bw2-page-top':(screen.top-r.top)/scale-root.clientTop+'px','--bw2-page-width':screen.width/scale+'px','--bw2-page-height':screen.height/scale+'px'};Object.keys(values).forEach(function(key){if(pageOverlay.style.getPropertyValue(key)!==values[key])pageOverlay.style.setProperty(key,values[key]);});
 }
 function bw2PageIsolation(){
+  bw2SyncPageButtons();
   if(!pageOverlayHost||!pageOverlay)return;
   var signature=[pageOverlay.classList.contains('open'),pageOverlay.classList.contains('bw2-upper-page'),pageOverlay.classList.contains('bw2-external-page'),pageOverlay.parentElement===document.body,overlay&&overlay.classList.contains('open'),subOverlay&&subOverlay.classList.contains('open'),!!(overlay&&overlay.querySelector('.bw2-detail'))].join('|');
   if(pageOverlayHost._bw2IsolationSignature===signature)return;pageOverlayHost._bw2IsolationSignature=signature;
@@ -65,8 +68,26 @@ function bw2SyncInteractionScreens(app,metrics){
 function bw2NormalizeUpperPage(){
   if(!pageOverlay||!pageOverlay.classList.contains('bw2-upper-page'))return;
   pageOverlay.querySelectorAll('.info-frame.plain-frame').forEach(function(section){section.classList.remove('plain-frame');section.classList.add('bw2-page-section');});
+  if(bw2IsTogglePage(pageOverlay.dataset.bw2PageKey))pageOverlay.querySelectorAll('[data-page-close]').forEach(function(button){button.remove();});
   if(pageOverlay.dataset.bw2PageKey==='pokedex'){
     var toolbar=pageOverlay.querySelector('.info-title:has([data-dex-thumb])');
     if(toolbar&&!toolbar.classList.contains('bw2-dex-toolbar')){toolbar.classList.add('bw2-dex-toolbar');Array.from(toolbar.childNodes).forEach(function(node){if(node.nodeType===3)node.remove();});toolbar.setAttribute('aria-label','图鉴显示方式');}
   }
+}
+
+function bw2IsTogglePage(key){return ['bag','box','breeding','badge'].indexOf(key)>=0;}
+function bw2SyncPageButtons(){
+  var active=pageOverlay&&pageOverlay.classList.contains('open')?pageOverlay.getAttribute('data-bw2-page-key'):'';
+  document.querySelectorAll('.bw2-menu-button[data-page]').forEach(function(button){
+    var key=button.getAttribute('data-page');if(!bw2IsTogglePage(key))return;
+    var close=key===active,icon=button.querySelector('.bw2-menu-icon'),label=button.querySelector('.menu-label');
+    if(!icon||!label)return;
+    if(!button._bw2PageOriginal)button._bw2PageOriginal={icon:icon.innerHTML,label:label.textContent};
+    if(button.classList.contains('bw2-page-close-button')!==close){
+      button.classList.toggle('bw2-page-close-button',close);
+      icon.innerHTML=close?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>':button._bw2PageOriginal.icon;
+      label.textContent=(close?'关闭':'')+button._bw2PageOriginal.label;
+    }
+    button.setAttribute('aria-expanded',close?'true':'false');
+  });
 }
