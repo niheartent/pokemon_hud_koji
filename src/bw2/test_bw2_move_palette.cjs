@@ -1,6 +1,6 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const{chromium}=require('./browser-runtime.cjs');
-const root=__dirname,out=path.join(root,'黑白2双版本-v0.4.2');
+const root=__dirname,out=path.join(root,'黑白2双版本-v0.4.3');
 const palette={一般:'#A8A878',格斗:'#C03028',飞行:'#A890F0',毒:'#A040A0',地面:'#E0C068',岩石:'#B8A038',虫:'#A8B820',幽灵:'#705898',钢:'#B8B8D0',火:'#F08030',水:'#6890F0',草:'#78C850',电:'#F8D030',超能力:'#F85888',冰:'#98D8D8',龙:'#7038F8',恶:'#705848',妖精:'#EE99AC'};
 (async()=>{const browser=await chromium.launch({headless:true,...require('./browser-runtime.cjs').launchOptions}),results=[];try{
 for(const variant of ['完整版','独立版']){

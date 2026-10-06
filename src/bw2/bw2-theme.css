@@ -26,3 +26,11 @@
 .relset-status{font-size:.75rem;color:var(--dim)}
 .relset-btns{display:flex;flex-wrap:wrap;gap:5px;margin-left:auto}
 .relset-btns button{font:inherit}
+
+/* Local feature surfaces keep each channel's palette. */
+.koji-tc-modes,.koji-tc-selects{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.koji-tc-select{flex:1;min-width:0;padding:8px;font:inherit;color:var(--text);background:var(--pk-surface,#222b40);border:1px solid var(--frame);border-radius:6px}
+.tc-mode-btn.active{outline:2px solid var(--pk-blue,var(--frame));outline-offset:1px}
+.koji-tc-image{text-align:center}.koji-tc-image img{max-width:100%;height:auto;border-radius:6px;cursor:zoom-in}
+.koji-tc-image .dim{font-size:.72rem;margin-top:4px}
+.item-entry.item-no-click{cursor:default}.item-entry.item-no-click:hover{background:transparent}

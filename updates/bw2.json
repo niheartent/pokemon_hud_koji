@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "bw2",
-  "ui": "0.4.2",
-  "core": "4.0.22",
+  "ui": "0.4.3",
+  "core": "4.0.30",
   "testedCore": [
     "3.3.19",
-    "4.0.22"
+    "4.0.30"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.2/versions/bw2/0.4.2/hud.js",
-  "sha256": "51124cbc8d9d85b2e75b80cedff5e08a0ef984415e6d0b7a1b1eba1d5ad362f8",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.2/versions/bw2/0.4.2/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.2",
-  "notes": "# 黑白2 v0.4.2\r\n\r\n- 内置弦九核心 v4.0.22，固定提交 37d0c838f1e29578eacc165ed792b05e3d7982d3。\r\n- 人际关系人物名称可点击查看立绘，战场人物名称支持同样入口。\r\n- 自有页面补齐配图管理：本地上传、图片链接、清除配图，使用上游图片存储接口。\r\n- 增加删除人物入口，保留上游确认及发送失败回滚逻辑。\r\n- 数据源改为自动测速选择直连或镜像，移除新版核心已失效的手动切换选项；旧核心仍显示有效旧选项。\r\n- 同步上游数据初始化与清缓存时重置内存数据的修复。\r\n- 保留本地独立主题、布局和现有队伍控件尺寸。\r\n\r\n在设置中检查更新，点击安装后刷新；也可重新导入 hud.json。黑白2独立版需重新导入升级。\r\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.3/versions/bw2/0.4.3/hud.js",
+  "sha256": "48dc3b9994862696dafddf06da3c20a1519866ddd11315275e9a761830a39b13",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.3/versions/bw2/0.4.3/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.3",
+  "notes": "# 黑白2 v0.4.3\r\n\r\n- 同步弦九核心 v4.0.30，固定提交 66c547db5ad47e2bb650c96b27de673aa2435bbb。\r\n- 自有背包模板接入有效说明判断：没有道具效果和仅有图片的 DIY 道具不可点击；有介绍／效果的 DIY 道具继续可查看。\r\n- 道具名称错误时按图标英文名反查效果，中文名正确时优先使用名称；丢弃和技能机操作继续使用原有接口。\r\n- 修复无效道具图标占位符仍可绕过点击判断的问题。\r\n- 克制表增加攻击方／防御方切换，默认防御方，继续使用本地属性颜色和各通道配色。\r\n- 克制表图片使用仓库 WebP 图源及核心镜像选择，保留放大查看与黑白2原有缩放布局。\r\n- 同步形态专属叫声映射和数据缓存版本，保留人物立绘、配图、自动数据源及现有布局。\r\n\r\n设置 → 检查更新 → 安装后刷新；黑白2独立版需重新导入 JSON。\r\n"
 }
