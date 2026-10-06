@@ -6,7 +6,7 @@ const readText=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
 const root=__dirname,out=path.join(root,'HUD黑白2版-第一版');fs.mkdirSync(out,{recursive:true});
 const payload=JSON.parse(readText(path.join(root,'pkm-hud-upstream.json')).replace(/^\uFEFF/,''));
 const upstream=require('../shared/upstream-core.cjs')();let original,code;const patches=[];
-const version='0.4.4';
+const version='0.4.5';
 const nativeVisualCss=readText(path.join(root,'bw2-native-base.css'));
 const presentation=readText(path.join(root,'../shared/presentation.js'));
 const presentationContract=require('../shared/presentation-contract.json');

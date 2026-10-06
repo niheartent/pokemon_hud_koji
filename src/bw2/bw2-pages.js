@@ -1,3 +1,13 @@
+/* A fitted two-screen chart; calculation IDs remain native business interfaces. */
+function bw2TypeChartHTML(){
+  var opts='<option value="">无</option>'+TYPE_LIST.map(function(t){return '<option value="'+t+'">'+t+'</option>';}).join('');
+  var attack=typeof typeChartSwitchMode==='function'&&typeof typeChartCalcAtk==='function';
+  var controls=attack?'<div class="koji-tc-modes" aria-label="属性克制视角"><button type="button" class="btn-small tc-mode-btn" data-tc-mode="def">作为防御方</button><button type="button" class="btn-small tc-mode-btn" data-tc-mode="atk">作为攻击方</button></div>':'';
+  controls+='<div id="tc-def-wrap"><div class="set-title">防御方属性（最多选两个）</div><div class="koji-tc-selects"><select class="koji-tc-select" aria-label="防御方第一属性" id="tc-def-1">'+opts+'</select><select class="koji-tc-select" aria-label="防御方第二属性" id="tc-def-2">'+opts+'</select></div><div id="tc-result"><div class="empty">选择属性查看克制关系</div></div></div>';
+  if(attack)controls+='<div id="tc-atk-wrap" style="display:none"><div class="set-title">攻击方属性</div><div class="koji-tc-selects"><select class="koji-tc-select" aria-label="攻击方属性" id="tc-atk-1">'+opts+'</select></div><div id="tc-atk-result"><div class="empty">选择属性查看克制关系</div></div></div>';
+  var url=kojiTypeChartURL();
+  return '<section class="bw2-typechart"><div class="bw2-typechart-calculator">'+controls+'</div><div class="bw2-typechart-table"><div class="set-title">完整克制表</div><div class="koji-tc-image"><img src="'+esc(url)+'" referrerpolicy="origin" data-tc-big="'+esc(url)+'" alt="宝可梦属性相克表"></div></div></section>';
+}
 /* Breeding uses only the native egg, remaining-step and storage fields. */
 function bw2BreedingHTML(){
   var b=stat_data.繁育||{},egg=String(b.蛋||'无蛋'),hasEgg=!/^(无蛋|无|-|空)$/.test(egg),steps=Math.max(0,num(b.剩余步数,0));
@@ -20,10 +30,10 @@ function bw2PreparePage(key){
   bw2CloseInteractions();
   var app=pageOverlayHost&&pageOverlayHost.parentElement;
   if(bw2IsTogglePage(key)&&app&&!app.querySelector('.bw2-menu-button[data-page="'+key+'"]'))bw2SelectConsoleTab(app,'4');
-  var upper=['box','bag','breeding','pokedex','badge'].indexOf(key)>=0,external=key==='map'||key==='typechart';
-  pageOverlay.classList.toggle('bw2-upper-page',upper);pageOverlay.classList.toggle('bw2-full-page',key==='pokedex');pageOverlay.classList.toggle('bw2-external-page',external);pageOverlay.classList.toggle('bw2-host',external);pageOverlay.setAttribute('data-bw2-page-key',key);
+  var upper=['box','bag','breeding','pokedex','badge','typechart'].indexOf(key)>=0,external=key==='map';
+  pageOverlay.classList.toggle('bw2-upper-page',upper);pageOverlay.classList.toggle('bw2-full-page',key==='pokedex'||key==='typechart');pageOverlay.classList.toggle('bw2-external-page',external);pageOverlay.classList.toggle('bw2-host',external);pageOverlay.setAttribute('data-bw2-page-key',key);
   if(external&&pageOverlayHost){var style=getComputedStyle(pageOverlayHost);['--frame','--text','--dim','--hp','--male','--female','--bw2-original-grid'].forEach(function(name){pageOverlay.style.setProperty(name,style.getPropertyValue(name));});}
-  if(!pageOverlay._bw2ExternalBound){pageOverlay._bw2ExternalBound=true;hudScope.listen(pageOverlay,'click',function(e){var image=e.target.closest&&e.target.closest('[data-tc-big]');if(!image||!pageOverlay.classList.contains('bw2-external-page'))return;e.preventDefault();e.stopImmediatePropagation();var zoomed=image.getAttribute('data-bw2-zoomed')==='1';image.setAttribute('data-bw2-zoomed',zoomed?'0':'1');image.style.maxWidth='none';image.style.width=zoomed?'100%':'200%';image.style.cursor=zoomed?'zoom-in':'zoom-out';},true);}
+  if(!pageOverlay._bw2ExternalBound){pageOverlay._bw2ExternalBound=true;hudScope.listen(pageOverlay,'click',function(e){var image=e.target.closest&&e.target.closest('[data-tc-big]');if(!image)return;if(pageOverlay.dataset.bw2PageKey==='typechart'){e.preventDefault();e.stopImmediatePropagation();}},true);}
 }
 function bw2PagePopout(on){
   if(!pageOverlay)return;

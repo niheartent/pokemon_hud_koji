@@ -340,10 +340,19 @@ button:hover:not(:disabled)>.bw2-button-rim polygon{fill:#3b5664;stroke:#c9e6fb}
 /* Full dex retains the same content and single scrolling owner, spanning the hinge. */
 .bw2-host .bw2-full-page .page{height:100%}
 .bw2-host .bw2-full-page .dex-search input{max-width:none}
-/* Type chart opens at 75% of the previous external-window limits. */
-.bw2-external-page[data-bw2-page-key="typechart"].pkm-hud-page-overlay.popout .page{width:75%;max-width:min(70.5vw,675px);max-height:64.5vh!important}
-.bw2-external-page[data-bw2-page-key="typechart"] .page-body{max-height:calc(64.5vh - 44px)!important}
-@media screen and (max-width:600px){.bw2-external-page[data-bw2-page-key="typechart"].pkm-hud-page-overlay.popout .page{width:72vw;max-width:72vw;max-height:67.5dvh!important}.bw2-external-page[data-bw2-page-key="typechart"] .page-body{max-height:calc(67.5dvh - 44px)!important}}
+/* The chart fits the two-screen surface without scrolling or image popouts. */
+.bw2-host .bw2-full-page[data-bw2-page-key="typechart"] .page-body{display:flex;overflow:hidden!important;padding:10px;max-height:none!important}
+.bw2-host .bw2-typechart{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0;gap:10px;overflow:hidden}
+.bw2-host .bw2-typechart-calculator{flex:none;padding:8px 10px;border:1px solid #718294;background:#202a3b}
+.bw2-host .bw2-typechart .koji-tc-modes,.bw2-host .bw2-typechart .koji-tc-selects{flex-wrap:nowrap;gap:6px;margin-bottom:6px}
+.bw2-host .bw2-typechart .set-title{margin:0 0 6px;font-size:12px;line-height:1.4;color:#dbe4ee}
+.bw2-host .bw2-typechart .koji-tc-select{padding:5px;font-size:12px;height:30px;border-radius:0}
+.bw2-host .bw2-typechart .empty{padding:6px 0;font-size:12px}
+.bw2-host .bw2-typechart :is(#tc-result,#tc-atk-result){font-size:12px;line-height:1.3}
+.bw2-host .bw2-typechart .type-chip{padding:2px 5px;font-size:11px;line-height:1.3}
+.bw2-host .bw2-typechart-table{display:flex;flex-direction:column;flex:1;min-height:0;min-width:0;padding:8px;border:1px solid #718294;background:#171e2a}
+.bw2-host .bw2-typechart .koji-tc-image{flex:1;min-height:0;min-width:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.bw2-host .bw2-typechart [data-tc-big]{display:block;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain;border-radius:0;cursor:default}
 
 /* Operation toggles stay at their original position on the lower screen. */
 .bw2-host .bw2-control-area .bw2-menu-button.bw2-page-close-button{background:linear-gradient(110deg,#643b42,#88535b)!important;border-color:#cf959b!important;color:#fff!important;--bw2-accent:#ffb7b7}

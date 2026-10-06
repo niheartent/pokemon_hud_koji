@@ -23,9 +23,9 @@ replaceFunction('hudSyncModalIsolation',functions.hudSyncModalIsolation.replace(
 replaceFunction('actionHTML','function actionHTML(raw,key){return bw2ActionHTML(raw,key);}');
 replaceFunction('breedingHTML','function breedingHTML(){return bw2BreedingHTML();}');
 replaceFunction('boxHTML','function boxHTML(){return bw2BoxHTML();}');
+replaceFunction('typeChartHTML','function typeChartHTML(){return bw2TypeChartHTML();}');
 let pageSource=fragment(functions.openPage,"(key==='typechart'?{label:'克制表'}:null)","(key==='typechart'?{label:'克制表'}:key==='rel'?{label:'人际关系'}:null)");
 let openPage=fragment(pageSource,'  currentPageKey=key;','  bw2PreparePage(key);currentPageKey=key;');
-openPage=fragment(openPage,"pageOverlayPopout(key==='map');","pageOverlayPopout(key==='map'||key==='typechart');");
 openPage=fragment(openPage,"if(key==='map')hudSyncMapPopoutHeight();","if(key==='map')hudSyncMapPopoutHeight();bw2SyncPageScreens(pageOverlayHost.parentElement);hudResolvePkidbImages(pageOverlay);");
 replaceFunction('openPage',openPage);
 replaceFunction('pageHTML',fragment(functions.pageHTML,"'<div class=\"page\"><div class=\"page-head\">'+mapCtl+","'<div class=\"page\"><div class=\"page-head\"><strong class=\"bw2-page-title\">'+esc(title)+'</strong>'+mapCtl+"));

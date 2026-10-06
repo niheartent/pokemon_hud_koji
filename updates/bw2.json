@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "bw2",
-  "ui": "0.4.4",
+  "ui": "0.4.5",
   "core": "4.0.30",
   "testedCore": [
     "3.3.19",
     "4.0.30"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.4/versions/bw2/0.4.4/hud.js",
-  "sha256": "e0b95ed837e04d3fea2837fbadfd7df0bd1197c9adf563c4b9ad1692c562696f",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.4/versions/bw2/0.4.4/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.4",
-  "notes": "# 黑白2 v0.4.4\r\n\r\n- 背包、盒子、繁育、徽章盒改为原位置按钮开关：打开后显示关闭图标、关闭文字与红灰背景，再点一次关闭并恢复。\r\n- 移除这四个上屏页面边框的关闭红叉；图鉴、设置、地图和其他弹窗保持各自关闭入口。\r\n- 菜单切换、切换上屏页面和刷新后同步按钮状态，保留下屏操作及原有业务接口。\r\n- 完整版与独立版同时更新，内置弦九核心 v4.0.30。\r\n\r\n完整版：设置 → 检查更新 → 安装后刷新。独立版：重新导入 JSON。\r\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.5/versions/bw2/0.4.5/hud.js",
+  "sha256": "d633e727ae1bc9926853c3b75ff4991583ff9ce398871f7eb1e2eaeb50bc6c9c",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.5/versions/bw2/0.4.5/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.5",
+  "notes": "# 黑白2 v0.4.5\n\n- 克制表改为覆盖上下两屏的内置全页面，不再跳出窗口。\n- 属性选择、攻击／防御视角与完整克制表统一排版，图片按剩余空间等比缩放，页面没有滚动条。\n- 点击克制表图片不会再打开额外弹窗；右上角关闭后回到原页面。\n- 完整版与独立版同时更新，内置弦九核心 v4.0.30。\n\n完整版：设置 → 检查更新 → 安装后刷新。独立版：重新导入 JSON。\n"
 }
