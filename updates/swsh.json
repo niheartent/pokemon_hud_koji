@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.6.5",
-  "core": "4.0.30",
+  "ui": "1.6.6",
+  "core": "4.0.43",
   "testedCore": [
     "3.3.19",
-    "4.0.30"
+    "4.0.43"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.5/versions/swsh/1.6.5/hud.js",
-  "sha256": "72f06d2cdb61489114418e64f4889ba7daf2ecc9d12283a0ab0ee9112aa96dbd",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.5/versions/swsh/1.6.5/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.5",
-  "notes": "# 剑盾 v1.6.5\r\n\r\n- 同步弦九核心 v4.0.30，固定提交 66c547db5ad47e2bb650c96b27de673aa2435bbb。\r\n- 自有背包模板接入有效说明判断：没有道具效果和仅有图片的 DIY 道具不可点击；有介绍／效果的 DIY 道具继续可查看。\r\n- 道具名称错误时按图标英文名反查效果，中文名正确时优先使用名称；丢弃和技能机操作继续使用原有接口。\r\n- 修复无效道具图标占位符仍可绕过点击判断的问题。\r\n- 克制表增加攻击方／防御方切换，默认防御方，继续使用本地属性颜色和各通道配色。\r\n- 克制表图片使用仓库 WebP 图源及核心镜像选择，保留放大查看与黑白2原有缩放布局。\r\n- 同步形态专属叫声映射和数据缓存版本，保留人物立绘、配图、自动数据源及现有布局。\r\n\r\n设置 → 检查更新 → 安装后刷新；黑白2独立版需重新导入 JSON。\r\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.6/versions/swsh/1.6.6/hud.js",
+  "sha256": "6da6a9c5dee3ada7cd9627dbb33fcedc81e0f5dc8bcf958f7e55547b953b020f",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.6/versions/swsh/1.6.6/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.6",
+  "notes": "# 剑盾 v1.6.6\n\n- 同步弦九核心 v4.0.43：数据优先走 jsDelivr，失败时备用源回退；新增阿尔宙斯手机图标和数据修订。\n- 人际关系配图／删除人物按钮使用柔和的白天、黑夜工具按钮配色；黑夜好感度条改为蓝青色。\n- 修复地图跳出 HUD 后失去主题的问题，区域、地点筛选、方向与缩放按钮继承独立的白天／黑夜颜色方案。\n- 保留本地徽章展示与 SVG 地图图标；劲敌展示新增专用类，不产生可点击的误导。\n\n设置 → 检查更新 → 安装后刷新。\n"
 }

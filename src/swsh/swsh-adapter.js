@@ -129,3 +129,7 @@ pkDoUpdate=function(){
   pkLatestContent=pkBeautyPreparedContent;return swshBaseViews.pkDoUpdate.apply(this,arguments);
 };
 pkRepair=function(){pkSetUpdateMsg('请先使用「检查更新」验证美化兼容性，再安装已合成版本。');};
+
+/* Detached operation pages receive the owned palette when they change hosts. */
+var swshBasePagePopout=pageOverlayPopout;
+pageOverlayPopout=function(on){var result=swshBasePagePopout(on);swshApplyTheme(swshCurrentApp());return result;};

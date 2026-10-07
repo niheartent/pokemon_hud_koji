@@ -43,6 +43,7 @@ var swshDarkTheme=true;
 // Missing preference uses dark; an explicit day preference survives upgrades.
 try{swshDarkTheme=localStorage.getItem('pk_swsh_dark_theme')!=='0';}catch(e){}
 function swshApplyTheme(app){
+  if(typeof pageOverlay!=='undefined'&&pageOverlay){pageOverlay.classList.toggle('swsh-page-host',pageOverlay.classList.contains('popout'));pageOverlay.classList.toggle('swsh-dark',swshDarkTheme);}
   if(app)app.classList.toggle('swsh-dark',swshDarkTheme);
   var win=document.getElementById('pkm-hud-win');if(win)win.classList.toggle('swsh-dark',swshDarkTheme);
   var inline=document.getElementById('pkm-hud-inline');if(inline)inline.classList.toggle('swsh-dark',swshDarkTheme);
