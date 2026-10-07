@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "bw2",
-  "ui": "0.4.7",
-  "core": "4.0.43",
+  "ui": "0.4.8",
+  "core": "4.0.45",
   "testedCore": [
     "3.3.19",
-    "4.0.43"
+    "4.0.45"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.7/versions/bw2/0.4.7/hud.js",
-  "sha256": "8777dd42ab03796fa95b4aee7e78376fc74319816ac47a0322a30de02d3bbf8e",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.7/versions/bw2/0.4.7/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.7",
-  "notes": "# 黑白2 v0.4.7\n\n- 同步弦九核心 v4.0.43：固定 jsDelivr 数据源，保留失败回退，接入新增阿尔宙斯手机图标与数据修订。\n- 保留黑白2本地徽章与 SVG 地图展示；同步劲敌专用样式类。\n- 保留四个页面原按钮关闭、双屏克制表无滚动条以及统一网格标题栏。\n- 完整版与独立版同时更新。\n\n完整版：设置 → 检查更新 → 安装后刷新。独立版：重新导入 JSON。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.8/versions/bw2/0.4.8/hud.js",
+  "sha256": "1fa42519d1076b78902a03af34f8b2112536dba2f6bc150c385c97dce05f6857",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.8/versions/bw2/0.4.8/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.8",
+  "notes": "# 黑白2 v0.4.8\n\n- 同步弦九核心 v4.0.45，接入详情属性标签点击查看克制／抵抗／免疫。\n- 两个属性标签均按双属性合并计算，保留本地属性颜色与弹窗样式。\n- 支持鼠标、触屏以及回车／空格操作；关闭计算结果后保持精灵详情。\n- 旧核心缺少计算接口时，详情标签退回普通展示。\n\n完整版：设置 → 检查更新 → 安装后刷新。黑白独立版：重新导入 JSON。\n"
 }

@@ -2,7 +2,7 @@
 
 ## 当前适配
 
-两套正式导入包以及黑白独立版内置 v4.0.43。核心源码仅维护一份：`src/shared/upstream/pkm-hud.js`；`manifest.json` 固定上游 Git 提交、版本与 SHA-256。构建验证哈希，避免原版同版本号静默修改导致产物无法复现。旧 JSON 保留历史元信息与旧版回归参考，已不作为当前业务核心来源。
+两套正式导入包以及黑白独立版内置 v4.0.45。核心源码仅维护一份：`src/shared/upstream/pkm-hud.js`；`manifest.json` 固定上游 Git 提交、版本与 SHA-256。构建验证哈希，避免原版同版本号静默修改导致产物无法复现。旧 JSON 保留历史元信息与旧版回归参考，已不作为当前业务核心来源。
 
 之前的失败来自对原版样式注入位置的依赖。剑盾 v1.6.0／黑白 v0.4.0 进一步取消了这一依赖：共享 `presentation-boundary.js` 在合成时排除原版 CSS 构建与注入，安装自有样式；`presentation.js` 提供 111 个固定组件函数及根布局。下载的新核心中的同名模板不会用于生成最终界面，缺失的模板由本地包补齐。
 
@@ -88,3 +88,9 @@
 ## 2026-10-07：核心 v4.0.43
 
 固定提交 bb1efd824ffa19cba4dc734afbaf4c286f7ef015。移除 pkmRepoOrder／pkmRepoAutoDetect，pkmRepoFirst 固定优先使用 jsDelivr，hudFetch 保留备用地址回退。设置按能力判断，缺少测速／手动选择服务时改为固定源说明。新增 ITEM_IMG 阿尔宙斯手机与 PKM_DATA_REV 修订。原版徽章布局和地图图标为展示变更，继续使用两套本地模板；劲敌同步 rival-item 类。地图弹出 body 时，剑盾通过 swsh-page-host 独立应用主题变量，避免作用域丢失。业务函数与新旧核心浏览器回归验证。
+
+## 2026-10-07：核心 v4.0.45 属性克制入口
+
+固定提交 ff7b829e6b6b1cc7a2655aaf818aa794a4037992。上游新增 typeWeakChipHTML／detailTypesHTML／showTypeWeakness 和 data-type-weak 点击代理。原版 detailHTML 改用新的属性模板，但本仓库已替换该详情模板，因此仅更新核心不会出现点击入口。
+
+共享 kojiDetailTypesHTML 为两套自有详情生成 data-type-weak，携带完整双属性；仅在 showTypeWeakness 存在时生成可交互标签，否则调用普通 typesHTML。功能计算、零倍免疫、子弹窗由核心接口负责；属性颜色、焦点样式、黑白上屏弹窗与剑盾明暗颜色由本地展示管理。仅修改详情标签，全局属性徽标保持普通展示。feature-adapter 注册一次键盘事件，调用同一计算服务。关闭子弹窗后详情仍保留。浏览器回归覆盖点击／回车／空格、草钢火4倍和毒免疫，以及旧核心回退。

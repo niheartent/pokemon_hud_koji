@@ -231,3 +231,5 @@
 :is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) [data-rel-del-open]:hover{color:var(--swsh-negative)!important}
 :is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .rival-item{cursor:default}
 :is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .rival-item:hover{background:transparent}
+
+.koji-detail-type-chip{cursor:pointer}.koji-detail-type-chip:hover{filter:brightness(1.08)}.koji-detail-type-chip:focus-visible{outline:2px solid currentColor;outline-offset:3px}

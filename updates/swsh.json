@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.6.6",
-  "core": "4.0.43",
+  "ui": "1.6.7",
+  "core": "4.0.45",
   "testedCore": [
     "3.3.19",
-    "4.0.43"
+    "4.0.45"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.6/versions/swsh/1.6.6/hud.js",
-  "sha256": "6da6a9c5dee3ada7cd9627dbb33fcedc81e0f5dc8bcf958f7e55547b953b020f",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.6/versions/swsh/1.6.6/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.6",
-  "notes": "# 剑盾 v1.6.6\n\n- 同步弦九核心 v4.0.43：数据优先走 jsDelivr，失败时备用源回退；新增阿尔宙斯手机图标和数据修订。\n- 人际关系配图／删除人物按钮使用柔和的白天、黑夜工具按钮配色；黑夜好感度条改为蓝青色。\n- 修复地图跳出 HUD 后失去主题的问题，区域、地点筛选、方向与缩放按钮继承独立的白天／黑夜颜色方案。\n- 保留本地徽章展示与 SVG 地图图标；劲敌展示新增专用类，不产生可点击的误导。\n\n设置 → 检查更新 → 安装后刷新。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.7/versions/swsh/1.6.7/hud.js",
+  "sha256": "3529bf9861b44d32775f0035460261766b8492943394e90c8a8bf8717c13a94b",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.7/versions/swsh/1.6.7/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.7",
+  "notes": "# 剑盾 v1.6.7\n\n- 同步弦九核心 v4.0.45，接入详情属性标签点击查看克制／抵抗／免疫。\n- 两个属性标签均按双属性合并计算，保留本地属性颜色与弹窗样式。\n- 支持鼠标、触屏以及回车／空格操作；关闭计算结果后保持精灵详情。\n- 旧核心缺少计算接口时，详情标签退回普通展示。\n\n完整版：设置 → 检查更新 → 安装后刷新。黑白独立版：重新导入 JSON。\n"
 }

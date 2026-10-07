@@ -4,6 +4,7 @@ hudBindRootDelegation=function(app){
   kojiBaseRootBinding(app);
   if(!app||app._kojiRelBound)return;
   app._kojiRelBound=true;
+  hudScope.listen(app,'keydown',function(e){var chip=e.target&&e.target.closest&&e.target.closest('.koji-detail-type-chip[data-type-weak]');if(!chip||(e.key!=='Enter'&&e.key!==' ')||typeof showTypeWeakness!=='function')return;e.preventDefault();e.stopPropagation();showTypeWeakness(chip.getAttribute('data-type-weak'));});
   hudScope.listen(app,'click',function(e){
     var target=e.target&&e.target.closest?e.target:null;
     if(!target)return;

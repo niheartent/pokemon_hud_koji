@@ -34,3 +34,5 @@
 .koji-tc-image{text-align:center}.koji-tc-image img{max-width:100%;height:auto;border-radius:6px;cursor:zoom-in}
 .koji-tc-image .dim{font-size:.72rem;margin-top:4px}
 .item-entry.item-no-click{cursor:default}.item-entry.item-no-click:hover{background:transparent}
+
+.koji-detail-type-chip{cursor:pointer}.koji-detail-type-chip:hover{filter:brightness(1.08)}.koji-detail-type-chip:focus-visible{outline:2px solid currentColor;outline-offset:3px}
