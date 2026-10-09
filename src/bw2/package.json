@@ -1,6 +1,6 @@
 {
   "name": "bw2-hud-workspace",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "private": true,
   "scripts": {
     "build": "node build_bw2_hud.cjs && node preview_bw2.cjs && node build_bw2_variants.cjs && node preview_bw2_variants.cjs && node audit_bw2_variant_resources.cjs",

@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.6.7",
-  "core": "4.0.45",
+  "ui": "1.6.8",
+  "core": "4.0.52",
   "testedCore": [
     "3.3.19",
-    "4.0.45"
+    "4.0.52"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.7/versions/swsh/1.6.7/hud.js",
-  "sha256": "3529bf9861b44d32775f0035460261766b8492943394e90c8a8bf8717c13a94b",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.7/versions/swsh/1.6.7/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.7",
-  "notes": "# 剑盾 v1.6.7\n\n- 同步弦九核心 v4.0.45，接入详情属性标签点击查看克制／抵抗／免疫。\n- 两个属性标签均按双属性合并计算，保留本地属性颜色与弹窗样式。\n- 支持鼠标、触屏以及回车／空格操作；关闭计算结果后保持精灵详情。\n- 旧核心缺少计算接口时，详情标签退回普通展示。\n\n完整版：设置 → 检查更新 → 安装后刷新。黑白独立版：重新导入 JSON。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.8/versions/swsh/1.6.8/hud.js",
+  "sha256": "56f5ac9ca341ea4bb25f8565abb9b895cd475a0f35038301397e660c95f697c2",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.8/versions/swsh/1.6.8/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.8",
+  "notes": "# 剑盾 v1.6.8\n\n- 同步弦九核心 v4.0.52，接入战场属性点击查看克制、抵抗与免疫。\n- 场上与队列的双属性标签按合并属性计算，支持点击、回车和空格操作。\n- 新增合众地图，接入地图与克制表图片加载失败时的镜像回退。\n- 同步闪光、Mega、头目标识的仓库资源路径，保留本地尺寸、布局及配色。\n- 完整版支持设置中检查更新、安装后刷新；黑白独立版需重新导入 JSON。\n"
 }

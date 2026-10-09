@@ -2,7 +2,7 @@
 function swshPartyMarksHTML(c){
   if(!c||c.empty)return '';
   var name=String(c.name||'')+' '+String(c.species||''),form=name+' '+String(c.icon||'');
-  var marks=[['mega','Mega',/mega|超级|超进化|超級|超進化/i.test(form),'超进化.png','M'],['gmax','超极巨化',/超极巨|超極巨|gmax|gigantamax/i.test(form),'超极巨化.png','G'],['boss','头目／霸主',/霸主|头目|頭目/i.test(name),'头目.png','◆'],['shiny','闪光',!!c.shiny,'','✦']];
+  var marks=[['mega','Mega',/mega|超级|超进化|超級|超進化/i.test(form),'超进化.png','M'],['gmax','超极巨化',/超极巨|超極巨|gmax|gigantamax/i.test(form),'超极巨化.png','G'],['boss','头目／霸主',/霸主|头目|頭目/i.test(name),'头目.png','◆'],['shiny','闪光',!!c.shiny,'闪光.png','✦']];
   return marks.reverse().filter(function(m){return m[2];}).map(function(m){
     var url=m[3]?'https://raw.githubusercontent.com/xianjiu0926/Pokemon/main/UI/ui/'+m[3]:'https://raw.githubusercontent.com/msikma/pokesprite/master/misc/special-attribute/shiny-stars.png';
     if(typeof pkmRepoFirst==='function')url=pkmRepoFirst(url);

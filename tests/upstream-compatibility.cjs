@@ -22,7 +22,7 @@ try{for(const target of (process.env.UPSTREAM_CANDIDATE?['bw2','swsh']:['bw2','s
   assert.doesNotThrow(()=>scope.pkBeautyBuildRemote(raw.replace('st.textContent=css;','st.textContent=css;st.textContent=css;')));
  }
  const template=fs.readFileSync(path.join(folder,channel==='bw2'?'预览与测试.html':'剑盾版预览.html'),'utf8');
- const bridge="previewState.队伍['1'].属性1='草';previewState.队伍['1'].属性2='钢';stat_data.队伍['1'].属性1='草';stat_data.队伍['1'].属性2='钢';previewState.人际关系={'测试人物':'同行伙伴'};stat_data.人际关系=previewState.人际关系;window.__UPSTREAM_TEST={core:PK_VER,open:openPage,repo:function(){return {url:pkmRepoFirst(PKM_REPO_RAW+'types.json'),icon:ITEM_IMG['阿尔宙斯手机']};},portrait:function(){stat_data.人际关系={'测试人物':'同行伙伴'};PKM_PORTRAITS={'测试人物':true};},rel:relHTML,newFeatures:function(){var items=[{name:'伤药',en:'Potion',desc:'恢复HP20'}];PKM_DB.item={data:items,idx:pkmDbBuildIndex(items,['name','en','jp'])};diyData.item={'自创图片':{img:'https://example.test/image.png'},'自创效果':{effect:'自创恢复效果'}};previewState.背包={'伤药':{类型:'道具',数量:1,图标:'wrong.png'},'写错的药':{类型:'道具',数量:1,图标:'potion.png'},'谜之道具':{类型:'道具',数量:1,图标:'unknown.png'},'自创图片':{类型:'道具',数量:1},'自创效果':{类型:'道具',数量:1}};stat_data.背包=previewState.背包;},cry:function(){FORM_CRY_MAP['test-form']=9999;return [pkmCryId({en:'test-form'},{ndex:25}),pkmCryId({en:'unknown'},{ndex:25})];}};loadDexList=function(region,cb){cb(Array.from({length:12},function(_,i){return {id:String(i+1),ndex:String(i+1),name:'测试精灵'+i};}));};";
+ const bridge="previewState.队伍['1'].属性1='草';previewState.队伍['1'].属性2='钢';stat_data.队伍['1'].属性1='草';stat_data.队伍['1'].属性2='钢';previewState.人际关系={'测试人物':'同行伙伴'};stat_data.人际关系=previewState.人际关系;window.__UPSTREAM_TEST={battle:function(){stat_data.战场={场上:{'测试精灵（我方）':'Lv.50 100/100｜草／钢｜特性：茂盛｜招式：撞击'},各方:{测试训练家:'队列1. 测试队列（草·钢） Lv.50｜招式：撞击'}};document.querySelector('#tab-3').innerHTML=battleHTML();},imageFallback:function(){var el=document.createElement('img');el.setAttribute('src',PKM_REPO_RAW+'UI/地图/合众.png');kojiMapImgErr(el);var first=el.getAttribute('src'),fallback=el.getAttribute('data-fallback');kojiMapImgErr(el);return {first:first,fallback:fallback,hidden:el.style.display};},core:PK_VER,open:openPage,repo:function(){return {url:pkmRepoFirst(PKM_REPO_RAW+'types.json'),icon:ITEM_IMG['阿尔宙斯手机']};},portrait:function(){stat_data.人际关系={'测试人物':'同行伙伴'};PKM_PORTRAITS={'测试人物':true};},rel:relHTML,newFeatures:function(){var items=[{name:'伤药',en:'Potion',desc:'恢复HP20'}];PKM_DB.item={data:items,idx:pkmDbBuildIndex(items,['name','en','jp'])};diyData.item={'自创图片':{img:'https://example.test/image.png'},'自创效果':{effect:'自创恢复效果'}};previewState.背包={'伤药':{类型:'道具',数量:1,图标:'wrong.png'},'写错的药':{类型:'道具',数量:1,图标:'potion.png'},'谜之道具':{类型:'道具',数量:1,图标:'unknown.png'},'自创图片':{类型:'道具',数量:1},'自创效果':{类型:'道具',数量:1}};stat_data.背包=previewState.背包;},cry:function(){FORM_CRY_MAP['test-form']=9999;return [pkmCryId({en:'test-form'},{ndex:25}),pkmCryId({en:'unknown'},{ndex:25})];}};loadDexList=function(region,cb){cb(Array.from({length:12},function(_,i){return {id:String(i+1),ndex:String(i+1),name:'测试精灵'+i};}));};";
  const start=template.lastIndexOf('<script>'),end=template.lastIndexOf('</script>'),boot=code.lastIndexOf('try{ensureHud();}catch(e){}'),script=code.slice(0,boot)+bridge+code.slice(boot);
  const html=template.slice(0,start+8)+script.replaceAll('</script','<\\/script')+template.slice(end),page=await browser.newPage({viewport:{width:1000,height:1400}}),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
@@ -44,6 +44,32 @@ try{for(const target of (process.env.UPSTREAM_CANDIDATE?['bw2','swsh']:['bw2','s
   }
  }else assert.equal(await detail.locator('[data-type-weak]').count(),0);
  await detail.locator('[data-close]').click();
+ if(/function btTypeLine\(/.test(raw)){
+  await page.locator('.tab-btn[data-tab="3"]').click();await page.evaluate(()=>__UPSTREAM_TEST.battle());
+  const cards=page.locator('#tab-3 .bt-card');assert.equal(await cards.count(),2);
+  assert.equal(await cards.first().locator('[data-type-weak="草|钢"]').count(),2);
+  assert.equal(await cards.last().locator('[data-type-weak="草|钢"]').count(),2);
+  assert.equal(await cards.first().locator('[data-ability="茂盛"]').count(),1);
+  assert.equal(await cards.first().locator('[data-move="撞击"]').count(),1);
+  for(const action of ['click','Enter',' ']){
+   const chip=cards.nth(action==='click'?0:1).locator('[data-type-weak]').first();
+   if(action==='click')await chip.click();else{await chip.focus();await page.keyboard.press(action===' '?'Space':action);}
+   const popup=page.locator('.pkm-hud-sub.open');await popup.waitFor();
+   assert((await popup.locator('.modal-name').innerText()).includes('草 / 钢'));
+   assert((await popup.locator('.modal-body').innerText()).includes('4× 克制'));
+   assert((await popup.locator('.modal-body>div').filter({hasText:'0× 无效'}).innerText()).includes('毒'));
+   await popup.locator('[data-sub-close]').click();assert.equal(await cards.count(),2);
+  }
+  await page.locator('.tab-btn[data-tab="1"]').click();
+ }
+ if(/function mapImgErr\(/.test(raw)){
+  const fallback=await page.evaluate(()=>__UPSTREAM_TEST.imageFallback());
+  assert(fallback.first.startsWith('https://cdn.jsdelivr.net/gh/'));assert(fallback.fallback);assert.equal(fallback.hidden,'none');
+  await page.evaluate(()=>__UPSTREAM_TEST.open('map'));
+  const unova=page.locator('.page-overlay.open [data-map]').filter({hasText:'合众'});assert.equal(await unova.count(),1);await unova.click();
+  assert((await page.locator('.page-overlay.open .map-img').first().getAttribute('data-src')).includes('合众'));
+  await closePage();
+ }
  for(const key of ['bag','box','badge','breeding','pokedex','settings','map','typechart']){await page.evaluate(key=>__UPSTREAM_TEST.open(key),key);await page.locator('.page-overlay.open .page').waitFor();await closePage();}
  if(/function resolveBagItemClick\(/.test(raw)){
   await page.evaluate(()=>{__UPSTREAM_TEST.newFeatures();__UPSTREAM_TEST.open('bag');});
