@@ -383,3 +383,26 @@ button:hover:not(:disabled)>.bw2-button-rim polygon{fill:#3b5664;stroke:#c9e6fb}
 .bw2-external-page .page-head .map-pad-toggle{flex:none;box-sizing:border-box;width:28px;height:28px;min-width:28px;min-height:28px;margin:0;padding:0;font-size:18px;line-height:1}
 .bw2-external-page .page-body{max-height:calc(86vh - var(--bw2-heading-height))!important}
 @media(max-width:600px){.bw2-external-page .page-body{max-height:calc(90dvh - var(--bw2-heading-height))!important}}
+
+/* Aura selection follows the console's graphite panels and cyan controls. */
+.bw2-host .aura-list{display:flex;flex-direction:column;gap:8px}
+.bw2-host .bw2-console :is(.aura-slot,.koji-aura-switch){font:inherit;color:#e1e9ef;background:#252e3e;border:1px solid #85969a;border-radius:2px;cursor:pointer}
+.bw2-host .bw2-console .aura-slot{display:flex;align-items:flex-start;gap:10px;width:100%;padding:10px 12px;text-align:left;line-height:1.6;box-shadow:none}
+.bw2-host .bw2-console .aura-slot.active{background:#243e4b;border-color:#72c6d2;box-shadow:inset 3px 0 #72c6d2}
+.bw2-host .bw2-console .aura-slot:not(:disabled):hover{background:#344657}
+.bw2-host .bw2-console .aura-slot.empty{color:#b6c4d1;opacity:1;cursor:default}
+.bw2-host .aura-n{flex:0 0 auto;font-weight:700}
+.bw2-host .aura-body{min-width:0;overflow-wrap:anywhere}
+.bw2-host .bw2-console .koji-aura-switch{padding:3px 8px;margin-left:6px;font-size:.78rem}
+.bw2-host .koji-aura-help{font-size:.78rem;margin:10px 0 0}
+
+.bw2-host .bw2-console .bw2-upper-dialog .modal-body button.aura-slot{background:#252e3e!important;color:#e1e9ef!important;border:1px solid #85969a!important;clip-path:none;border-radius:2px!important;box-shadow:none!important}
+.bw2-host .bw2-console .bw2-upper-dialog .modal-body button.aura-slot.active{background:#243e4b!important;color:#e1e9ef!important;border-color:#72c6d2!important;box-shadow:inset 3px 0 #72c6d2!important}
+.bw2-host .bw2-console .bw2-upper-dialog .modal-body button.aura-slot.empty{color:#b6c4d1!important}
+.bw2-host .bw2-console .bw2-upper-dialog .modal-body button.aura-slot:not(:disabled):hover{background:#344657!important}
+
+.bw2-host .bw2-console .koji-aura-modal .modal-body button.aura-slot{background:#252e3e!important;color:#e1e9ef!important;border:1px solid #85969a!important}
+.bw2-host .bw2-console .koji-aura-modal .modal-body button.aura-slot.active{background:#243e4b!important;color:#e1e9ef!important;border-color:#72c6d2!important}
+.bw2-host .koji-aura-modal .aura-slot>.bw2-button-rim polygon{fill:#252e3e;stroke:#85969a}
+.bw2-host .koji-aura-modal .aura-slot.active>.bw2-button-rim polygon{fill:#243e4b;stroke:#72c6d2}
+.bw2-host .koji-aura-modal .aura-slot:not(:disabled):hover>.bw2-button-rim polygon{fill:#344657}

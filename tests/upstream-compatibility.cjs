@@ -22,7 +22,7 @@ try{for(const target of (process.env.UPSTREAM_CANDIDATE?['bw2','swsh']:['bw2','s
   assert.doesNotThrow(()=>scope.pkBeautyBuildRemote(raw.replace('st.textContent=css;','st.textContent=css;st.textContent=css;')));
  }
  const template=fs.readFileSync(path.join(folder,channel==='bw2'?'预览与测试.html':'剑盾版预览.html'),'utf8');
- const bridge="previewState.队伍['1'].属性1='草';previewState.队伍['1'].属性2='钢';stat_data.队伍['1'].属性1='草';stat_data.队伍['1'].属性2='钢';previewState.人际关系={'测试人物':'同行伙伴'};stat_data.人际关系=previewState.人际关系;window.__UPSTREAM_TEST={battle:function(){stat_data.战场={场上:{'测试精灵（我方）':'Lv.50 100/100｜草／钢｜特性：茂盛｜招式：撞击'},各方:{测试训练家:'队列1. 测试队列（草·钢） Lv.50｜招式：撞击'}};document.querySelector('#tab-3').innerHTML=battleHTML();},imageFallback:function(){var el=document.createElement('img');el.setAttribute('src',PKM_REPO_RAW+'UI/地图/合众.png');kojiMapImgErr(el);var first=el.getAttribute('src'),fallback=el.getAttribute('data-fallback');kojiMapImgErr(el);return {first:first,fallback:fallback,hidden:el.style.display};},core:PK_VER,open:openPage,repo:function(){return {url:pkmRepoFirst(PKM_REPO_RAW+'types.json'),icon:ITEM_IMG['阿尔宙斯手机']};},portrait:function(){stat_data.人际关系={'测试人物':'同行伙伴'};PKM_PORTRAITS={'测试人物':true};},rel:relHTML,newFeatures:function(){var items=[{name:'伤药',en:'Potion',desc:'恢复HP20'}];PKM_DB.item={data:items,idx:pkmDbBuildIndex(items,['name','en','jp'])};diyData.item={'自创图片':{img:'https://example.test/image.png'},'自创效果':{effect:'自创恢复效果'}};previewState.背包={'伤药':{类型:'道具',数量:1,图标:'wrong.png'},'写错的药':{类型:'道具',数量:1,图标:'potion.png'},'谜之道具':{类型:'道具',数量:1,图标:'unknown.png'},'自创图片':{类型:'道具',数量:1},'自创效果':{类型:'道具',数量:1}};stat_data.背包=previewState.背包;},cry:function(){FORM_CRY_MAP['test-form']=9999;return [pkmCryId({en:'test-form'},{ndex:25}),pkmCryId({en:'unknown'},{ndex:25})];}};loadDexList=function(region,cb){cb(Array.from({length:12},function(_,i){return {id:String(i+1),ndex:String(i+1),name:'测试精灵'+i};}));};";
+ const bridge="previewState.队伍['1'].属性1='草';previewState.队伍['1'].属性2='钢';stat_data.队伍['1'].属性1='草';stat_data.队伍['1'].属性2='钢';previewState.人际关系={'测试人物':'同行伙伴'};stat_data.人际关系=previewState.人际关系;window.__UPSTREAM_TEST={aura:function(){var raw='1.气场一：增强攻击‖2.气场二：增强防御‖3.空‖启用1';previewState.训练家.气场=raw;stat_data.训练家.气场=raw;render();},auraValue:function(){return {current:stat_data.训练家.气场,saved:previewState.训练家.气场,writes:previewWrites};},theme:function(dark){if(typeof swshApplyTheme==='function'){swshDarkTheme=dark;swshApplyTheme(document.getElementById('pkm-hud-inline'));}},formatted:function(){stat_data.任务={传说:'传说一；传说二\\n传说三',支线:'支线一；；\\n支线二'};stat_data.劲敌={测试劲敌:'信息｜已知宝可梦：皮卡丘'};return {tasks:tasksHTML(),rivals:rivalsHTML(),cmd:CMDS[0][1]};},battle:function(){stat_data.战场={场上:{'测试精灵（我方）':'Lv.50 100/100｜草／钢｜特性：茂盛｜招式：撞击'},各方:{测试训练家:'队列1. 测试队列（草·钢） Lv.50｜招式：撞击'}};document.querySelector('#tab-3').innerHTML=battleHTML();},imageFallback:function(){var el=document.createElement('img');el.setAttribute('src',PKM_REPO_RAW+'UI/地图/合众.png');kojiMapImgErr(el);var first=el.getAttribute('src'),fallback=el.getAttribute('data-fallback');kojiMapImgErr(el);return {first:first,fallback:fallback,hidden:el.style.display};},core:PK_VER,open:openPage,repo:function(){return {url:pkmRepoFirst(PKM_REPO_RAW+'types.json'),icon:ITEM_IMG['阿尔宙斯手机']};},portrait:function(){stat_data.人际关系={'测试人物':'同行伙伴'};PKM_PORTRAITS={'测试人物':true};},rel:relHTML,newFeatures:function(){var items=[{name:'伤药',en:'Potion',desc:'恢复HP20'}];PKM_DB.item={data:items,idx:pkmDbBuildIndex(items,['name','en','jp'])};diyData.item={'自创图片':{img:'https://example.test/image.png'},'自创效果':{effect:'自创恢复效果'}};previewState.背包={'伤药':{类型:'道具',数量:1,图标:'wrong.png'},'写错的药':{类型:'道具',数量:1,图标:'potion.png'},'谜之道具':{类型:'道具',数量:1,图标:'unknown.png'},'自创图片':{类型:'道具',数量:1},'自创效果':{类型:'道具',数量:1}};stat_data.背包=previewState.背包;},cry:function(){FORM_CRY_MAP['test-form']=9999;return [pkmCryId({en:'test-form'},{ndex:25}),pkmCryId({en:'unknown'},{ndex:25})];}};loadDexList=function(region,cb){cb(Array.from({length:12},function(_,i){return {id:String(i+1),ndex:String(i+1),name:'测试精灵'+i};}));};";
  const start=template.lastIndexOf('<script>'),end=template.lastIndexOf('</script>'),boot=code.lastIndexOf('try{ensureHud();}catch(e){}'),script=code.slice(0,boot)+bridge+code.slice(boot);
  const html=template.slice(0,start+8)+script.replaceAll('</script','<\\/script')+template.slice(end),page=await browser.newPage({viewport:{width:1000,height:1400}}),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
@@ -30,6 +30,32 @@ try{for(const target of (process.env.UPSTREAM_CANDIDATE?['bw2','swsh']:['bw2','s
 
  await page.route('**/*',r=>r.fulfill({contentType:r.request().url().startsWith('http://localhost:3299')?'text/html':r.request().resourceType()==='image'?'image/svg+xml':'application/json',body:r.request().url().startsWith('http://localhost:3299')?html:r.request().resourceType()==='image'?'<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"/>':'{"data":[]}'}));
  await page.goto('http://localhost:3299/'+channel);await page.locator(channel==='bw2'?'.bw2-console':'.swsh-team').waitFor();assert.equal(await page.evaluate(()=>__UPSTREAM_TEST.core),version);
+ if(/function parseAura\(/.test(raw)){
+  for(const name of ['parseAura','auraRebuild','setActiveAura','openAuraPicker'])if(!independent)assert.equal(after[name],before[name],'native aura service '+name);
+  const colors=[];
+  for(const dark of channel==='swsh'?[false,true]:[true]){
+   await page.evaluate(d=>{__UPSTREAM_TEST.theme(d);__UPSTREAM_TEST.aura();},dark);
+   if(channel==='bw2')await page.locator('[data-bw2-trainer]').click();else await page.locator('.swsh-trainer-details').evaluate(el=>el.open=true);
+   const entry=page.locator('#aura-entry');assert((await entry.innerText()).includes('气场一'));assert(!(await entry.innerText()).includes('气场二'));
+   await page.locator('#aura-cycle').click();const picker=page.locator('.overlay.open .koji-aura-modal');await picker.waitFor();
+   assert.equal(await picker.locator('[data-aura]').count(),3);assert(await picker.locator('[data-aura="3"]').isDisabled());
+   await page.waitForTimeout(200);
+   const samples=await picker.locator('.aura-slot').evaluateAll(els=>els.map(el=>{var c=getComputedStyle(el);return {fg:c.color,bg:c.backgroundColor};}));
+   function lum(rgb){return rgb.match(/[\d.]+/g).slice(0,3).map(Number).map(v=>v/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)).reduce((x,v,i)=>x+v*[.2126,.7152,.0722][i],0);}
+   for(const c of samples){const a=lum(c.fg),b=lum(c.bg),ratio=(Math.max(a,b)+.05)/(Math.min(a,b)+.05);assert(ratio>=4.5,JSON.stringify({channel,dark,c,ratio}));}
+   colors.push(samples[0].bg);
+   if(channel==='swsh')assert.equal(await picker.locator('.aura-slot.active').evaluate(el=>getComputedStyle(el).borderColor),dark?'rgb(143, 185, 217)':'rgb(184, 46, 70)');
+   await picker.screenshot({path:path.join(root,'artifacts','aura-'+target+'-'+(dark?'dark':'day')+'.png')});
+   await picker.locator('[data-aura="2"]').focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>__UPSTREAM_TEST.auraValue().saved.endsWith('启用2'));
+   const value=await page.evaluate(()=>__UPSTREAM_TEST.auraValue());assert(value.current.endsWith('启用2'));assert(value.writes>0);assert.equal(await page.locator('.koji-aura-modal:visible').count(),0);
+   await page.waitForFunction(()=>document.querySelector('#aura-entry').textContent.includes('气场二'));
+  }
+  if(channel==='swsh')assert.notEqual(colors[0],colors[1],'day and night aura colors must differ');
+  if(channel==='bw2')await page.locator('[data-bw2-trainer]').click();else await page.locator('.swsh-trainer-details').evaluate(el=>el.open=false);
+  const formatted=await page.evaluate(()=>__UPSTREAM_TEST.formatted());
+  assert(formatted.tasks.includes('传说一<br>传说二<br>传说三'));assert(formatted.tasks.includes('支线一<br>支线二'));assert(!formatted.tasks.includes('<br><br>'));assert(formatted.rivals.includes('信息<br>已知宝可梦'));assert(!formatted.cmd.includes('洛托姆'));
+ }
+ const writesAfterAura=await page.evaluate(()=>previewWrites);
  await page.locator('.card-frame[data-slot]').first().click();await page.locator(channel==='bw2'?'.bw2-detail':'.detail-modal').waitFor();
  const detail=page.locator(channel==='bw2'?'.bw2-detail':'.detail-modal');
  if(/function showTypeWeakness\(/.test(raw)){
@@ -137,7 +163,7 @@ try{for(const target of (process.env.UPSTREAM_CANDIDATE?['bw2','swsh']:['bw2','s
   await page.locator('[data-reldel="测试人物"]').click();
   assert((await page.locator('.overlay.open').innerText()).includes('确定删除'));
  }
- assert.deepEqual(errors,[]);assert.equal(await page.evaluate(()=>previewWrites),0);await page.close();results.push({channel:target,core:version,businessFunctionsPreserved:independent?0:business.length,pages:10,errors});
+ assert.deepEqual(errors,[]);assert.equal(await page.evaluate(()=>previewWrites),writesAfterAura);await page.close();results.push({channel:target,core:version,businessFunctionsPreserved:independent?0:business.length,pages:10,errors});
 }
 fs.mkdirSync(path.join(root,'artifacts'),{recursive:true});fs.writeFileSync(path.join(root,'artifacts/upstream-browser-validation.json'),JSON.stringify({passed:true,results},null,2));console.log(JSON.stringify({passed:true,results}));
 }finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "bw2",
-  "ui": "0.4.9",
-  "core": "4.0.52",
+  "ui": "0.4.10",
+  "core": "5.0.0",
   "testedCore": [
     "3.3.19",
-    "4.0.52"
+    "5.0.0"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.9/versions/bw2/0.4.9/hud.js",
-  "sha256": "8d71bd41f2cc5286d556078bb4d1e825befcd2eb81614c4941c45d9fc891ae82",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.9/versions/bw2/0.4.9/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.9",
-  "notes": "# 黑白2 v0.4.9\n\n- 同步弦九核心 v4.0.52，接入战场属性点击查看克制、抵抗与免疫。\n- 场上与队列的双属性标签按合并属性计算，支持点击、回车和空格操作。\n- 新增合众地图，接入地图与克制表图片加载失败时的镜像回退。\n- 同步闪光、Mega、头目标识的仓库资源路径，保留本地尺寸、布局及配色。\n- 完整版支持设置中检查更新、安装后刷新；黑白独立版需重新导入 JSON。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.10/versions/bw2/0.4.10/hud.js",
+  "sha256": "e10ec408d525c7df5cb911342ac1b6c8cd2423078b4e9a59da6a419e202743aa",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.10/versions/bw2/0.4.10/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.10",
+  "notes": "# 黑白2 v0.4.10\n\n- 同步弦九核心 v5.0.0，适配新版变量格式与气场三槽切换、即时写回。\n- 气场选择使用本地样式，空槽禁用，当前槽有文字与边框提示。\n- 传说任务、支线任务与劲敌信息分段显示，去除多余空行。\n- 同步移除洛托姆快捷指令文案，修正未白镇地图名称。\n- 剑盾明暗配色及黑白双屏风格由本地独立管理。\n\n完整版：设置 → 检查更新 → 安装后刷新。黑白独立版：重新导入 JSON。\n"
 }

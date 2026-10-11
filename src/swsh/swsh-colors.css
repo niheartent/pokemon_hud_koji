@@ -233,3 +233,16 @@
 :is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .rival-item:hover{background:transparent}
 
 .koji-detail-type-chip{cursor:pointer}.koji-detail-type-chip:hover{filter:brightness(1.08)}.koji-detail-type-chip:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+
+/* New core aura controls use only the local semantic palette. */
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .aura-list{display:flex;flex-direction:column;gap:10px}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) :is(.aura-slot,.koji-aura-switch){font:inherit;color:var(--swsh-on-surface)!important;background:var(--swsh-surface-soft)!important;border:1px solid var(--swsh-border)!important;border-radius:8px;cursor:pointer}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .aura-slot{display:flex;gap:12px;align-items:flex-start;width:100%;padding:12px;text-align:left;line-height:1.6;box-shadow:none}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .aura-slot.active{background:var(--swsh-accent-soft)!important;border-color:var(--swsh-fold-accent)!important;box-shadow:inset 3px 0 var(--swsh-fold-accent)}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .aura-slot:not(:disabled):hover{background:var(--swsh-surface-hover)!important}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .aura-slot.empty{cursor:default;color:var(--swsh-muted)!important;opacity:1}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .aura-n{flex:0 0 auto;font-weight:700}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .aura-body{min-width:0;overflow-wrap:anywhere}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .koji-aura-switch{padding:3px 8px;font-size:.78rem;margin-left:6px}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .koji-aura-help{margin:12px 0 0;font-size:.78rem}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) :is(.aura-slot,.koji-aura-switch):focus-visible{outline:2px solid var(--swsh-link);outline-offset:3px}
