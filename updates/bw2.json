@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "bw2",
-  "ui": "0.4.15",
+  "ui": "0.4.16",
   "core": "5.2.7",
   "testedCore": [
     "3.3.19",
     "5.2.7"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.15/versions/bw2/0.4.15/hud.js",
-  "sha256": "f1ea7763f76bd7784038aaedea90444c3d6a520996bc2b3f28c896de97d7dc25",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.15/versions/bw2/0.4.15/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.15",
-  "notes": "# 黑白2 v0.4.15\n\n- 修复 TauriTavern 角色卡写回使用显示名称导致找不到角色的问题，改用当前卡头像文件对应的存储标识。\n- 写回前重新读取当前卡，只更新 HUD 所在扩展，保存后回读核对脚本。\n- 角色索引失效时自动清缓存重试一次；不再扫描并修改第一张含 HUD 的角色卡。\n- 设置新增「重新写回当前角色卡」，本地安装成功后可直接重试，无需等待下一次更新。\n- 写回失败显示具体原因，本地已保存的新版仍可在刷新后启用。\n\n完整版：设置 → 检查更新 → 安装后刷新。第一次从旧版安装时仍由旧写回逻辑执行，若提示本地已保存，请刷新以启用修复，然后点击「重新写回当前角色卡」补写。黑白独立版无需使用角色卡自动写回。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.16/versions/bw2/0.4.16/hud.js",
+  "sha256": "ea0b61f26d2dd3c14c644ee455d7b0ce9b148b7e56d4a593afc7f9c17ef48f89",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.16/versions/bw2/0.4.16/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.16",
+  "notes": "# 黑白2 v0.4.16\n\n- 修复更新时仍使用旧会话写回函数的问题，安装时立即使用已验证的新包写回逻辑。\n- 兼容旧版在线迁移：仅对已合成脚本的精确内容接管旧写入请求，按当前角色卡存储标识保存并校验；成功后恢复临时适配。\n- 完成角色卡写入不需要刷新或重新打开角色卡，刷新仅用于加载新版界面。\n- 保留失败原因、索引失效自动重试及补写按钮。\n\n完整版：检查更新 → 安装，当前会话内完成角色卡保存。黑白独立版不带远程更新器。\n"
 }

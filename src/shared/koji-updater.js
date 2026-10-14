@@ -2,83 +2,8 @@
 /* Resolve the active card by its storage identity, never by the first HUD in the library.
  * TauriTavern: character-identity.js / get_character / UpdateCharacterDto.
  * Display names are not storage keys; avatar stems are. */
-function kojiTauriInvoke(command,args){
-  var bridge=WIN&&WIN.__TAURI_INTERNALS__;
-  if(!bridge||typeof bridge.invoke!=='function')return Promise.reject(Error('桌面端角色卡接口不可用'));
-  try{return Promise.resolve(bridge.invoke(command,args));}catch(error){return Promise.reject(error);}
-}
-function kojiCharacterHud(card){
-  var candidates=[card,card&&card.data,card&&card.character,card&&card.character&&card.character.data];
-  for(var i=0;i<candidates.length;i++){
-    var ext=candidates[i]&&candidates[i].extensions,scripts=ext&&ext.tavern_helper&&ext.tavern_helper.scripts;
-    if(!Array.isArray(scripts))continue;
-    for(var j=0;j<scripts.length;j++)if(scripts[j]&&typeof scripts[j].content==='string'&&scripts[j].content.indexOf('pkm-hud-btn')>=0&&scripts[j].content.indexOf('PK_VER')>=0)return {extensions:ext,scripts:scripts,idx:j};
-  }
-  return null;
-}
-function kojiCharacterStem(card){
-  var avatar=card&&(card.avatar||(card.data&&card.data.avatar));
-  return typeof avatar==='string'&&/^[^\\/]+\.png$/i.test(avatar)?avatar.slice(0,-4):'';
-}
-function kojiCurrentCharacter(){
-  var st=WIN&&WIN.SillyTavern,ctx=st&&st.getContext?st.getContext():null;
-  if(!ctx||ctx.characterId===null||ctx.characterId===undefined||ctx.characterId==='')throw Error('当前会话没有选中的角色卡');
-  var card=ctx.characters&&ctx.characters[ctx.characterId];
-  return Promise.resolve(card|| (typeof ctx.getOneCharacter==='function'?ctx.getOneCharacter(ctx.characterId):null)).then(function(value){
-    if(!value)throw Error('无法读取当前会话角色卡');
-    return {card:value,id:ctx.characterId,key:kojiCharacterStem(value)};
-  });
-}
-function kojiTauriTarget(){
-  return kojiCurrentCharacter().then(function(active){
-    if(active.key)return active;
-    // Older context bridges may omit avatar. Resolve a unique display-name match
-    // from the live list, then use its avatar identity for all reads and writes.
-    return kojiTauriInvoke('get_all_characters',{shallow:false}).then(function(res){
-      var list=Array.isArray(res)?res:res&&(res.items||res.characters||res.data||res.list);
-      if(!Array.isArray(list))throw Error('角色列表格式不受支持');
-      var name=active.card.name||(active.card.data&&active.card.data.name),matches=list.filter(function(c){return name&&(c.name||(c.data&&c.data.name))===name&&kojiCharacterStem(c);});
-      if(matches.length!==1)throw Error('无法唯一确认当前角色卡的存储标识');
-      active.key=kojiCharacterStem(matches[0]);return active;
-    });
-  });
-}
-function kojiTauriWriteback(content){
-  function attempt(){
-    var selected;
-    return kojiTauriTarget().then(function(active){
-      selected=active;return kojiTauriInvoke('get_character',{name:active.key});
-    }).then(function(card){
-      card=card&&card.character||card;
-      if(!card||kojiCharacterStem(card)!==selected.key)throw Error('角色卡读取结果与当前存储标识不一致');
-      var fresh=JSON.parse(JSON.stringify(card)),hit=kojiCharacterHud(fresh);
-      if(!hit)throw Error('当前角色卡内没有可更新的 HUD 脚本');
-      hit.scripts[hit.idx].content=content;
-      var extensions=hit.extensions;
-      if(!extensions)throw Error('当前角色卡缺少 HUD 扩展字段');
-      return kojiTauriTarget().then(function(now){
-        if(now.key!==selected.key)throw Error('更新期间切换了角色卡，请在当前卡重新检查更新');
-        return kojiTauriInvoke('update_character',{name:selected.key,dto:{extensions:extensions}});
-      });
-    }).then(function(){return kojiTauriInvoke('get_character',{name:selected.key});}).then(function(saved){
-      var hit=kojiCharacterHud(saved);
-      if(!hit||hit.scripts[hit.idx].content!==content)throw Error('角色卡保存后回读校验未通过');
-      return kojiCurrentCharacter().then(function(active){
-        // Keep the active frontend copy consistent so a later host save cannot
-        // overwrite the verified script with the pre-update cached content.
-        if(active.key===selected.key){var cached=kojiCharacterHud(active.card);if(cached)cached.scripts[cached.idx].content=content;}
-        return {ok:true,msg:'角色卡脚本已保存并回读验证'};
-      },function(){return {ok:true,msg:'角色卡脚本已保存并回读验证'};});
-    });
-  }
-  return Promise.resolve().then(attempt).catch(function(error){
-    var message=error&&error.message||String(error);
-    if(!/not found|找不到角色/i.test(message))throw error;
-    // Rebuild stale backend indexes after a card import/replacement, once only.
-    return kojiTauriInvoke('clear_character_cache',{}).catch(function(){}).then(attempt);
-  }).catch(function(error){return {ok:false,msg:error&&error.message||String(error)};});
-}
 // Shared by both full editions and by remotely composed future cores.
+var kojiTauriWriteback=kojiCreateCharacterWriter(WIN);
 var kojiNativeWriteback=pkUpdateScript;
 pkUpdateScript=function(content){return WIN&&WIN.__TAURI_INTERNALS__?kojiTauriWriteback(content):kojiNativeWriteback(content);};
 /* Two independent release channels, one verified installation per check. */
@@ -139,7 +64,7 @@ function kojiCheckUpdate(quiet){
     if(!code&&uiNew&&releaseCode&&pkVerCompare(kojiVersion(releaseCode),PK_VER)>=0){code=releaseCode;core=kojiVersion(code);}
     if(!code&&uiNew)warnings.push('新美化版暂无兼容且不降低当前核心的组合');
     if(!code){pkClearHasUpdate();message(warnings.length?'未安装：'+warnings.join('；'):'已是最新版本：核心 v'+PK_VER+' · 美化 v'+PK_BEAUTY_VER);return false;}
-    kojiPrepared={content:code,core:core,ui:candidate.version};pkBeautyPreparedContent=code;pkBeautyPreparedVer=core;pkLatestContent=code;pkLatestVer=core;
+    kojiPrepared={content:code,core:core,ui:candidate.version,writebackPackage:candidate};pkBeautyPreparedContent=code;pkBeautyPreparedVer=core;pkLatestContent=code;pkLatestVer=core;
     pkLatestNotice=((code.match(/\/\*PK_NOTICE_BEGIN([\s\S]*?)PK_NOTICE_END\*\//)||[])[1]||'').trim();pkMarkHasUpdate(core);kojiUpdateButtons(true);
     message('可更新：核心 v'+core+' · 美化 v'+candidate.version+'，已合成并检查。'+(warnings.length?' '+warnings.join('；'):''));return true;
   }).catch(function(error){kojiPrepared=null;pkBeautyPreparedContent=null;pkBeautyPreparedVer=null;pkLatestContent=null;pkLatestVer=null;kojiUpdateButtons(false);pkClearHasUpdate();message('未安装：'+error.message);return false;}).then(function(result){kojiCheckPromise=null;kojiCheckVisible=false;return result;});
@@ -150,7 +75,7 @@ function kojiDoUpdate(){
   if(!kojiPrepared){pkSetUpdateMsg('请先检查更新，通过后才能安装');return Promise.resolve(false);}
   var prepared=kojiPrepared;kojiInstalling=true;kojiUpdateButtons(true);pkSetUpdateMsg('正在保存核心 v'+prepared.core+' · 美化 v'+prepared.ui+'…');
   return Promise.resolve().then(function(){return pkInstallRecord(prepared.core,prepared.content);}).then(function(){
-    return Promise.resolve().then(function(){return pkUpdateScript(prepared.content);}).then(function(result){pkClearHasUpdate();pkSetUpdateMsg(result&&result.ok?'更新已保存，刷新页面生效。':'本地更新已保存；角色卡写回失败：'+(result&&result.msg||'未返回保存结果')+'。刷新后可使用本地新版，或复制已合成脚本导入。');return true;},function(error){pkSetUpdateMsg('本地更新已保存；角色卡写回失败：'+(error&&error.message||String(error))+'。刷新后可使用本地新版。');return true;});
+    return Promise.resolve().then(function(){var writer=kojiPreparedCharacterWriter(WIN,prepared.writebackPackage);return writer?writer(prepared.content):pkUpdateScript(prepared.content);}).then(function(result){if(result&&result.ok)kojiClearLegacyWriteback(WIN,PK_BEAUTY_PACKAGE.channel,prepared.content);pkClearHasUpdate();pkSetUpdateMsg(result&&result.ok?'新版已写入当前角色卡并校验成功；刷新可加载新版界面。':'本地更新已保存；角色卡写回失败：'+(result&&result.msg||'未返回保存结果')+'。刷新后可使用本地新版，或复制已合成脚本导入。');return true;},function(error){pkSetUpdateMsg('本地更新已保存；角色卡写回失败：'+(error&&error.message||String(error))+'。刷新后可使用本地新版。');return true;});
   }).catch(function(error){pkSetUpdateMsg('未安装：本地保存失败，'+error.message);return false;}).then(function(result){kojiInstalling=false;kojiUpdateButtons(true);return result;});
 }
 function kojiRetryWriteback(){

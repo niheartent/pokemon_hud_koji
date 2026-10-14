@@ -56,5 +56,6 @@ function pkBeautyBuildRemote(raw){
   var injected="\nvar PK_BEAUTY_PACKAGE="+JSON.stringify(pkg)+";\n"+pkg.runtime+"\n"+pkg.beauty+"\n"+(pkg.updateRuntime||'')+"\ncss += "+JSON.stringify(pkg.css)+";";
   code=kojiInsertPresentationModule(code,pkBeautyParser,injected);
   try{new Function(code);}catch(e){throw new Error('合成后的脚本语法错误：'+(e&&e.message||e));}
+  kojiStageLegacyWriteback(code,pkg);
   return code;
 }

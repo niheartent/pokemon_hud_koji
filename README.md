@@ -6,9 +6,9 @@
 
 | 版本 | 下载入口 | 更新方式 |
 | --- | --- | --- |
-| 黑白2完整版 v0.4.15 | [黑白2发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.15) | 设置 → 检查更新，检查美化版与弦九核心 |
-| 黑白2独立版 v0.4.15 | 同一发布页的 independent JSON | 重新导入升级 |
-| 剑盾版 v1.6.14 | [剑盾发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.14) | 设置 → 检查更新，检查美化版与弦九核心 |
+| 黑白2完整版 v0.4.16 | [黑白2发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.16) | 设置 → 检查更新，检查美化版与弦九核心 |
+| 黑白2独立版 v0.4.16 | 同一发布页的 independent JSON | 重新导入升级 |
+| 剑盾版 v1.6.15 | [剑盾发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.15) | 设置 → 检查更新，检查美化版与弦九核心 |
 
 下载 Release 附件中的 JSON，导入酒馆助手脚本并替换对应旧版。只启用一个 HUD 脚本。旧版首次接入本仓库更新源需要重新导入一次。
 

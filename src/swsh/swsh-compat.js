@@ -38,5 +38,6 @@ function pkBeautyBuildRemote(raw){
   edits.sort(function(a,b){return b.start-a.start;});var code=kojiPatchBootstrap(raw);
   edits.forEach(function(e){code=code.slice(0,e.start)+e.text+code.slice(e.end);});
   try{new Function(code);}catch(e){throw new Error('合成后的脚本语法错误：'+e.message);}
+  kojiStageLegacyWriteback(code,pkg);
   return code;
 }

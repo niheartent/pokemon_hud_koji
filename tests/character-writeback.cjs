@@ -33,7 +33,7 @@ async function scenario(label,options={}){
   throw Error('Unexpected command '+command);
  }}},pkUpdateScript:()=>{native++;return Promise.resolve({ok:true});}};
  if(options.web)delete scope.WIN.__TAURI_INTERNALS__;
- vm.createContext(scope);vm.runInContext(runtime,scope);
+ vm.createContext(scope);vm.runInContext(fs.readFileSync(require('path').join(root,'src/shared/character-writeback.js'),'utf8')+runtime,scope);
  const result=await scope.pkUpdateScript(newContent),updates=calls.filter(c=>c.command==='update_character');
  const fail=options.noContext||options.noHud||options.missing||options.switchCard||options.permission||options.noSave||(options.noAvatar&&!options.unique);
  assert.equal(result.ok,!fail,label+': '+result.msg);
