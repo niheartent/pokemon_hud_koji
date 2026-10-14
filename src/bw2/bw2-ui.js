@@ -116,7 +116,7 @@ function bw2PanelHTML(key){
 }
 function bw2PanelSignature(key){
   // Depend only on the data each view reads. Hidden views catch up on activation.
-  if(key==='trainer')return JSON.stringify([stat_data.训练家,stat_data.环境,pickRegion(parseBadges())]);
+  if(key==='trainer')return JSON.stringify([stat_data.训练家,stat_data.环境,pickRegion(parseBadges()),typeof inBattle==='function'&&inBattle()]);
   if(key==='party')return JSON.stringify([stat_data.队伍,stat_data.战场&&stat_data.战场.场上,pkmSource,diyStorageRawSeen]);
   if(key==='1')return bw2PanelSignature('trainer')+'|'+bw2PanelSignature('party');
   if(key==='2')return JSON.stringify([stat_data.环境&&stat_data.环境.赛程,stat_data.任务,stat_data.世界事件]);

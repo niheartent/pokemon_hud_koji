@@ -8,6 +8,7 @@ hudBindRootDelegation=function(app){
   hudScope.listen(app,'click',function(e){
     var target=e.target&&e.target.closest?e.target:null;
     if(!target)return;
+    if(target.closest('[data-phone-case-btn]')&&typeof loadPhoneCases==='function'){e.preventDefault();e.stopImmediatePropagation();if(subOverlay)subOverlay.classList.remove('open');openPhoneCasePicker();return;}
     if(kojiBagClick(e))return;
     var settings=target.closest('[data-rel-settings]'),del=target.closest('[data-rel-del-open]');
     if(!settings&&!del)return;

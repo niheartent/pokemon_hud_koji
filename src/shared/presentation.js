@@ -318,7 +318,7 @@ function nearbyHTML(){var obj=stat_data.附近宝可梦||{};var keys=nearbySorte
 
 function nearbyPageHTML(){var obj=stat_data.附近宝可梦||{};var keys=nearbySortedKeys(obj);if(!keys.length)return '<div class="nearby-wrap"><div class="nearby-title">附近宝可梦</div><div class="empty">暂无</div></div>';var cells=keys.map(function(key){return nearbyCardHTML(key,obj[key],'page');}).join('');return '<div class="nearby-wrap"><div class="nearby-title">附近宝可梦 <span class="nb-page-count">'+keys.length+' 个目标</span></div><div class="nearby-grid">'+cells+'</div></div>';}
 
-function bagItemsHTML(){var cats=bagCategories();var cur=cats.find(function(c){return c.key===activeBag;})||cats[0];if(!cur.items.length)return '<div class="empty">这里什么都没有...</div>';return cur.items.map(function(it){var isTM=(it.name.indexOf('技能机')>=0||it.name.indexOf('招式学习器')>=0);var tmMove=isTM?tmMoveName(it.name):'';var icon;if(tmMove){var iconSlug=String(it.icon||'').toLowerCase().replace(/\.(png|gif|jpe?g|webp)$/,'');icon=iconSlug?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(psItemUrl(iconSlug,'bag'))+'" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder tm-wiki" data-tm="'+esc(tmMove)+'">?</span></span>';}else if(isTM){var iconName=(itemIconName(it.name)||String(it.icon||'')).toLowerCase();if(iconName.slice(-4)==='.png'){iconName=iconName.slice(0,-4);}icon=iconName?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(psItemUrl(iconName,'bag'))+'" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder">?</span></span>';}else if(pkmItemSource==='serebii'){var ov2=itemImgOf(it.name);if(ov2!==undefined){icon=ov2?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(ov2)+'" referrerpolicy="origin" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder">?</span></span>';}else{icon='<span class="item-icon-wrap"><span class="item-icon placeholder item-wiki" data-item="'+esc(it.name)+'" data-item-en="'+esc(it.icon||'')+'" data-cls="item-icon">?</span></span>';}}else{var ov=itemImgOf(it.name);if(ov!==undefined){icon=ov?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(ov)+'" referrerpolicy="origin" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder">?</span></span>';}else{icon='<span class="item-icon-wrap"><span class="item-icon placeholder item-wiki" data-item="'+esc(it.name)+'" data-cls="item-icon">?</span></span>';}}var click=tmMove?' data-tm="'+esc(tmMove)+'" style="cursor:pointer"':((!isTM&&itemClickEnabled)?(typeof resolveBagItemClick==='function'?' data-bag-item="'+esc(it.name)+'" data-bag-icon="'+esc(it.icon||'')+'"':' data-item="'+esc(it.name)+'" style="cursor:pointer"'):'');return '<div class="item-entry"'+click+'>'+icon+'<span class="item-name">'+esc(it.name)+'</span><span class="item-count">×'+it.count+'</span><button class="btn-small" data-bag-discard="'+esc(it.name)+'">丢弃</button></div>';}).join('');}
+function bagItemsHTML(){var cats=bagCategories();var cur=cats.find(function(c){return c.key===activeBag;})||cats[0];if(!cur.items.length)return '<div class="empty">这里什么都没有...</div>';return cur.items.map(function(it){var isTM=(it.name.indexOf('技能机')>=0||it.name.indexOf('招式学习器')>=0);var tmMove=isTM?tmMoveName(it.name):'';var icon;if(tmMove){var iconSlug=String(it.icon||'').toLowerCase().replace(/\.(png|gif|jpe?g|webp)$/,'');icon=iconSlug?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(psItemUrl(iconSlug,'bag'))+'" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder tm-wiki" data-tm="'+esc(tmMove)+'">?</span></span>';}else if(isTM){var iconName=(itemIconName(it.name)||String(it.icon||'')).toLowerCase();if(iconName.slice(-4)==='.png'){iconName=iconName.slice(0,-4);}icon=iconName?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(psItemUrl(iconName,'bag'))+'" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder">?</span></span>';}else if(pkmItemSource==='serebii'){var ov2=(typeof bagPhoneIcon==='function'?bagPhoneIcon(it.name):undefined)||itemImgOf(it.name);if(ov2!==undefined){icon=ov2?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(ov2)+'" referrerpolicy="origin" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder">?</span></span>';}else{icon='<span class="item-icon-wrap"><span class="item-icon placeholder item-wiki" data-item="'+esc(it.name)+'" data-item-en="'+esc(it.icon||'')+'" data-cls="item-icon">?</span></span>';}}else{var ov=(typeof bagPhoneIcon==='function'?bagPhoneIcon(it.name):undefined)||itemImgOf(it.name);if(ov!==undefined){icon=ov?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(ov)+'" referrerpolicy="origin" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder">?</span></span>';}else{icon='<span class="item-icon-wrap"><span class="item-icon placeholder item-wiki" data-item="'+esc(it.name)+'" data-cls="item-icon">?</span></span>';}}var click=tmMove?' data-tm="'+esc(tmMove)+'" style="cursor:pointer"':((!isTM&&itemClickEnabled)?(typeof resolveBagItemClick==='function'?' data-bag-item="'+esc(it.name)+'" data-bag-icon="'+esc(it.icon||'')+'"':' data-item="'+esc(it.name)+'" style="cursor:pointer"'):'');return '<div class="item-entry"'+click+'>'+icon+'<span class="item-name">'+esc(it.name)+'</span><span class="item-count">×'+it.count+'</span><button class="btn-small" data-bag-discard="'+esc(it.name)+'">丢弃</button></div>';}).join('');}
 
 function bagHTML(){var tabs=bagCategories().map(function(c){return '<button class="bag-tab'+(c.key===activeBag?' active':'')+'" data-bag="'+c.key+'">'+c.label+'</button>';}).join('');return frame('背包','<div class="bag-tabs">'+tabs+'</div><div class="bag-list" id="bag-list">'+bagItemsHTML()+'</div>');}
 
@@ -504,7 +504,7 @@ var caught=devUnlocked()||hitSpecies(owned,bn);
 var seen=!caught&&hitSpecies(sSet,bn);
 var known=caught||seen;
 var cls=caught?'caught':(seen?'seen':'unknown');
-var label=known?name:'？？？';
+var label=known?bn:'？？？';
 var attr=known?' data-name="'+esc(bn)+'"':' data-noclick="1"';
 var imgHtml='';
 if(showThumbs){var img=dexCellImgUrl(ndex);if(img){var sil=(label==='？？？')?' style="filter:brightness(0) opacity(.45) !important"':'';imgHtml='<span class="dex-img"><img decoding="async" data-dexsrc="'+esc(img)+'" referrerpolicy="origin" alt=""'+sil+'></span>';}}
@@ -838,7 +838,8 @@ function auraRowHTML(){
   var raw=(stat_data.训练家||{}).气场||'';
   if(typeof parseAura!=='function')return '<div class="info-row block" id="aura-entry"><span class="k">气场</span><span class="v">'+esc(raw||'-')+'</span></div>';
   var parsed=parseAura(raw),active=auraActiveSlot(parsed),count=auraNonEmptyCount(parsed);
-  var button=count>1?'<button type="button" id="aura-cycle" class="koji-aura-switch" aria-label="切换气场" title="切换气场">'+esc(parsed.active+' 号')+' ⇄</button>':'';
+  var battle=typeof inBattle==='function'&&inBattle();
+  var button=count>1?(battle?'<span id="aura-busy" class="koji-aura-busy" title="战斗中无法切换气场">战斗中</span>':'<button type="button" id="aura-cycle" class="koji-aura-switch" aria-label="切换气场" title="切换气场">'+esc(parsed.active+' 号')+' ⇄</button>'):'';
   return '<div class="info-row block" id="aura-entry"><span class="k">气场 '+button+'</span><span class="v"><span class="aura-line">'+esc(active&&!active.empty?active.text:'无')+'</span></span></div>';
 }
 function auraPickerHTML(){
@@ -847,4 +848,21 @@ function auraPickerHTML(){
     return '<button type="button" class="aura-slot'+(active?' active':'')+(slot.empty?' empty':'')+'" data-aura="'+slot.n+'" aria-pressed="'+active+'"'+(slot.empty?' disabled':'')+'><span class="aura-n">'+(active?'●':'○')+' '+slot.n+' 号</span><span class="aura-body">'+esc(slot.empty?'空':slot.text)+'</span></button>';
   }).join('');
   return '<div class="modal koji-aura-modal"><div class="modal-head"><div class="modal-name">选择气场</div><button class="close" data-close aria-label="关闭">✕</button></div><div class="modal-body"><div class="aura-list">'+rows+'</div><p class="dim koji-aura-help">选择后立即启用，● 表示当前生效的气场。</p></div></div>';
+}
+
+function openPhoneCasePicker(){
+  loadPhoneCases().then(function(cases){
+    if(!cases||!cases.length){hudMsg('手机壳数据加载失败');return;}
+    var item=stat_data.背包&&stat_data.背包['手机'];
+    var current=item&&item.图标?String(item.图标).trim():'';
+    var names=[''].concat(cases);
+    var grid=names.map(function(name){
+      var selected=name?current===name:(!current||current==='默认手机壳');
+      var icon=name?phoneCaseIconURL(name):(itemImgOf('手机')||pkmRepoFirst(PKM_DATA_BASE+'phone-cases/手机.webp'));
+      return '<button type="button" class="phone-cell'+(selected?' on':'')+'" data-phone-pick="'+esc(name)+'" aria-pressed="'+selected+'"><img src="'+esc(icon)+'" alt="" onerror="itemImgErr(this)"><span class="phone-cell-name">'+esc(name||'默认')+'</span></button>';
+    }).join('');
+    clearBack();
+    overlay.innerHTML='<div class="modal koji-phone-modal"><div class="modal-head"><div class="modal-name">选择手机壳</div><button class="close" data-close aria-label="关闭">✕</button></div><div class="modal-body"><div class="phone-grid">'+grid+'</div></div></div>';
+    overlay.classList.add('open');
+  });
 }

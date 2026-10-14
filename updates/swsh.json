@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.6.9",
-  "core": "5.0.0",
+  "ui": "1.6.10",
+  "core": "5.1.3",
   "testedCore": [
     "3.3.19",
-    "5.0.0"
+    "5.1.3"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.9/versions/swsh/1.6.9/hud.js",
-  "sha256": "6ea09e0141c43b31b6922fa879cbae63fcb117ff2968383818519f4805697354",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.9/versions/swsh/1.6.9/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.9",
-  "notes": "# 剑盾 v1.6.9\n\n- 同步弦九核心 v5.0.0，适配新版变量格式与气场三槽切换、即时写回。\n- 气场选择使用本地样式，空槽禁用，当前槽有文字与边框提示。\n- 传说任务、支线任务与劲敌信息分段显示，去除多余空行。\n- 同步移除洛托姆快捷指令文案，修正未白镇地图名称。\n- 剑盾明暗配色及黑白双屏风格由本地独立管理。\n\n完整版：设置 → 检查更新 → 安装后刷新。黑白独立版：重新导入 JSON。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.10/versions/swsh/1.6.10/hud.js",
+  "sha256": "d8be2b16fda037d5da6e2e7abeff8be7b74d82c7bc14c010ae7ffc0daf2839cf",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.10/versions/swsh/1.6.10/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.10",
+  "notes": "# 剑盾 v1.6.10\n\n- 同步弦九核心 v5.1.3，兼容异步精灵图片别名表及最新图片数据版本。\n- 接入手机壳切换、中文图标名写回、默认手机壳及背包图标即时刷新。\n- 手机壳窗口与战斗中气场锁定提示使用本地配色；剑盾明暗模式分别检查，黑白保持双屏风格。\n- 修正图鉴基础形态名称展示，同步核心种族值顺序及形态图片修复。\n- 完整版：设置 → 检查更新 → 安装后刷新。黑白独立版：重新导入 JSON。\n"
 }
