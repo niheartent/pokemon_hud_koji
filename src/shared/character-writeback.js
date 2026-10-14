@@ -1,18 +1,27 @@
 /* A pure writer factory: usable by a verified downloaded package before HUD reload. */
-function kojiCreateCharacterWriter(WIN,invoke){
+function kojiCreateCharacterWriter(WIN,invoke,channel){
 function kojiTauriInvoke(command,args){
   var bridge=WIN&&WIN.__TAURI_INTERNALS__;
   if(!bridge||typeof bridge.invoke!=='function')return Promise.reject(Error('桌面端角色卡接口不可用'));
   try{return Promise.resolve((invoke||bridge.invoke).call(bridge,command,args));}catch(error){return Promise.reject(error);}
 }
 function kojiCharacterHud(card){
-  var candidates=[card,card&&card.data,card&&card.character,card&&card.character&&card.character.data];
+  var candidates=[card,card&&card.data,card&&card.character,card&&card.character&&card.character.data],hits=[],seen=[];
   for(var i=0;i<candidates.length;i++){
     var ext=candidates[i]&&candidates[i].extensions,scripts=ext&&ext.tavern_helper&&ext.tavern_helper.scripts;
-    if(!Array.isArray(scripts))continue;
-    for(var j=0;j<scripts.length;j++)if(scripts[j]&&typeof scripts[j].content==='string'&&scripts[j].content.indexOf('pkm-hud-btn')>=0&&scripts[j].content.indexOf('PK_VER')>=0)return {extensions:ext,scripts:scripts,idx:j};
+    if(!Array.isArray(scripts)||seen.indexOf(scripts)>=0)continue;seen.push(scripts);
+    for(var j=0;j<scripts.length;j++){
+      var script=scripts[j];
+      if(!script||script.enabled===false||typeof script.content!=='string'||script.content.indexOf('pkm-hud-btn')<0||script.content.indexOf('PK_VER')<0)continue;
+      var match=script.content.match(/"channel":"(swsh|bw2)"/);
+      hits.push({extensions:ext,scripts:scripts,idx:j,channel:match?match[1]:null});
+    }
   }
-  return null;
+  var own=channel?hits.filter(function(h){return h.channel===channel;}):hits;
+  if(own.length===1)return own[0];
+  if(own.length>1)throw Error('当前角色卡启用了多个相同版本类型的 HUD，请只启用一个');
+  var legacy=hits.filter(function(h){return !h.channel;});
+  return legacy.length===1?legacy[0]:null;
 }
 function kojiCharacterStem(card){
   var avatar=card&&(card.avatar||(card.data&&card.data.avatar));
@@ -79,54 +88,55 @@ function kojiTauriWriteback(content){
 return kojiTauriWriteback;
 }
 
-/* Legacy updaters execute the verified package composer during check, but still
- * call their old writer during install. Route only that exact composed payload
- * through the new writer. Other host commands are untouched; restore on success. */
+/* Old clients cannot replace their closed-over installer. The verified composer
+ * arms a scoped button handler which uses this package's slot installer/writer.
+ * Checking never writes. No host API is patched and no downloaded HUD is started. */
 function kojiLegacyWritebackHost(){
   if(typeof window==='undefined')return null;
   try{if(window.parent&&window.parent!==window&&window.parent.document&&window.parent.document.body)return window.parent;}catch(e){}
   return window;
 }
 function kojiClearLegacyWriteback(host,channel,content){
-  var bridge=host&&host.__TAURI_INTERNALS__,state=bridge&&bridge.__kojiHudWritebackBridgeV1;
-  if(!state)return;
+  var state=host&&host.__kojiHudLiveInstallerV1;if(!state)return;
   var entry=state.entries[channel];if(entry&&entry.content===content)delete state.entries[channel];
-  if(Object.keys(state.entries).length===0&&bridge.invoke===state.shim){bridge.invoke=state.original;delete bridge.__kojiHudWritebackBridgeV1;}
+  if(Object.keys(state.entries).length===0){host.document.removeEventListener('click',state.handler,true);delete host.__kojiHudLiveInstallerV1;}
 }
 function kojiStageLegacyWriteback(content,pkg){
-  var host=kojiLegacyWritebackHost(),bridge=host&&host.__TAURI_INTERNALS__;
-  if(!bridge||typeof bridge.invoke!=='function')return;
-  var state=bridge.__kojiHudWritebackBridgeV1;
+  var host=kojiLegacyWritebackHost();
+  if(!host||!host.__TAURI_INTERNALS__||typeof pkg.installRuntime!=='string')return;
+  var state=host.__kojiHudLiveInstallerV1;
+  if(state&&state.busy)return;
   if(!state){
-    state={original:bridge.invoke,entries:Object.create(null)};
-    state.shim=function(command,args){
-      if(command==='update_character'&&args&&args.dto){
-        var dto=args.dto,locations=[dto,dto.data,dto.character,dto.character&&dto.character.data];
-        for(var channel in state.entries){
-          var entry=state.entries[channel],matches=locations.some(function(o){var th=o&&o.extensions&&o.extensions.tavern_helper;return th&&Array.isArray(th.scripts)&&th.scripts.some(function(script){return script&&script.content===entry.content;});});
-          if(matches){
-            // Newer hosts/writers already send a minimal extensions DTO. Preserve
-            // that request exactly; only the obsolete full-card DTO needs rerouting.
-            if(!dto.avatar){
-              return Promise.resolve(state.original.apply(bridge,arguments)).then(function(result){kojiClearLegacyWriteback(host,entry.channel,entry.content);return result;});
-            }
-            if(!entry.pending)entry.pending=entry.writer(entry.content).then(function(result){
-              if(!result||!result.ok)throw Error(result&&result.msg||'角色卡写回未成功');
-              kojiClearLegacyWriteback(host,entry.channel,entry.content);return result;
-            }).finally(function(){entry.pending=null;});
-            return entry.pending;
-          }
-        }
-      }
-      return state.original.apply(bridge,arguments);
+    state={entries:Object.create(null),busy:false};
+    state.handler=function(event){
+      var button=event.target&&event.target.closest&&event.target.closest('[data-pk-do-update]');if(!button)return;
+      var channel=button.closest('.bw2-host')?'bw2':'swsh',entry=state.entries[channel];if(!entry)return;
+      event.preventDefault();event.stopImmediatePropagation();if(state.busy)return;
+      var box=button.closest('.set-opts')||button.parentElement,msg=box.querySelector('#pk-update-msg')||host.document.getElementById('pk-update-msg');
+      function message(text){if(msg)msg.textContent=text;}
+      state.busy=true;entry.pending=true;button.disabled=true;message('正在安装并写入当前角色卡…');
+      var slots=null,localSaved=false;
+      Promise.resolve().then(function(){
+        slots=Function('host','db',entry.pkg.installRuntime+'\nreturn kojiCreateSlotInstaller(host,db);')(host,entry.pkg.runtimeDb);
+        var version=(entry.content.match(/var PK_VER='([^']+)';/)||[])[1],db=(entry.content.match(/var PK_RUNTIME_DB=['"]([^'"]+)['"];/)||[])[1];if(!version||db!==entry.pkg.runtimeDb)throw Error('安装包核心版本或更新槽标识无效');
+        return slots.install(version,entry.content);
+      }).then(function(){
+        localSaved=true;return kojiCreateCharacterWriter(host,null,entry.pkg.channel)(entry.content);
+      }).then(function(result){
+        if(!result||!result.ok)throw Error(result&&result.msg||'角色卡写回未成功');
+        message('新版已写入当前角色卡并校验成功；刷新可加载新版界面。');button.textContent='已写入当前角色卡';button.disabled=true;
+        kojiClearLegacyWriteback(host,entry.pkg.channel,entry.content);
+      }).catch(function(error){
+        message((localSaved?'本地更新已保存；角色卡写回失败：':'未安装：')+(error&&error.message||String(error)));button.disabled=false;
+      }).finally(function(){state.busy=false;entry.pending=false;if(slots)slots.close();});
     };
-    try{bridge.invoke=state.shim;if(bridge.invoke!==state.shim)return;bridge.__kojiHudWritebackBridgeV1=state;}catch(e){return;}
+    host.__kojiHudLiveInstallerV1=state;host.document.addEventListener('click',state.handler,true);
+    var scope=host.__pkmHudScope_v180;
+    if(scope&&typeof scope.cleanup==='function')scope.cleanup(function(){if(host.__kojiHudLiveInstallerV1===state){host.document.removeEventListener('click',state.handler,true);delete host.__kojiHudLiveInstallerV1;}});
   }
-  state.entries[pkg.channel]={channel:pkg.channel,content:content,writer:kojiCreateCharacterWriter(host,state.original),pending:null};
+  state.entries[pkg.channel]={content:content,pkg:pkg,pending:false};
 }
 function kojiPreparedCharacterWriter(host,pkg){
-  if(!pkg||typeof pkg.writebackRuntime!=='string')return null;
-  var bridge=host&&host.__TAURI_INTERNALS__,state=bridge&&bridge.__kojiHudWritebackBridgeV1;
-  if(!bridge)return null;
-  return Function('host','invoke',pkg.writebackRuntime+'\nreturn kojiCreateCharacterWriter(host,invoke);')(host,state?state.original:bridge.invoke);
+  if(!pkg||typeof pkg.writebackRuntime!=='string'||!host||!host.__TAURI_INTERNALS__)return null;
+  return Function('host','channel',pkg.writebackRuntime+'\nreturn kojiCreateCharacterWriter(host,null,channel);')(host,pkg.channel);
 }

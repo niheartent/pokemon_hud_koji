@@ -3,7 +3,7 @@
  * TauriTavern: character-identity.js / get_character / UpdateCharacterDto.
  * Display names are not storage keys; avatar stems are. */
 // Shared by both full editions and by remotely composed future cores.
-var kojiTauriWriteback=kojiCreateCharacterWriter(WIN);
+var kojiTauriWriteback=kojiCreateCharacterWriter(WIN,null,PK_BEAUTY_PACKAGE.channel);
 var kojiNativeWriteback=pkUpdateScript;
 pkUpdateScript=function(content){return WIN&&WIN.__TAURI_INTERNALS__?kojiTauriWriteback(content):kojiNativeWriteback(content);};
 /* Two independent release channels, one verified installation per check. */

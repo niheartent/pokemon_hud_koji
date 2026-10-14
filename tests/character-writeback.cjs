@@ -12,7 +12,7 @@ async function scenario(label,options={}){
  if(options.noHud)b.extensions.tavern_helper.scripts=[];
  if(options.missing)delete db['storage-b'];
  if(options.noContext)ctx.characterId=null;
- const scope={WIN:{SillyTavern:{getContext:()=>ctx},__TAURI_INTERNALS__:{invoke:async(command,args)=>{
+ const scope={PK_BEAUTY_PACKAGE:{channel:'swsh'},WIN:{SillyTavern:{getContext:()=>ctx},__TAURI_INTERNALS__:{invoke:async(command,args)=>{
   calls.push({command,args:clone(args)});
   if(command==='clear_character_cache'){clears++;return;}
   if(command==='get_all_characters')return Object.values(db).map(clone);
