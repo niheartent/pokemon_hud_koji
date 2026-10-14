@@ -867,7 +867,7 @@ function openPhoneCasePicker(){
   });
 }
 
-function kojiBagTabsHTML(){return '<div class="bag-tabs">'+bagCategories().map(function(c){var img=c.icon&&typeof bagCatIconURL==='function'?'<img class="bag-cat-icon" src="'+esc(bagCatIconURL(c))+'" alt="" onerror="this.hidden=true">':'';return '<button type="button" class="bag-tab'+(c.key===activeBag?' active':'')+'" data-bag="'+esc(c.key)+'" aria-label="'+esc(c.label)+'" title="'+esc(c.label)+'">'+img+'<span>'+esc(c.label)+'</span></button>';}).join('')+'</div>';}
+function kojiBagTabsHTML(){return '<div class="koji-bag-tabs-wrap"><div class="bag-tabs">'+bagCategories().map(function(c){var img=c.icon&&typeof bagCatIconURL==='function'?'<img class="bag-cat-icon" src="'+esc(bagCatIconURL(c))+'" alt="" onerror="this.hidden=true">':'';return '<button type="button" class="bag-tab'+(c.key===activeBag?' active':'')+'" data-bag="'+esc(c.key)+'" aria-label="'+esc(c.label)+'" title="'+esc(c.label)+'">'+img+'<span>'+esc(c.label)+'</span></button>';}).join('')+'</div></div>';}
 function kojiBagModesHTML(){
   if(typeof bagCatEdit==='undefined')return '';
   return '<div class="koji-bag-toolbar">'+[['cat-edit','分类',bagCatEdit],['discard-mode','丢弃',bagDiscardMode]].map(function(mode){return '<button type="button" class="btn-small koji-bag-mode'+(mode[2]?' active':'')+'" data-bag-'+mode[0]+' aria-pressed="'+!!mode[2]+'">'+(mode[2]?'✓ ':'')+mode[1]+'</button>';}).join('')+'</div>';
