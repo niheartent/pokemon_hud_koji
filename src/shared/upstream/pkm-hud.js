@@ -3,7 +3,7 @@
 var WIN=(function(){try{if(window.parent&&window.parent!==window&&window.parent.document&&window.parent.document.body){return window.parent;}}catch(e){}return window;})();
 var document=WIN.document;
 /* ★★★ 发布新版只需改下面这一块：版本号 + 更新公告 ★★★ */
-var PK_VER='5.1.3';
+var PK_VER='5.2.7';
 /*PK_NOTICE_BEGIN
 v5.1.2 更新：
 · 背包图标字段支持「默认手机壳」：填「默认手机壳」显示默认手机图，切换手机壳写回中文图标名
@@ -510,8 +510,11 @@ var css='#pkm-hud-win,#pkm-hud-inline{--frame:#7d95b5;--text:#c6d1e4;--dim:#8ba0
 '.rel-fill{height:100%;background:#f08888;border-radius:4px}'+
 '.rel-val{width:30px;text-align:right;flex-shrink:0;color:var(--dim)}'+
 '.empty{text-align:center;padding:10px 0;color:var(--dim);letter-spacing:2px;font-size:.82rem}'+
-'.bag-tabs{display:flex;gap:4px;margin-bottom:5px;justify-content:flex-end}'+
-'.bag-tab{flex:0 0 auto;padding:2px 14px;font-family:inherit;font-size:.72rem;text-align:center;border:1px solid var(--frame);background:rgba(170,204,255,.12);color:var(--text);border-radius:4px;cursor:pointer}'+
+'.bag-tabs{display:flex;gap:4px;margin-bottom:5px;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}'+
+'.bag-tabs .bag-tab:first-child{margin-left:auto}'+
+'.bag-tabs .bag-tab:last-child{margin-right:auto}'+
+'.bag-tabs::-webkit-scrollbar{display:none}'+
+'.bag-tab{flex:0 0 auto;padding:3px 7px;font-family:inherit;font-size:.72rem;text-align:center;border:1px solid var(--frame);background:rgba(170,204,255,.12);color:var(--text);border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}'+
 '.bag-tab.active{background:rgba(43,74,111,.8);color:#fff}'+
 '.bag-list{display:flex;flex-direction:column;gap:6px;max-height:min(280px,46vh);overflow-y:auto;padding-right:4px}'+
 '.item-entry{display:flex;align-items:center;gap:8px;padding:6px 0;padding-right:clamp(8px,2vw,12px);border-bottom:1px dashed rgba(170,204,255,.25)}'+
@@ -522,7 +525,7 @@ var css='#pkm-hud-win,#pkm-hud-inline{--frame:#7d95b5;--text:#c6d1e4;--dim:#8ba0
 '.item-icon.placeholder{display:flex;align-items:center;justify-content:center;color:var(--dim);background:rgba(170,204,255,.12);border-radius:4px;width:28px;height:28px}'+
 '.item-name{flex:1;font-size:.85rem;color:var(--text)}'+
 '.item-count{font-size:.85rem;color:var(--dim)}'+
-'.bag-list>.item-entry{display:grid;grid-template-columns:28px minmax(0,1fr) 36px 58px;column-gap:8px;align-items:center;padding-right:clamp(8px,2vw,12px)}'+
+'.bag-list>.item-entry{display:grid;grid-template-columns:28px minmax(0,1fr) 36px auto;column-gap:8px;align-items:center;padding-right:clamp(8px,2vw,12px)}'+
 '.bag-list>.item-entry .item-icon-wrap{width:28px;min-width:28px}'+
 '.bag-list>.item-entry .item-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'+
 '.bag-list>.item-entry .item-count{width:36px;min-width:36px;text-align:right;justify-self:end}'+
@@ -3417,8 +3420,10 @@ function resolvePkmBgRepo(el,slug,shiny,name){
   resolvePkmBgRepo(el,slug,shiny,name);
 }
 
-var BADGE_DIR={'关都':'guandu','城都':'chengdu','丰缘':'fengyuan','神奥':'shenao','合众':'hezhong','卡洛斯':'kaluosi','伽勒尔':'jialeer','帕底亚':'padiya'};
-var BADGE_MAP={'关都':[[1,'岩石','灰色徽章','深灰市'],[2,'水','蓝色徽章','华蓝市'],[3,'电','橙色徽章','枯叶市'],[4,'草','彩虹徽章','玉虹市'],[5,'毒','粉红徽章','浅红市'],[6,'超能力','金黄徽章','金黄市'],[7,'火','深红徽章','红莲镇'],[8,'地面','绿色徽章','常青市']],'城都':[[1,'飞行','飞翼徽章','桔梗市'],[2,'虫','昆虫徽章','桧皮镇'],[3,'一般','常规徽章','满金市'],[4,'幽灵','幻影徽章','圆珠市'],[5,'格斗','打击徽章','湛蓝市'],[6,'钢','钢铁徽章','浅葱市'],[7,'冰','冰雪徽章','卡吉镇'],[8,'龙','升龙徽章','烟墨市']],'丰缘':[[1,'岩石','岩石徽章','卡那兹市'],[2,'格斗','拳击徽章','武斗镇'],[3,'电','电力徽章','紫堇市'],[4,'火','烈焰徽章','釜炎镇'],[5,'一般','天秤徽章','橙华市'],[6,'飞行','白羽徽章','茵郁市'],[7,'超能力','心灵徽章','绿岭市'],[8,'水','雨滴徽章','琉璃市']],'神奥':[[1,'岩石','石炭徽章','黑金市'],[2,'草','森林徽章','百代市'],[3,'格斗','铺石徽章','帷幕市'],[4,'水','湿地徽章','野原市'],[5,'幽灵','遗迹徽章','家缘市'],[6,'钢','矿山徽章','水脉市'],[7,'冰','冰河徽章','雪峰市'],[8,'电','灯塔徽章','滨海市']],'合众':[[1,'草/火/水','三元徽章','三曜市'],[2,'一般','基础徽章','七宝市'],[3,'毒','毒烟徽章','立涌市'],[4,'虫','甲虫徽章','飞云市'],[5,'电','伏特徽章','雷文市'],[6,'地面','震动徽章','帆巴市'],[7,'飞行','喷射徽章','吹寄市'],[8,'冰','冰柱徽章','雪花市'],[9,'龙','传说徽章','双龙市'],[10,'水','海浪徽章','青海波市']],'卡洛斯':[[1,'虫','虫虫徽章','白檀市'],[2,'岩石','崖壁徽章','遥香市'],[3,'格斗','战斗徽章','娑罗市'],[4,'草','植物徽章','比翼市'],[5,'电','电压徽章','密阿雷市'],[6,'妖精','妖精徽章','香薰市'],[7,'超能力','幻彩徽章','百刻市'],[8,'冰','冰山徽章','映雪市']],'伽勒尔':[[1,'草','草之徽章','草路镇'],[2,'水','水之徽章','水舟镇'],[3,'火','火之徽章','机擎市'],[4,'格斗','格斗徽章','溯传镇'],[5,'幽灵','幽灵徽章','溯传镇'],[6,'妖精','妖精徽章','舞姿镇'],[7,'岩石','岩石徽章','战竞镇'],[8,'冰','冰之徽章','战竞镇'],[9,'恶','恶之徽章','尖钉镇'],[10,'龙','龙之徽章','拳关市']],'帕底亚':[[1,'虫','虫之徽章','圆模镇'],[2,'草','草之徽章','深钵镇'],[3,'水','水之徽章','玻瓶市'],[4,'电','电之徽章','酿光市'],[5,'一般','一般徽章','锦汇市'],[6,'冰','冰之徽章','霜抹山'],[7,'幽灵','幽灵徽章','冰柜镇'],[8,'超能力','超能徽章','焙固镇']]};
+var BADGE_DIR={};
+var BADGE_MAP={};
+var badgeRulesPromise=null;
+function ensureBadgeRules(){if(badgeRulesPromise)return badgeRulesPromise;badgeRulesPromise=hudFetch(PKM_DATA_BASE+'badge-rules.json').then(function(r){return r.ok?r.json():null;}).then(function(j){var d=(j&&j.data&&typeof j.data==='object'&&!Array.isArray(j.data))?j.data:((j&&typeof j==='object'&&!Array.isArray(j))?j:{});BADGE_DIR={};BADGE_MAP={};for(var k in d){var it=d[k];if(!it||typeof it!=='object')continue;if(it.dir)BADGE_DIR[k]=String(it.dir);if(Array.isArray(it.badges))BADGE_MAP[k]=it.badges;}try{pkmHudRenderCurrent();}catch(e){}return BADGE_MAP;}).catch(function(){return BADGE_MAP;});return badgeRulesPromise;}
 var badgeSel=null;
 var badgeMinHCache=0;
 function badgeMinH(){if(badgeMinHCache)return badgeMinHCache;var d=document.createElement('div');d.className='badge-grid';d.style.cssText='position:absolute;visibility:hidden;left:-9999px;top:0;width:100%;';var tab=BADGE_MAP['合众']||[];var rec={region:'合众',list:[],cnt:0};d.innerHTML=tab.map(function(e,i){return badgeImg('合众',e,badgeGot(rec,e,i),true);}).join('');document.body.appendChild(d);badgeMinHCache=d.offsetHeight||0;if(d.parentNode)d.parentNode.removeChild(d);return badgeMinHCache;}
@@ -3715,9 +3720,9 @@ function resolveNearbyTypes(scope){
     });
   })(els[i]);}
 }
-var NEARBY_LEGENDARY_SET=nearbyLookup('急冻鸟|闪电鸟|火焰鸟|超梦|洛奇亚|凤王|雷公|炎帝|水君|雷吉洛克|雷吉艾斯|雷吉斯奇鲁|拉帝亚斯|拉帝欧斯|盖欧卡|固拉多|烈空坐|由克希|艾姆利多|亚克诺姆|帝牙卢卡|帕路奇亚|席多蓝恩|雷吉奇卡斯|骑拉帝纳|克雷色利亚|勾帕路翁|代拉基翁|毕力吉翁|龙卷云|雷电云|土地云|莱希拉姆|捷克罗姆|酋雷姆|哲尔尼亚斯|伊裴尔塔尔|基格尔德|卡璞·鸣鸣|卡璞·蝶蝶|卡璞·哞哞|卡璞·鳍鳍|科斯莫古|科斯莫姆|索尔迦雷欧|露奈雅拉|奈克洛兹玛|属性：空|银伴战兽|苍响|藏玛然特|无极汰那|熊徒弟|武道熊师|雷吉艾勒奇|雷吉铎拉戈|雪暴马|灵幽马|蕾冠王|眷恋云|古剑豹|古鼎鹿|古简蜗|古玉鱼|故勒顿|密勒顿|够赞狗|愿增猿|吉雉鸡|厄诡椪|太乐巴戈斯');
-var NEARBY_MYTHICAL_SET=nearbyLookup('梦幻|时拉比|基拉祈|代欧奇希斯|玛纳霏|霏欧纳|达克莱伊|谢米|阿尔宙斯|比克提尼|凯路迪欧|美洛耶塔|盖诺赛克特|蒂安希|胡帕|波尔凯尼恩|玛机雅娜|玛夏多|捷拉奥拉|美录坦|美录梅塔|萨戮德|桃歹郎');
-var NEARBY_ULTRA_SET=nearbyLookup('虚吾伊德|爆肌蚊|费洛美螂|电束木|铁火辉夜|纸御剑|恶食大王|毒贝比|四颚针龙|垒磊石|砰头小丑');
+var NEARBY_SPECIAL={};
+var nearbySpecialPromise=null;
+function ensureNearbySpecial(){if(nearbySpecialPromise)return nearbySpecialPromise;nearbySpecialPromise=hudFetch(PKM_DATA_BASE+'nearby-special.json').then(function(r){return r.ok?r.json():null;}).then(function(j){var m=(j&&j.data&&typeof j.data==='object'&&!Array.isArray(j.data))?j.data:((j&&typeof j==='object'&&!Array.isArray(j))?j:{});NEARBY_SPECIAL={};for(var k in m){if(m[k])NEARBY_SPECIAL[k]=String(m[k]);}try{pkmHudRenderCurrent();}catch(e){}return NEARBY_SPECIAL;}).catch(function(){return NEARBY_SPECIAL;});return nearbySpecialPromise;}
 function nearbyTruthy(v){if(v===true||v===1)return true;if(v===false||v===0||v==null)return false;var s=String(v).trim().toLowerCase();if(!s)return false;if(/^(?:否|false|0|no|n|普通|非闪光|非異色|非异色)$/.test(s))return false;return /^(?:是|true|1|yes|y|闪光|異色|异色|shiny)$/.test(s)||/闪光|異色|异色|shiny/.test(s);}
 function nearbyList(v){if(v==null)return [];if(Array.isArray(v))return v.map(function(x){return String(x||'').trim();}).filter(Boolean);if(typeof v==='object')return Object.keys(v).filter(function(k){return v[k];});return String(v).split(/[\/、,，|;+；]+/).map(function(x){return x.trim();}).filter(Boolean);}
 function nearbyNormalizeEntry(raw){raw=(raw&&typeof raw==='object')?raw:{};var p=Object.assign({},raw),nm=String(p.名字||p.名称||p.name||p.species||'').trim(),en=String(p.英文名||p.EnglishName||p.englishName||p.name_en||'').trim(),types=[];[p.属性1,p.类型1].some(function(x){if(String(x||'').trim()){types.push(String(x).trim());return true;}return false;});[p.属性2,p.类型2].some(function(x){if(String(x||'').trim()&&String(x).trim()!=='无'){types.push(String(x).trim());return true;}return false;});if(!types.length){var mixed=nearbyList(p.属性||p.类型||p.types);types=mixed.slice(0,2);}var tags=[];[p.状态,p.标签,p.特征,p.稀有度,p.分类,p.形态,p.特殊形态,p.form,p.tags].forEach(function(v){nearbyList(v).forEach(function(x){if(tags.indexOf(x)<0)tags.push(x);});});p.名字=nm;p.英文名=en;p.数量=Math.max(1,parseInt(p.数量||p.count||p.数量上限||1,10)||1);p.是否闪光=nearbyTruthy(p.是否闪光!=null?p.是否闪光:(p.闪光!=null?p.闪光:p.shiny));p.状态=String(p.状态||p.status||'普通');p.图标=String(p.图标||p.图片||p.icon||p.img||'');p.属性1=types[0]||'';p.属性2=types[1]||'无';p._nearbyTags=tags;return p;}
@@ -3725,7 +3730,7 @@ function nearbyNormName(name){var t=String(name||'').trim();try{if(typeof baseNa
 function nearbyTypeColor(tp){return NEARBY_TYPE_COLORS[String(tp||'').trim()]||'#7d95b5';}
 function nearbyHexToRgba(hex,a){hex=String(hex||'').replace('#','');if(hex.length===3)hex=hex.replace(/(.)/g,'$1$1');var n=parseInt(hex,16);if(!isFinite(n))return 'rgba(125,149,181,'+(a||1)+')';var r=(n>>16)&255,g=(n>>8)&255,b=n&255;return 'rgba('+r+','+g+','+b+','+(a==null?1:a)+')';}
 function nearbyAllText(p){p=(p&&Array.isArray(p._nearbyTags))?p:nearbyNormalizeEntry(p);return [p.名字,p.英文名,p.状态,(p._nearbyTags||[]).join(' ')].join(' ');}
-function nearbyCategoryMeta(raw){var p=nearbyNormalizeEntry(raw),nm=nearbyNormName(p.名字),txt=nearbyAllText(p),shiny=p.是否闪光,boss=/霸主|头目|頭目|首领|首領|boss|alpha/i.test(txt),mega=/(?:^|[\s·_-])mega(?:[\s·_-]|$)|\bmage\b|mega进化|mega進化|超级进化|超級進化|超进化|超進化/i.test(txt)||/^(?:Mega|mega|MAGE|mage)/.test(String(p.名字||'')),dynamax=/超极巨|超極巨|极巨化|極巨化|极巨|極巨|dynamax|gigantamax|g-max/i.test(txt),ultra=/异兽|異獸|究极异兽|究極異獸|ultra\s*beast|\bUB\b/i.test(txt)||!!NEARBY_ULTRA_SET[nm],mythical=/幻兽|幻獸|mythical/i.test(txt)||!!NEARBY_MYTHICAL_SET[nm],legendary=!mythical&&!ultra&&(/神兽|神獸|传说宝可梦|傳說寶可夢|legendary/i.test(txt)||!!NEARBY_LEGENDARY_SET[nm]),t1=String(p.属性1||'').trim(),t2=String(p.属性2||'').trim();if(t2==='无')t2='';if(!t1){var _nt=nearbyTypeCache[nearbyTypeCacheKeyOf(p)];if(_nt){t1=_nt.type1||'';if(!t2)t2=_nt.type2||'';}}var c1=nearbyTypeColor(t1||(legendary?'龙':'一般')),c2=t2?nearbyTypeColor(t2):c1,primary=legendary?'legendary':mythical?'mythical':ultra?'ultra':boss?'boss':mega?'mega':dynamax?'dynamax':shiny?'shiny':'normal';if(primary==='mythical'){c1='#ff78a9';c2='#b98cff';}else if(primary==='ultra'){c1='#00e5ff';c2='#7c3aed';}else if(primary==='boss'){c1='#ff9a3d';c2='#dc2626';}else if(primary==='mega'){c1='#58c8ff';c2='#8b5cf6';}else if(primary==='dynamax'){c1='#ff5cac';c2='#e11d48';}else if(primary==='shiny'){c1='#ffe47a';c2='#e6b800';}return {pokemon:p,name:nm,text:txt,legendary:legendary,mythical:mythical,ultra:ultra,boss:boss,mega:mega,dynamax:dynamax,shiny:shiny,type1:t1,type2:t2,primary:primary,accent1:c1,accent2:c2,soft1:nearbyHexToRgba(c1,.28),soft2:nearbyHexToRgba(c2,.20),glow1:nearbyHexToRgba(c1,.38),glow2:nearbyHexToRgba(c2,.28)};}
+function nearbyCategoryMeta(raw){var p=nearbyNormalizeEntry(raw),nm=nearbyNormName(p.名字),txt=nearbyAllText(p),shiny=p.是否闪光,boss=/霸主|头目|頭目|首领|首領|boss|alpha/i.test(txt),mega=/(?:^|[\s·_-])mega(?:[\s·_-]|$)|\bmage\b|mega进化|mega進化|超级进化|超級進化|超进化|超進化/i.test(txt)||/^(?:Mega|mega|MAGE|mage)/.test(String(p.名字||'')),dynamax=/超极巨|超極巨|极巨化|極巨化|极巨|極巨|dynamax|gigantamax|g-max/i.test(txt),ultra=/异兽|異獸|究极异兽|究極異獸|ultra\s*beast|\bUB\b/i.test(txt)||NEARBY_SPECIAL[nm]==='ultra',mythical=/幻兽|幻獸|mythical/i.test(txt)||NEARBY_SPECIAL[nm]==='mythical',legendary=!mythical&&!ultra&&(/神兽|神獸|传说宝可梦|傳說寶可夢|legendary/i.test(txt)||NEARBY_SPECIAL[nm]==='legendary'),t1=String(p.属性1||'').trim(),t2=String(p.属性2||'').trim();if(t2==='无')t2='';if(!t1){var _nt=nearbyTypeCache[nearbyTypeCacheKeyOf(p)];if(_nt){t1=_nt.type1||'';if(!t2)t2=_nt.type2||'';}}var c1=nearbyTypeColor(t1||(legendary?'龙':'一般')),c2=t2?nearbyTypeColor(t2):c1,primary=legendary?'legendary':mythical?'mythical':ultra?'ultra':boss?'boss':mega?'mega':dynamax?'dynamax':shiny?'shiny':'normal';if(primary==='mythical'){c1='#ff78a9';c2='#b98cff';}else if(primary==='ultra'){c1='#00e5ff';c2='#7c3aed';}else if(primary==='boss'){c1='#ff9a3d';c2='#dc2626';}else if(primary==='mega'){c1='#58c8ff';c2='#8b5cf6';}else if(primary==='dynamax'){c1='#ff5cac';c2='#e11d48';}else if(primary==='shiny'){c1='#ffe47a';c2='#e6b800';}return {pokemon:p,name:nm,text:txt,legendary:legendary,mythical:mythical,ultra:ultra,boss:boss,mega:mega,dynamax:dynamax,shiny:shiny,type1:t1,type2:t2,primary:primary,accent1:c1,accent2:c2,soft1:nearbyHexToRgba(c1,.28),soft2:nearbyHexToRgba(c2,.20),glow1:nearbyHexToRgba(c1,.38),glow2:nearbyHexToRgba(c2,.28)};}
 function nearbyCardPriority(raw){var m=nearbyCategoryMeta(raw),s=0;if(m.legendary)s+=700;if(m.mythical)s+=640;if(m.ultra)s+=580;if(m.boss)s+=440;if(m.mega)s+=360;if(m.dynamax)s+=300;if(m.shiny)s+=240;s+=(Number(m.pokemon&&m.pokemon.数量)||0);return s;}
 function nearbySortedKeys(obj){return Object.keys(obj||{}).map(function(k){return {key:k,score:nearbyCardPriority(obj[k])};}).sort(function(a,b){return b.score-a.score;}).map(function(x){return x.key;});}
 function nearbyMarkHTML(kind,label,text,style){return '<span class="nb-mark '+kind+'"'+(style?' style="'+style+'"':'')+' title="'+esc(label)+'"><span>'+text+'</span></span>';}
@@ -3740,706 +3745,36 @@ function nearbyHTML(){var obj=stat_data.附近宝可梦||{};var keys=nearbySorte
 function nearbyPageHTML(){var obj=stat_data.附近宝可梦||{};var keys=nearbySortedKeys(obj);if(!keys.length)return '<div class="nearby-wrap"><div class="nearby-title">附近宝可梦</div><div class="empty">暂无</div></div>';var cells=keys.map(function(key){return nearbyCardHTML(key,obj[key],'page');}).join('');return '<div class="nearby-wrap"><div class="nearby-title">附近宝可梦 <span class="nb-page-count">'+keys.length+' 个目标</span></div><div class="nearby-grid">'+cells+'</div></div>';}
 function openNearbyPage(){pageOverlayPopout(false);pageOverlay.innerHTML='<div class="page nearby-page"><div class="page-head"><button class="page-close" data-page-close>✕</button></div><div class="page-body nearby-body">'+nearbyPageHTML()+'</div></div>';pageOverlay.classList.add('open');bindPageInteractions();resolvePkmImgs(pageOverlay);resolveNearbyTypes(pageOverlay);hudResolvePkidbImages(pageOverlay);}
 
-function bagCategories(){var cats=[{key:'道具',label:'道具',items:[]},{key:'精灵球',label:'精灵球',items:[]},{key:'重要物品',label:'重要物品',items:[]}];var bag=stat_data.背包||{};Object.keys(bag).forEach(function(name){var it=bag[name];if(!it||typeof it!=='object'||!(('类型')in it))return;var c=cats.find(function(x){return x.key===it.类型;});if(c)c.items.push({name:name,count:Number(it.数量)||0,icon:String(it.图标||'')});});return cats;}
-var activeBag='道具';
-function bagItemsHTML(){var cats=bagCategories();var cur=cats.find(function(c){return c.key===activeBag;})||cats[0];if(!cur.items.length)return '<div class="empty">这里什么都没有...</div>';return cur.items.map(function(it){var isTM=(it.name.indexOf('技能机')>=0||it.name.indexOf('招式学习器')>=0);var tmMove=isTM?tmMoveName(it.name):'';var icon;if(tmMove){var iconSlug=String(it.icon||'').toLowerCase().replace(/\.(png|gif|jpe?g|webp)$/,'');icon=iconSlug?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(psItemUrl(iconSlug,'bag'))+'" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder tm-wiki" data-tm="'+esc(tmMove)+'">?</span></span>';}else if(isTM){var iconName=(itemIconName(it.name)||String(it.icon||'')).toLowerCase();if(iconName.slice(-4)==='.png'){iconName=iconName.slice(0,-4);}icon=iconName?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(psItemUrl(iconName,'bag'))+'" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder">?</span></span>';}else if(pkmItemSource==='serebii'){var ov2=bagPhoneIcon(it.name)||itemImgOf(it.name);if(ov2!==undefined){icon=ov2?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(ov2)+'" referrerpolicy="origin" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder">?</span></span>';}else{icon='<span class="item-icon-wrap"><span class="item-icon placeholder item-wiki" data-item="'+esc(it.name)+'" data-item-en="'+esc(it.icon||'')+'" data-cls="item-icon">?</span></span>';}}else{var ov=bagPhoneIcon(it.name)||itemImgOf(it.name);if(ov!==undefined){icon=ov?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(ov)+'" referrerpolicy="origin" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder">?</span></span>';}else{icon='<span class="item-icon-wrap"><span class="item-icon placeholder item-wiki" data-item="'+esc(it.name)+'" data-cls="item-icon">?</span></span>';}}var click=tmMove?' data-tm="'+esc(tmMove)+'" style="cursor:pointer"':((!isTM&&itemClickEnabled)?' data-bag-item="'+esc(it.name)+'" data-bag-icon="'+esc(it.icon||'')+'"':'');return '<div class="item-entry"'+click+'>'+icon+'<span class="item-name">'+esc(it.name)+'</span><span class="item-count">×'+it.count+'</span><button class="btn-small" data-bag-discard="'+esc(it.name)+'">丢弃</button></div>';}).join('');}
-function bagHTML(){var tabs=bagCategories().map(function(c){return '<button class="bag-tab'+(c.key===activeBag?' active':'')+'" data-bag="'+c.key+'">'+c.label+'</button>';}).join('');return frame('背包','<div class="bag-tabs">'+tabs+'</div><div class="bag-list" id="bag-list">'+bagItemsHTML()+'</div>');}
-
-var MAPS_DATA=[
-  {
-  name:'关都',
-  img:pkmRepoFirst(PKM_DATA_BASE+'UI/地图/关都.jpeg'),
-  towns:[
-    {name:'真新镇',x:23.9,y:64.9},
-    {name:'常青市',x:24.4,y:45.4},
-    {name:'深灰市',x:25.1,y:20.9},
-    {name:'华蓝市',x:64.7,y:17.6},
-    {name:'紫苑镇',x:88.8,y:36.1},
-    {name:'金黄市',x:64.6,y:34.9},
-    {name:'玉虹市',x:47.7,y:35.1},
-    {name:'浅红市',x:50.5,y:74.5},
-    {name:'枯叶市',x:64.4,y:56},
-    {name:'红莲镇',x:23.8,y:91.4},
-    {name:'霓虹镇',x:49.9,y:83.6}
-  ],
-  roads:[
-    {name:'1号道路',x:23.9,y:56.2},
-    {name:'2号道路',x:24.8,y:33.6},
-    {name:'3号道路',x:36.4,y:20.8},
-    {name:'4号道路',x:52.4,y:17.8},
-    {name:'5号道路',x:64.7,y:26.3},
-    {name:'6号道路',x:64.7,y:45},
-    {name:'7号道路',x:56.9,y:35.3},
-    {name:'8号道路',x:77,y:35.4},
-    {name:'9号道路',x:77.3,y:16.6},
-    {name:'10号道路',x:88.2,y:29.8},
-    {name:'11号道路',x:78.5,y:54.8},
-    {name:'12号道路',x:89.5,y:55},
-    {name:'13号道路',x:79.3,y:69.5},
-    {name:'14号道路',x:72.9,y:73.3},
-    {name:'15号道路',x:65,y:76.4},
-    {name:'16号道路',x:37.4,y:35.4},
-    {name:'17号道路',x:35.9,y:52.1},
-    {name:'18号道路',x:38.2,y:75.8},
-    {name:'19号水道',x:49.6,y:89.8},
-    {name:'20号水道',x:33.3,y:93},
-    {name:'21号水道',x:23.9,y:78},
-    {name:'22号道路',x:16.6,y:45.9},
-    {name:'24号道路',x:64.6,y:9.2},
-    {name:'25号道路',x:73.5,y:5.9}
-  ],
-  specials:[
-    {name:'月见山',x:42.9,y:11.6},
-    {name:'常青森林',x:23.5,y:31.3},
-    {name:'伙伴公园',x:50.4,y:62.3},
-    {name:'正辉灯塔',x:81.3,y:4.7},
-    {name:'圣特安努号',x:64.5,y:66.3},
-    {name:'小明的道馆',x:64.5,y:43.3},
-    {name:'宝可梦研究学院',x:64.6,y:47.5},
-    {name:'胜利之路',x:12.5,y:32.3},
-    {name:'白银山',x:5,y:6.4},
-    {name:'蓝普尔其',x:59.7,y:56.2},
-    {name:'少女峡',x:69.6,y:58.5},
-    {name:'大傻谷',x:34.2,y:92.4},
-    {name:'石英高原',x:12.9,y:5.2},
-    {name:'自行车道',x:35.6,y:58.2},
-    {name:'地鼠洞穴出入口',x:26.6,y:27.6},
-    {name:'地鼠洞穴出入口',x:66.2,y:44.3},
-    {name:'双子岛',x:38.5,y:92.8},
-    {name:'华蓝洞窟',x:56.3,y:12.8},
-    {name:'岩山隧道',x:86.4,y:19.6}
-  ]
-},
-  {
-    name:'城都',
-    img:pkmRepoFirst(PKM_DATA_BASE+'UI/地图/城都.jpg'),
-    towns:[
-      {name:'若叶镇',x:70,y:67.5},
-      {name:'吉花市',x:57.6,y:67.7},
-      {name:'桔梗市',x:50.2,y:45.9},
-      {name:'桧皮镇',x:43.2,y:79.5},
-      {name:'满金市',x:37.7,y:60.6},
-      {name:'缘朱市',x:40.9,y:33.8},
-      {name:'浅葱市',x:28.3,y:47.5},
-      {name:'湛蓝市',x:19.6,y:62.2},
-      {name:'卡吉镇',x:54.4,y:34.3},
-      {name:'烟墨市',x:68.2,y:33.5}
-    ],
-    roads:[
-      {name:'29号道路',x:64.1,y:67.6},
-      {name:'28号道路',x:96.2,y:47.9},
-      {name:'27号道路',x:84.3,y:67.8},
-      {name:'30号道路',x:57.4,y:56.1},
-      {name:'31号道路',x:56,y:49},
-      {name:'32号道路',x:48.4,y:60},
-      {name:'33号道路',x:47.5,y:80},
-      {name:'34号道路',x:39.1,y:71.7},
-      {name:'35号道路',x:38.9,y:50.6},
-      {name:'36号道路',x:44.4,y:44.5},
-      {name:'37号道路',x:41.3,y:40},
-      {name:'38号道路',x:33.3,y:34.4},
-      {name:'39号道路',x:27.7,y:39.1},
-      {name:'40号水路',x:25.5,y:53.2},
-      {name:'41号水路',x:24,y:60.6},
-      {name:'42号道路',x:48.3,y:35.3},
-      {name:'43号道路',x:54.7,y:27.4},
-      {name:'44号道路',x:60.6,y:34.5},
-      {name:'45号道路',x:67.2,y:45.3},
-      {name:'46号道路',x:63.8,y:61.5},
-      {name:'47号道路',x:9.6,y:61.9},
-      {name:'48号道路',x:9,y:56.6}
-    ],
-    specials:[
-      {name:'黑暗洞穴出入口',x:58.2,y:48.2},
-      {name:'黑暗洞穴出入口',x:64.6,y:57.2},
-      {name:'黑暗洞穴出入口',x:66.7,y:37.9},
-      {name:'喇叭芽之塔',x:50.6,y:41.7},
-      {name:'阿露福遗迹',x:45.3,y:51.1},
-      {name:'互连洞',x:47.9,y:71.7},
-      {name:'呆呆兽之井',x:45.4,y:77.6},
-      {name:'栎树林',x:40.2,y:77.3},
-      {name:'播音塔',x:36.2,y:59.5},
-      {name:'全球终端',x:33.7,y:58.1},
-      {name:'满金地下通道',x:38.4,y:62.6},
-      {name:'满金游戏城',x:37,y:61.8},
-      {name:'自然公园',x:37.1,y:43.5},
-      {name:'宝可全能竞技赛巨蛋',x:33.6,y:46.7},
-      {name:'铃铛塔',x:40.8,y:28.5},
-      {name:'烧焦塔',x:39.8,y:30.7},
-      {name:'哞哞牧场',x:27.1,y:34.4},
-      {name:'浅葱灯塔',x:30.4,y:48.2},
-      {name:'对战开拓区',x:23.7,y:43},
-      {name:'断崖入口',x:15.2,y:65.1},
-      {name:'断崖洞穴',x:13.2,y:67.8},
-      {name:'埋葬之塔',x:8.6,y:66.3},
-      {name:'狩猎地带',x:8.9,y:50.3},
-      {name:'漩涡岛',x:24.1,y:61.2},
-      {name:'擂钵山',x:48.3,y:33.3},
-      {name:'愤怒之湖',x:53,y:15.8},
-      {name:'火箭队基地',x:54.2,y:35.4},
-      {name:'冰雪小径',x:71.1,y:30},
-      {name:'龙穴',x:68.8,y:28.2},
-      {name:'白银山',x:90.8,y:34.1},
-      {name:'都城瀑布',x:78.2,y:67.9}
-    ]
-  },
-  {
-    name:'丰缘',
-    img:pkmRepoFirst(PKM_DATA_BASE+'UI/地图/丰缘.jpg'),
-    towns:[
-      {name:'未白镇',x:20.1,y:70.8},
-      {name:'古玫镇',x:20.2,y:62.1},
-      {name:'橙华市',x:13,y:62.7},
-      {name:'卡那兹市',x:8.5,y:45.8},
-      {name:'武斗镇',x:11.4,y:89.8},
-      {name:'凯那市',x:30.9,y:66.8},
-      {name:'紫堇市',x:31.4,y:38.3},
-      {name:'绿茵镇',x:20.3,y:37.7},
-      {name:'釜炎镇',x:23.7,y:21.8},
-      {name:'秋叶镇',x:20.4,y:8.4},
-      {name:'茵郁市',x:46,y:11.4},
-      {name:'水静市',x:68,y:22.5},
-      {name:'绿岭市',x:88.2,y:25.3},
-      {name:'琉璃市',x:76,y:43.8},
-      {name:'暮水镇',x:63.5,y:64.3},
-      {name:'彩悠市',x:94,y:46.6}
-    ],
-    roads:[
-      {name:'101号道路',x:20.1,y:67.1},
-      {name:'102号道路',x:16.8,y:62.5},
-      {name:'103号道路',x:24.2,y:54.4},
-      {name:'104号道路',x:8.7,y:63.2},
-      {name:'105号水路',x:7.6,y:74.2},
-      {name:'106号水路',x:10.9,y:84.5},
-      {name:'107号水路',x:17,y:89.4},
-      {name:'108号水路',x:24.6,y:88.5},
-      {name:'109号水路',x:31.6,y:83.5},
-      {name:'110号道路',x:31.2,y:47.5},
-      {name:'111号道路',x:34.4,y:17},
-      {name:'112号道路',x:29.3,y:21.8},
-      {name:'113号道路',x:28.6,y:8.7},
-      {name:'114号道路',x:15,y:13.7},
-      {name:'115号道路',x:9.8,y:34.2},
-      {name:'116号道路',x:13.2,y:41.4},
-      {name:'117号道路',x:26.5,y:38.7},
-      {name:'118号道路',x:41.7,y:38.1},
-      {name:'119号道路',x:40,y:21.1},
-      {name:'120号道路',x:54.6,y:18.2},
-      {name:'121号道路',x:59.4,y:23.3},
-      {name:'122号水路',x:58.4,y:29.3},
-      {name:'123号道路',x:50.7,y:39.1},
-      {name:'124号水路',x:75.2,y:22.5},
-      {name:'125号水路',x:80.9,y:26.4},
-      {name:'126号水路',x:77.7,y:39.1},
-      {name:'127号水路',x:83.9,y:46.4},
-      {name:'128号水路',x:85.3,y:54.5},
-      {name:'129号水路',x:83.8,y:64.8},
-      {name:'130号水路',x:75.7,y:65.1},
-      {name:'131号水路',x:69.6,y:65.5},
-      {name:'132号水路',x:53.9,y:64.1},
-      {name:'133号水路',x:45.7,y:65.3},
-      {name:'134号水路',x:38.6,y:64.2}
-    ],
-    specials:[
-      {name:'橙华森林',x:7,y:57.6},
-      {name:'石之洞窟',x:7.4,y:86.1},
-      {name:'海紫堇',x:23.9,y:83},
-      {name:'新紫堇',x:33.9,y:42.4},
-      {name:'卡绿隧道',x:16.3,y:38.7},
-      {name:'烟囱山',x:24.6,y:11},
-      {name:'凹凸山道',x:24.5,y:14.9},
-      {name:'烈焰小径',x:27.5,y:17.8},
-      {name:'流星瀑布',x:11.3,y:22.5},
-      {name:'狩猎地带',x:59.1,y:19.2},
-      {name:'送神山',x:61,y:29},
-      {name:'浅滩洞穴',x:88.8,y:14.8},
-      {name:'天空之柱',x:75.1,y:60.5},
-      {name:'南方孤岛',x:46.8,y:85.7},
-      {name:'秘密海滨',x:86.2,y:68.7},
-      {name:'冠军之路',x:93.9,y:39.9},
-      {name:'起源洞窟',x:84,y:47.7},
-      {name:'对战度假地',x:78.7,y:77.2},
-      {name:'幻影岛',x:61,y:91.6},
-      {name:'觉醒神殿',x:76,y:43},
-      {name:'秘密小岛',x:71,y:49.4}
-    ]
-  },
-  {
-    name:'神奥',
-    img:pkmRepoFirst(PKM_DATA_BASE+'UI/地图/神奥.png'),
-    towns:[
-      {name:'双叶镇',x:15.8,y:87.7},
-      {name:'水脉市',x:11.6,y:66},
-      {name:'真砂镇',x:22.9,y:82.8},
-      {name:'祝庆市',x:22.4,y:71.1},
-      {name:'黑金市',x:36.1,y:70.4},
-      {name:'家缘市',x:53.7,y:61.3},
-      {name:'野原市',x:66.9,y:76.4},
-      {name:'滨海市',x:91,y:71.5},
-      {name:'帷幕市',x:74.7,y:50.4},
-      {name:'雪峰市',x:43.8,y:8.9},
-      {name:'神和镇',x:51.4,y:41.8},
-      {name:'百代市',x:38.7,y:42},
-      {name:'花苑镇',x:24.8,y:56.3},
-      {name:'随意镇',x:61.9,y:56}
-    ],
-    roads:[
-      {name:'201号道路',x:16.1,y:83.2},
-      {name:'202号道路',x:23.4,y:79.1},
-      {name:'203号道路',x:29.1,y:70.3},
-      {name:'204号道路',x:24.5,y:61.7},
-      {name:'205号道路',x:29.1,y:50.9},
-      {name:'206号道路',x:37.5,y:52.5},
-      {name:'207号道路',x:40.2,y:63.2},
-      {name:'208号道路',x:46.6,y:65.2},
-      {name:'209号道路',x:60.9,y:64.4},
-      {name:'210号道路',x:59.1,y:41},
-      {name:'211号道路',x:45.7,y:41.3},
-      {name:'212号道路',x:57.1,y:83},
-      {name:'213号道路',x:71,y:77},
-      {name:'214号道路',x:77.6,y:62.4},
-      {name:'215号道路',x:65.8,y:48.6},
-      {name:'216号道路',x:43.6,y:27.4},
-      {name:'217号道路',x:39,y:19.3},
-      {name:'218号道路',x:15.8,y:69.3},
-      {name:'219号道路',x:23.1,y:87.3},
-      {name:'220号水路',x:23.1,y:94.3},
-      {name:'221号道路',x:31,y:92.8},
-      {name:'222号道路',x:82.4,y:73.1},
-      {name:'223号水路',x:88.7,y:58.2},
-      {name:'224号道路',x:92.3,y:40.9},
-      {name:'225号道路',x:67.5,y:23.5},
-      {name:'226号水路',x:74.8,y:21.8},
-      {name:'227号道路',x:74.9,y:16.5},
-      {name:'228号道路',x:79,y:24.5},
-      {name:'229号道路',x:81.7,y:30.7},
-      {name:'230号水路',x:74.5,y:32.5}
-    ],
-    specials:[
-      {name:'睿智湖',x:40,y:9.3},
-      {name:'钢铁岛',x:21.2,y:37.3},
-      {name:'新月岛',x:17.6,y:13.7},
-      {name:'满月岛',x:7.2,y:14.7},
-      {name:'多多罗铁工厂',x:24.3,y:46.2},
-      {name:'百代森林',x:29,y:41.4},
-      {name:'山谷发电站',x:32.8,y:54.7},
-      {name:'心齐湖',x:11.9,y:79.3},
-      {name:'伙伴公园',x:36.1,y:86.2},
-      {name:'天冠山',x:44.5,y:41.6},
-      {name:'立志湖',x:74.8,y:69},
-      {name:'宝可梦联盟',x:88,y:41.7},
-      {name:'隐泉之路',x:81,y:61.8},
-      {name:'战斗区',x:66.7,y:29.1},
-      {name:'生存区',x:67.4,y:19.9},
-      {name:'名胜区',x:82.5,y:35.2},
-      {name:'严酷山',x:70,y:7.4},
-      {name:'花之乐园',x:75.6,y:14.3},
-      {name:'冠军之路',x:87.4,y:46.9}
-    ]
-  },
-  {
-    name:'合众',
-    img:pkmRepoFirst(PKM_DATA_BASE+'UI/地图/合众.png'),
-    towns:[
-      {name:'桧扇市',x:4.8,y:82.5},
-      {name:'算木镇',x:10.8,y:76.1},
-      {name:'立涌市',x:25.8,y:70.4},
-      {name:'帆巴市',x:27.1,y:54.6},
-      {name:'吹寄市',x:9.9,y:38.7},
-      {name:'金轮镇',x:6,y:17.4},
-      {name:'雪花市',x:23.8,y:20.9},
-      {name:'双龙市',x:47.9,y:24.7},
-      {name:'笼目镇',x:79.5,y:24.6},
-      {name:'雷文市',x:49.3,y:54.9},
-      {name:'飞云市',x:51.6,y:79.7},
-      {name:'黑色市|白森林',x:73.1,y:53.1},
-      {name:'七宝市',x:76.7,y:66.9},
-      {name:'三曜市',x:87.7,y:62.2},
-      {name:'唐草镇',x:88.1,y:72.2},
-      {name:'鹿子镇',x:91.4,y:86.3},
-      {name:'涟漪镇',x:83.8,y:41.5},
-      {name:'山路镇',x:69,y:40.2},
-      {name:'青海波市',x:94.5,y:30.5},
-      {name:'宝可梦联盟',x:60.4,y:7.6}
-    ],
-    roads:[
-      {name:'1号道路',x:89.7,y:79.2},
-      {name:'2号道路',x:87.4,y:67},
-      {name:'3号道路',x:80.6,y:59.1},
-      {name:'4号道路',x:51.2,y:66.9},
-      {name:'5号道路',x:43.3,y:54.8},
-      {name:'6号道路',x:22.2,y:51.3},
-      {name:'7号道路',x:12.9,y:32.9},
-      {name:'8号道路',x:33.6,y:23.4},
-      {name:'9号道路',x:43.8,y:25.6},
-      {name:'10号道路',x:53,y:17.5},
-      {name:'11号道路',x:53.1,y:25.4},
-      {name:'12号道路',x:68.9,y:26.2},
-      {name:'13号道路',x:87.3,y:27},
-      {name:'14号道路',x:78.9,y:51.4},
-      {name:'15号道路',x:72.9,y:52.2},
-      {name:'16号道路',x:60,y:54.7},
-      {name:'17号水路',x:80.3,y:89},
-      {name:'18号道路',x:76.6,y:90.1},
-      {name:'19号道路',x:7.2,y:78},
-      {name:'20号道路',x:17.7,y:72.4},
-      {name:'21号水路',x:93.4,y:33.8},
-      {name:'22号道路',x:90.7,y:23.4},
-      {name:'23号道路',x:78.6,y:17.9}
-    ],
-    specials:[
-      {name:'算木牧场',x:12.8,y:68.5},
-      {name:'心之空洞',x:14.4,y:75.2},
-      {name:'立涌联合工业区',x:22.4,y:77.2},
-      {name:'自由庭圆岛',x:27.8,y:83},
-      {name:'联合塔',x:34.5,y:90.2},
-      {name:'宝可梦好莱坞',x:26.1,y:66.1},
-      {name:'菊老大之路',x:23.4,y:45.5},
-      {name:'电气石洞穴',x:18.1,y:45.8},
-      {name:'罗斯山',x:24.6,y:28},
-      {name:'吹寄洞穴',x:21.7,y:34.5},
-      {name:'帆巴吊桥',x:36.7,y:54.6},
-      {name:'天堂之塔',x:9.8,y:32.8},
-      {name:'龙螺旋之塔',x:22.3,y:14},
-      {name:'雪花湿地',x:30.6,y:15.1},
-      {name:'圆筒桥',x:40,y:25.1},
-      {name:'村庄桥',x:58.9,y:23.5},
-      {name:'连入之森',x:50.5,y:41.1},
-      {name:'汇合大道',x:51.1,y:59.9},
-      {name:'古代城',x:43.1,y:60.8},
-      {name:'古代密道',x:37.4,y:68.6},
-      {name:'飞云下水道',x:60.5,y:86.8},
-      {name:'迷幻森林',x:58.7,y:50.7},
-      {name:'奇幻桥',x:67.2,y:53.6},
-      {name:'传送工厂',x:67.1,y:47},
-      {name:'天箭桥',x:66.7,y:74.3},
-      {name:'矢车森林',x:72.8,y:68.5},
-      {name:'泉源洞穴',x:78,y:57.4},
-      {name:'梦的遗址',x:92.4,y:62.2},
-      {name:'P2实验室',x:81,y:86},
-      {name:'丰饶之祠',x:76.5,y:46.6},
-      {name:'反转山',x:82.1,y:41.1},
-      {name:'陌生人之家',x:73.2,y:39.6},
-      {name:'海边洞穴',x:92.4,y:36.5},
-      {name:'海底遗迹',x:92.5,y:36.2},
-      {name:'海洋隧道',x:95.5,y:40.5},
-      {name:'涟漪湾',x:92.4,y:38.6},
-      {name:'巨人洞窟',x:85.7,y:19.4},
-      {name:'冠军之路',x:72.9,y:10.8},
-      {name:'N的城堡',x:67.7,y:3.8},
-      {name:'冠军之路',x:57.4,y:14.8},
-      {name:'修行岩屋',x:44.9,y:29.6},
-      {name:'荒野名胜区',x:46.6,y:61},
-      {name:'宝可梦世界锦标赛|冰冻仓库',x:28.6,y:59.4},
-      {name:'黑色摩天楼|白色树洞',x:71.8,y:51.2}
-    ]
-  },
-  {
-    name:'卡洛斯',
-    img:pkmRepoFirst(PKM_DATA_BASE+'UI/地图/卡洛斯.png'),
-    towns:[
-      {name:'比翼市',x:36.2,y:27.8},
-      {name:'古木镇',x:43.6,y:56.4},
-      {name:'密阿雷市',x:54.1,y:35.2},
-      {name:'娑罗市',x:16.8,y:41.6},
-      {name:'石香镇',x:11.3,y:48.5},
-      {name:'遥香市',x:20.7,y:56.2},
-      {name:'古香镇',x:25.3,y:71.6},
-      {name:'香薰市',x:54.1,y:15},
-      {name:'风絮镇',x:70.7,y:28.2},
-      {name:'宝可梦联盟',x:75.5,y:39.9},
-      {name:'百刻市',x:86.6,y:39.6},
-      {name:'连理镇',x:94.5,y:45.9},
-      {name:'映雪市',x:85,y:54.7},
-      {name:'白檀市',x:63.5,y:54.4},
-      {name:'名水镇',x:67,y:70.1},
-      {name:'朝香镇',x:67.3,y:78.5},
-      {name:'奇楠市',x:77.1,y:91}
-    ],
-    roads:[
-      {name:'1号道路',x:67.1,y:75.1},
-      {name:'2号道路',x:67,y:67.8},
-      {name:'3号道路',x:66.8,y:58.6},
-      {name:'4号道路',x:59.1,y:46.8},
-      {name:'5号道路',x:48.7,y:46.7},
-      {name:'6号道路',x:38.1,y:50.4},
-      {name:'7号道路',x:35.7,y:55.7},
-      {name:'8号道路',x:23.8,y:65.7},
-      {name:'9号道路',x:35.3,y:72.1},
-      {name:'10号道路',x:16.7,y:51.6},
-      {name:'11号道路',x:13.2,y:46.1},
-      {name:'12号道路',x:27.9,y:30.3},
-      {name:'13号道路',x:45.1,y:28.8},
-      {name:'14号道路',x:53.7,y:26.3},
-      {name:'15号道路',x:62,y:19.5},
-      {name:'16号道路',x:64.3,y:21.8},
-      {name:'17号道路',x:76.8,y:33},
-      {name:'18号道路',x:92.5,y:42},
-      {name:'19号道路',x:86.9,y:47.2},
-      {name:'20号道路',x:82.8,y:62.1},
-      {name:'21号道路',x:81.4,y:51.6},
-      {name:'22号道路',x:69.2,y:50.8}
-    ],
-    specials:[
-      {name:'海神之穴',x:27.1,y:17.3},
-      {name:'巴尔法姆香殿',x:33.2,y:46.1},
-      {name:'镜穴',x:13.8,y:44.6},
-      {name:'串连地洞',x:25,y:61.7},
-      {name:'闪耀洞窟',x:40.3,y:71},
-      {name:'卡洛斯发电厂',x:42.5,y:32.2},
-      {name:'精灵球工厂',x:54,y:8.5},
-      {name:'废弃酒店',x:67.7,y:22},
-      {name:'冰结洞窟',x:77.6,y:17.6},
-      {name:'终结洞窟',x:94.2,y:30.7},
-      {name:'宝可梦村',x:82.7,y:70.3},
-      {name:'冠军之路',x:75.9,y:50},
-      {name:'白檀森林',x:67.2,y:64.2},
-      {name:'虚空之室',x:72.9,y:58.2},
-      {name:'精练之塔',x:16.7,y:37.2},
-      {name:'蔚蓝湾',x:30.6,y:20.9},
-      {name:'逊毕勒城',x:44.1,y:53.6},
-      {name:'对战城塞',x:29.6,y:54},
-      {name:'无名洞窟',x:81.5,y:75.9},
-      {name:'树果园',x:38.6,y:57.7},
-      {name:'恐怖小屋',x:53.8,y:25}
-    ]
-  },
-  {
-    name:'伽勒尔',
-    img:pkmRepoFirst(PKM_DATA_BASE+'UI/地图/伽勒尔.png'),
-    towns:[
-      {name:'宫门市',x:51.8,y:17},
-      {name:'舞姿镇',x:35.7,y:29},
-      {name:'溯传镇',x:33.9,y:36.5},
-      {name:'拳关市',x:51.9,y:36.4},
-      {name:'战竞镇',x:69.1,y:30.6},
-      {name:'尖钉镇',x:75.8,y:37.3},
-      {name:'水舟镇',x:60,y:45.4},
-      {name:'草路镇',x:37.5,y:45.4},
-      {name:'机擎市',x:43.9,y:53.2},
-      {name:'木杆镇',x:49.8,y:84.8},
-      {name:'化朗镇',x:48.6,y:91.6}
-    ],
-    roads:[
-      {name:'10号道路',x:52.9,y:23.8},
-      {name:'6号道路',x:38.8,y:37.2},
-      {name:'7号道路',x:62.7,y:37},
-      {name:'8号道路',x:66.5,y:34},
-      {name:'9号道路',x:72.8,y:34},
-      {name:'5号道路',x:48.7,y:46},
-      {name:'4号道路',x:37.2,y:47.8},
-      {name:'3号道路',x:31.7,y:52.2},
-      {name:'2号道路',x:58.5,y:81.5},
-      {name:'1号道路',x:49.1,y:88.4}
-    ],
-    specials:[
-      {name:'对战塔',x:51.8,y:12.7},
-      {name:'迷光森林',x:38.6,y:31.3},
-      {name:'九路隧道',x:69.2,y:37.1},
-      {name:'拳关丘陵',x:53.8,y:40.4},
-      {name:'宝可梦寄放屋',x:46.8,y:45.4},
-      {name:'伽勒尔矿山',x:28,y:48.6},
-      {name:'逆鳞湖',x:43.5,y:40.1},
-      {name:'沙尖洼地',x:52.1,y:43.7},
-      {name:'巨人帽岩',x:47.6,y:41.3},
-      {name:'巨人镜池',x:59.3,y:41.6},
-      {name:'巨石原野',x:53.8,y:45.2},
-      {name:'桥间空地',x:51.8,y:49.7},
-      {name:'第二矿山',x:66.8,y:50.3},
-      {name:'机擎市郊外',x:54.3,y:52.7},
-      {name:'机擎河岸',x:52.3,y:56.7},
-      {name:'瞭望塔旧址',x:34.9,y:60.5},
-      {name:'牙牙湖',x:40.9,y:63.1},
-      {name:'美纳斯湖',x:51.2,y:64.3},
-      {name:'沐光森林',x:37.2,y:69.9},
-      {name:'照丽草原',x:42.2,y:67.8},
-      {name:'巨人凳岩',x:60.7,y:66.6},
-      {name:'集汇空地',x:45.4,y:73.1},
-      {name:'微寐森林',x:38.5,y:91.5},
-      {name:'铠之孤岛',x:97,y:35.9},
-      {name:'王冠雪原',x:50.6,y:98.2}
-    ]
-  },
-  {
-    name:'阿罗拉',
-    img:pkmRepoFirst(PKM_DATA_BASE+'UI/地图/阿罗拉.png'),
-    islands:[
-      {name:'美乐美乐岛',x:32.8,y:26.2,img:pkmRepoFirst(PKM_DATA_BASE+'UI/地图/美乐美乐岛.png'),
-        towns:[
-          {name:'利利小镇',x:32.9,y:27.8},
-          {name:'好奥乐市',x:27.9,y:71}
-        ],
-        roads:[
-          {name:'2号道路',x:10.2,y:46.8},
-          {name:'1号道路',x:48.3,y:31.9},
-          {name:'3号道路',x:41.1,y:12.9}
-        ],
-        specials:[
-          {name:'大浪海滩',x:5,y:32.5},
-          {name:'卡拉蔚湾',x:54.4,y:17.6},
-          {name:'美乐美乐海',x:83.9,y:45.5},
-          {name:'好奥乐墓园',x:21.2,y:51.7},
-          {name:'马哈罗山路',x:29.6,y:8.6},
-          {name:'十克拉山丘',x:64.1,y:46.5},
-          {name:'美乐美乐花园',x:35.5,y:9.1},
-          {name:'通海洞穴',x:32.4,y:14.5},
-          {name:'树果园',x:5.9,y:48.1},
-          {name:'葱郁洞窟',x:21.6,y:15.7},
-          {name:'战争遗迹',x:30.6,y:20.9},
-          {name:'海滩洞穴',x:1.6,y:48.9}
-        ]
-      },
-      {name:'乌拉乌拉岛',x:80.6,y:68.6,img:pkmRepoFirst(PKM_DATA_BASE+'UI/地图/乌拉乌拉岛.png'),
-        towns:[
-          {name:'马利埃静市',x:69.6,y:25.5},
-          {name:'卡璞村',x:58,y:39.4},
-          {name:'魄镇',x:31.6,y:9.5}
-        ],
-        roads:[
-          {name:'10号道路',x:52,y:17.7},
-          {name:'17号道路',x:35.7,y:18.1},
-          {name:'16号道路',x:28.8,y:30.4},
-          {name:'15号水路',x:21.8,y:70.3},
-          {name:'14号道路',x:48.2,y:81},
-          {name:'13号道路',x:71.3,y:52.6},
-          {name:'11号道路',x:73.9,y:33.4},
-          {name:'12号道路',x:83,y:45.3}
-        ],
-        specials:[
-          {name:'乌拉乌拉海滩',x:94.2,y:57.9},
-          {name:'辉克拉尼山',x:47.7,y:18},
-          {name:'拉纳基拉山',x:53,y:31.8},
-          {name:'哈伊纳沙漠',x:70.4,y:46.5},
-          {name:'乌拉乌拉花园',x:23.5,y:33.1},
-          {name:'以太之家',x:46.1,y:68},
-          {name:'辉克拉尼天文台',x:51.1,y:13.2},
-          {name:'超值超市旧址',x:62.6,y:81.6},
-          {name:'宝可梦联盟',x:52.6,y:26.6},
-          {name:'丰收遗迹',x:68.6,y:41.3}
-        ]
-      },
-      {name:'阿卡拉岛',x:61.5,y:30,img:pkmRepoFirst(PKM_DATA_BASE+'UI/地图/阿卡拉岛.png'),
-        towns:[
-          {name:'可霓可市',x:17,y:81},
-          {name:'欧哈纳镇',x:33.7,y:32.6},
-          {name:'慷待市',x:22.7,y:59.2},
-          {name:'豪诺豪诺度假地',x:64,y:56.1},
-          {name:'皇家大道',x:55.5,y:28.8}
-        ],
-        roads:[
-          {name:'8号道路',x:24.2,y:3.9},
-          {name:'5号道路',x:26.5,y:14.3},
-          {name:'7号道路',x:59.7,y:12.5},
-          {name:'4号道路',x:29.3,y:45.2},
-          {name:'6号道路',x:41.9,y:35.3},
-          {name:'9号道路',x:32.1,y:89.8}
-        ],
-        specials:[
-          {name:'慷待海滩',x:16.1,y:47.8},
-          {name:'豪诺豪诺海滩',x:76.1,y:59.8},
-          {name:'潺潺之丘',x:14.8,y:15.8},
-          {name:'维拉火山公园',x:64.2,y:18.2},
-          {name:'树荫丛林',x:32.1,y:10.7},
-          {name:'地鼠隧道',x:33.1,y:70.4},
-          {name:'回忆之丘',x:35.9,y:88.6},
-          {name:'生命遗迹',x:43.7,y:84.6},
-          {name:'皮卡丘山谷',x:26.9,y:43.9},
-          {name:'分隔岭隧道',x:55.1,y:7.3},
-          {name:'欧哈纳牧场',x:32,y:25.3}
-        ]
-      },
-      {name:'波尼岛',x:17.2,y:50.2,img:pkmRepoFirst(PKM_DATA_BASE+'UI/地图/波尼岛.png'),
-        towns:[
-          {name:'海洋居民之村',x:39.9,y:83.8}
-        ],
-        roads:[],
-        specials:[
-          {name:'波尼险路',x:39.4,y:20.5},
-          {name:'波尼海岸',x:80.9,y:30.6},
-          {name:'波尼旷野',x:57.4,y:33.6},
-          {name:'波尼树林',x:61.7,y:42},
-          {name:'波尼鼓浪岩岸',x:77.9,y:51.3},
-          {name:'波尼古道',x:54,y:52.5},
-          {name:'波尼原野',x:27.6,y:63.2},
-          {name:'波尼海滩',x:15.2,y:76.1},
-          {name:'椰蛋树岛',x:7.1,y:93.8},
-          {name:'波尼大峡谷',x:44,y:43.8},
-          {name:'日轮祭坛',x:21,y:30.1},
-          {name:'月轮祭坛',x:23.2,y:31.7},
-          {name:'彼岸遗迹',x:79.8,y:42.6},
-          {name:'波尼花园',x:74.5,y:30.8},
-          {name:'旷野洞窟',x:53.3,y:26.7},
-          {name:'终结洞窟',x:49.3,y:22.2},
-          {name:'对战树',x:26.1,y:16.8}
-        ]
-      },
-      {name:'以太乐园',x:44,y:45.1,img:'',
-        towns:[],
-        roads:[],
-        specials:[]
-      }
-    ]
-  },
-  {
-  name:'帕底亚',
-  img:pkmRepoFirst(PKM_DATA_BASE+'UI/地图/帕底亚.png'),
-  towns:[
-    {name:'小匙镇',x:47.9,y:91.7},
-    {name:'平碟镇',x:47.9,y:74.6},
-    {name:'桌台市',x:47.9,y:61.4},
-    {name:'深钵镇',x:78.4,y:56.2},
-    {name:'酿光市',x:83.1,y:44.3},
-    {name:'焙固镇',x:7.3,y:74.1},
-    {name:'圆模镇',x:26.5,y:59.9},
-    {name:'玻瓶市',x:30.3,y:35.1},
-    {name:'渍沁镇',x:14.8,y:32.2},
-    {name:'穴扎镇',x:66.1,y:37.5},
-    {name:'锦汇镇',x:40.6,y:30.7},
-    {name:'冰柜镇',x:54.1,y:4.5}
-  ],
-  roads:[
-    {name:'南第1区',x:57.5,y:77.7},
-    {name:'南第5区',x:68.5,y:71.5},
-    {name:'南第3区',x:66.1,y:61.6},
-    {name:'东第1区',x:71.8,y:47.4},
-    {name:'东第2区',x:76.5,y:46.1},
-    {name:'东第3区',x:72.8,y:36.9},
-    {name:'北第2区',x:84.7,y:23.9},
-    {name:'北第1区',x:69.1,y:17.3},
-    {name:'北第3区',x:44.6,y:8.7},
-    {name:'西第3区',x:40,y:26.1},
-    {name:'西第2区',x:22.3,y:28.9},
-    {name:'西第1区',x:16.4,y:50},
-    {name:'南第2区',x:31.1,y:58.8},
-    {name:'南第4区',x:33.6,y:75.5},
-    {name:'南第6区',x:16.2,y:72.4}
-  ],
-  specials:[
-    {name:'小匙小径',x:50.8,y:84.4},
-    {name:'朽木之祠',x:65.6,y:80.9},
-    {name:'火难之祠',x:77.9,y:21.4},
-    {name:'尘土之祠',x:25.8,y:14.5},
-    {name:'冻裂之祠',x:5.2,y:43.6},
-    {name:'橘子学院|葡萄学院',x:48.2,y:54.4},
-    {name:'第零区|零区研究所',x:49.1,y:42.6},
-    {name:'帕底亚巨坑',x:49.3,y:38.9},
-    {name:'南帕底亚海',x:47.8,y:98.4},
-    {name:'北帕底亚海',x:44.6,y:2.4},
-    {name:'西帕底亚海',x:2.8,y:28.9},
-    {name:'东帕底亚海',x:95.9,y:39.6},
-    {name:'印记树林',x:65.6,y:30.2},
-    {name:'霜抹山',x:55.2,y:14.3},
-    {name:'锦穴山道',x:55.6,y:26.6},
-    {name:'大锅湖',x:27.9,y:22.7},
-    {name:'锅巴林道',x:27.4,y:14.5},
-    {name:'烘烘沙漠',x:20.7,y:37.5},
-    {name:'宝可梦联盟',x:36.6,y:47.7},
-    {name:'烘固空洞',x:10.3,y:71.1}
-  ]
-  }
-
+var BAG_CATS=[
+{key:'回复',icon:'回复.png',color:'#ffa6c4'},
+{key:'精灵球',icon:'精灵球.png',color:'#ff9494'},
+{key:'战斗道具',icon:'战斗道具.png',color:'#ffb98b'},
+{key:'树果',icon:'树果.png',color:'#86c270'},
+{key:'道具',icon:'道具.png',color:'#94c8ff'},
+{key:'招式学习器',icon:'招式学习器.png',color:'#c49dff'},
+{key:'重要物品',icon:'重要物品.png',color:'#ffdf94'},
+{key:'食材',icon:'食材.png',color:'#7fd4c0'}
 ];
-var MAPS=pkmHudClone(MAPS_DATA);
+var BAG_CAT_KEYS=BAG_CATS.map(function(c){return c.key;});
+var ITEM_CAT_MAP={};
+var itemCatPromise=null;
+function ensureItemCategories(){if(itemCatPromise)return itemCatPromise;itemCatPromise=hudFetch(PKM_DATA_BASE+'item-categories.json').then(function(r){return r.ok?r.json():null;}).then(function(j){var m=(j&&j.data&&typeof j.data==='object'&&!Array.isArray(j.data))?j.data:((j&&typeof j==='object'&&!Array.isArray(j))?j:{});ITEM_CAT_MAP={};for(var k in m){if(m[k])ITEM_CAT_MAP[k]=String(m[k]);}try{refreshBagLists();}catch(e){}return ITEM_CAT_MAP;}).catch(function(){return ITEM_CAT_MAP;});return itemCatPromise;}
+function bagCatIconURL(c){return pkmRepoFirst(PKM_DATA_BASE+'UI/背包分类/'+c.icon);}
+function bagCatIcon(c){return '<img class="bag-cat-icon" src="'+esc(bagCatIconURL(c))+'" alt="'+esc(c.key)+'" title="'+esc(c.key)+'" style="width:20px;height:20px;object-fit:contain;display:block">';}
+function itemCategoryOf(name,aiType){var n=String(name||'').trim();if(!n)return '道具';if(/技能机|招式学习器|招式记录|秘传学习器/.test(n))return '招式学习器';var hw=normItemName(n);if(ITEM_CAT_MAP[hw])return ITEM_CAT_MAP[hw];if(ITEM_CAT_MAP[n])return ITEM_CAT_MAP[n];var t=String(aiType||'').trim();if(BAG_CAT_KEYS.indexOf(t)>=0)return t;return '道具';}
+function refreshBagLists(){var lists=document.querySelectorAll('#bag-list');for(var i=0;i<lists.length;i++){lists[i].innerHTML=bagItemsHTML();}if(pageOverlay){try{resolveItemImgs(pageOverlay);}catch(e){}}var app=document.getElementById(winMode==='0'?'pkm-hud-inline':'pkm-hud-slot');if(app){try{resolveItemImgs(app);}catch(e){}}}
+function bagCategories(){var cats=BAG_CATS.map(function(c){return {key:c.key,label:c.key,icon:c.icon,color:c.color,items:[]};});var bag=stat_data.背包||{};Object.keys(bag).forEach(function(name){var it=bag[name];if(!it||typeof it!=='object'||!(('类型')in it))return;var cat=itemCategoryOf(name,it.类型);var c=cats.find(function(x){return x.key===cat;});if(c)c.items.push({name:name,count:Number(it.数量)||0,icon:String(it.图标||'')});});return cats;}
+var activeBag='道具';
+var bagCatEdit=false;
+var bagDiscardMode=false;
+function bagItemsHTML(){var cats=bagCategories();var cur=cats.find(function(c){return c.key===activeBag;})||cats[0];if(!cur.items.length)return '<div class="empty">这里什么都没有...</div>';return cur.items.map(function(it){var isTM=(it.name.indexOf('技能机')>=0||it.name.indexOf('招式学习器')>=0||it.name.indexOf('招式记录')>=0||it.name.indexOf('秘传学习器')>=0);var tmMove=isTM?tmMoveName(it.name):'';var icon;if(tmMove){var iconSlug=String(it.icon||'').toLowerCase().replace(/\.(png|gif|jpe?g|webp)$/,'');icon=iconSlug?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(psItemUrl(iconSlug,'bag'))+'" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder tm-wiki" data-tm="'+esc(tmMove)+'">?</span></span>';}else if(isTM){var iconName=(itemIconName(it.name)||String(it.icon||'')).toLowerCase();if(iconName.slice(-4)==='.png'){iconName=iconName.slice(0,-4);}icon=iconName?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(psItemUrl(iconName,'bag'))+'" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder">?</span></span>';}else if(pkmItemSource==='serebii'){var ov2=bagPhoneIcon(it.name)||itemImgOf(it.name);if(ov2!==undefined){icon=ov2?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(ov2)+'" referrerpolicy="origin" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder">?</span></span>';}else{icon='<span class="item-icon-wrap"><span class="item-icon placeholder item-wiki" data-item="'+esc(it.name)+'" data-item-en="'+esc(it.icon||'')+'" data-cls="item-icon">?</span></span>';}}else{var ov=bagPhoneIcon(it.name)||itemImgOf(it.name);if(ov!==undefined){icon=ov?'<span class="item-icon-wrap"><img class="item-icon" src="'+esc(ov)+'" referrerpolicy="origin" onerror="itemImgErr(this)"></span>':'<span class="item-icon-wrap"><span class="item-icon placeholder">?</span></span>';}else{icon='<span class="item-icon-wrap"><span class="item-icon placeholder item-wiki" data-item="'+esc(it.name)+'" data-cls="item-icon">?</span></span>';}}var click=tmMove?' data-tm="'+esc(tmMove)+'" style="cursor:pointer"':((!isTM&&itemClickEnabled)?' data-bag-item="'+esc(it.name)+'" data-bag-icon="'+esc(it.icon||'')+'"':'');var actionBtn=bagCatEdit?'<button class="btn-small" data-bag-recat="'+esc(it.name)+'">改类</button>':(bagDiscardMode?'<button class="btn-small" data-bag-discard="'+esc(it.name)+'">丢弃</button>':'');
+return '<div class="item-entry"'+click+'>'+icon+'<span class="item-name">'+esc(it.name)+'</span><span class="item-count">×'+it.count+'</span>'+actionBtn+'</div>';}).join('');}
+function bagHTML(){var tabs=bagCategories().map(function(c){return '<button class="bag-tab'+(c.key===activeBag?' active':'')+'" data-bag="'+c.key+'" title="'+esc(c.key)+'">'+bagCatIcon(c)+'</button>';}).join('');var editBtn='<button class="btn-small" data-bag-cat-edit style="margin-left:6px;padding:2px 8px;font-size:.7rem;line-height:1.3;'+(bagCatEdit?'background:rgba(99,179,237,.32);border-color:rgba(99,179,237,.7);color:#fff;':'')+'">'+(bagCatEdit?'✓分类':'分类')+'</button><button class="btn-small" data-bag-discard-mode style="margin-left:4px;padding:2px 8px;font-size:.7rem;line-height:1.3;'+(bagDiscardMode?'background:rgba(224,80,80,.32);border-color:rgba(224,80,80,.7);color:#fff;':'')+'">'+(bagDiscardMode?'✓丢弃':'丢弃')+'</button>';return frame('背包'+editBtn,'<div class="bag-tabs">'+tabs+'</div><div class="bag-list" id="bag-list">'+bagItemsHTML()+'</div>');}
+
+var MAPS_DATA=[];
+var MAPS=[];
+var mapLocationsPromise=null;
+function ensureMapLocations(){if(mapLocationsPromise)return mapLocationsPromise;mapLocationsPromise=hudFetch(PKM_DATA_BASE+'map-locations.json').then(function(r){return r.ok?r.json():null;}).then(function(j){if(!j)return null;var maps=(j.maps&&Array.isArray(j.maps))?j.maps:[];maps.forEach(function(m){if(m&&m.img)m.img=pkmRepoFirst(PKM_DATA_BASE+m.img);if(m&&m.islands)m.islands.forEach(function(is){if(is&&is.img)is.img=pkmRepoFirst(PKM_DATA_BASE+is.img);});});MAPS_DATA=maps;MAPS=pkmHudClone(MAPS_DATA);LOC_REGION=(j.regions&&typeof j.regions==='object')?j.regions:{};try{pkmHudRenderCurrent();}catch(e){}return MAPS_DATA;}).catch(function(){return MAPS_DATA;});return mapLocationsPromise;}
 
 /* 地图图片直接走 URL + 浏览器 HTTP 缓存（图床返回 Cache-Control max-age=28 天），不再写入 IndexedDB，省约 30MB 空间与内存。 */
 function mapImgSrc(url){return url||'';}
@@ -4851,7 +4186,7 @@ function bindMapViewer(wrap){
 }
 
 
-var activeBox='1';var nearbyOpen=false;var foldState={};function foldHTML(key,label,fn){var open=!!foldState[key];return '<div class="fold-box"><div class="fold-head" data-fold="'+key+'"><span>'+label+'</span><span class="fold-arrow">'+(open?'▾':'▸')+'</span></div>'+(open?'<div class="fold-body">'+fn()+'</div>':'')+'</div>';}function bagPlainHTML(){var tabs=bagCategories().map(function(c){return '<button class="bag-tab'+(c.key===activeBag?' active':'')+'" data-bag="'+c.key+'">'+c.label+'</button>';}).join('');return '<div class="fold-inner"><div class="bag-tabs">'+tabs+'</div><div class="bag-list" id="bag-list">'+bagItemsHTML()+'</div></div>';}function relPlainHTML(){var rel=stat_data.人际关系||{};var ks=Object.keys(rel);if(!ks.length)return '<div class="fold-inner"><div class="empty">暂无</div></div>';return '<div class="fold-inner">'+ks.map(function(k){var val=rel[k];var score=(typeof val==='object'&&val)?num(val.好感度,0):(typeof val==='number'?val:0);return '<div class="rel-item"><span class="rel-name'+(relHasPortrait(k)?' rel-click" data-rel="'+esc(k)+'"':'"')+'>'+esc(k)+'</span><div class="rel-bar"><div class="rel-fill" style="width:'+Math.max(0,Math.min(100,score))+'%"></div></div><span class="rel-val">'+score+'</span></div>';}).join('')+'</div>';}
+var activeBox='1';var nearbyOpen=false;var foldState={};function foldHTML(key,label,fn){var open=!!foldState[key];return '<div class="fold-box"><div class="fold-head" data-fold="'+key+'"><span>'+label+'</span><span class="fold-arrow">'+(open?'▾':'▸')+'</span></div>'+(open?'<div class="fold-body">'+fn()+'</div>':'')+'</div>';}function bagPlainHTML(){var tabs=bagCategories().map(function(c){return '<button class="bag-tab'+(c.key===activeBag?' active':'')+'" data-bag="'+c.key+'" title="'+esc(c.key)+'">'+bagCatIcon(c)+'</button>';}).join('');return '<div class="fold-inner"><div class="bag-tabs">'+tabs+'</div><div class="bag-list" id="bag-list">'+bagItemsHTML()+'</div></div>';}function relPlainHTML(){var rel=stat_data.人际关系||{};var ks=Object.keys(rel);if(!ks.length)return '<div class="fold-inner"><div class="empty">暂无</div></div>';return '<div class="fold-inner">'+ks.map(function(k){var val=rel[k];var score=(typeof val==='object'&&val)?num(val.好感度,0):(typeof val==='number'?val:0);return '<div class="rel-item"><span class="rel-name'+(relHasPortrait(k)?' rel-click" data-rel="'+esc(k)+'"':'"')+'>'+esc(k)+'</span><div class="rel-bar"><div class="rel-fill" style="width:'+Math.max(0,Math.min(100,score))+'%"></div></div><span class="rel-val">'+score+'</span></div>';}).join('')+'</div>';}
 function quickHTML(){var Q=[['box','q-box',pkmRepoFirst(PKM_DATA_BASE+'UI/ui/盒子.png'),'盒子'],['pokedex','q-pokedex',pkmRepoFirst(PKM_DATA_BASE+'UI/ui/图鉴.png'),'图鉴'],['breeding','q-breeding',pkmRepoFirst(PKM_DATA_BASE+'UI/ui/繁育.png'),'繁育'],['typechart','q-typechart','⚡','克制表'],['map','q-map',pkmRepoFirst(PKM_DATA_BASE+'UI/ui/地图.png'),'地图']];return '<div class="quick-bar">'+Q.map(function(q){var sz=getIconSize(q[1]);var ic=q[2].indexOf('http')===0?'<img src="'+esc(q[2])+'" referrerpolicy="origin" style="width:'+sz+'px;height:'+sz+'px;object-fit:contain;image-rendering:pixelated">':'<span class="quick-emoji" style="font-size:'+sz+'px">'+q[2]+'</span>';return '<span class="menu-item quick-chip" data-page="'+q[0]+'">'+ic+q[3]+'</span>';}).join('')+'</div>';}function homeFoldHTML(){return foldHTML('bagfold','<span style="display:inline-flex;align-items:center;gap:4px"><img src="'+pkmRepoFirst(PKM_DATA_BASE+'UI/ui/背包.png')+'" style="width:18px;height:18px;object-fit:contain;image-rendering:pixelated">背包</span>',bagPlainHTML)+foldHTML('relfold','💬 人际关系 <span class="rel-settings" data-rel-settings title="给角色配图">📷</span>',relPlainHTML);}function boxHTML(){var box=stat_data.盒子||{};var keys=Object.keys(box);if(!keys.length)return frame('<span>盒子</span><button class="btn-small" data-box-new style="display:inline-block;vertical-align:middle;margin-left:6px;padding:2px 7px;font-size:.7rem;line-height:1.3">＋ 新建盒子</button>','<div class="empty">这里是空的</div>');if(!box[activeBox])activeBox=keys[0];var sel='<select class="box-select" id="box-select" style="float:left;margin-bottom:5px;min-width:0;width:auto;max-width:100%">'+keys.map(function(k){return '<option value="'+esc(k)+'"'+(k===activeBox?' selected':'')+'>'+esc(String(k).replace(/^盒子/,''))+'</option>';}).join('')+'</select>';var pokemons=box[activeBox]||{};var entries=Object.keys(pokemons).filter(function(s){var p=pokemons[s];return p&&p.名字&&p.名字!=='空';}).map(function(s){return{slot:s,data:pokemons[s]};});var cells=entries.length?entries.map(function(e){var p=e.data;var img=pkImgHTML(p.名字,p.图标,p.是否闪光,'box-icon');return '<div class="box-cell" data-box="'+esc(activeBox)+'" data-slot="'+esc(e.slot)+'">'+img+'<div class="box-name">'+esc(p.昵称||p.名字)+'</div></div>';}).join(''):'<div class="empty">这里是空的</div>';return frame('<span>盒子</span><button class="btn-small" data-box-new style="display:inline-block;vertical-align:middle;margin-left:6px;padding:2px 7px;font-size:.7rem;line-height:1.3">＋ 新建盒子</button><button class="btn-small" data-box-del style="display:inline-block;vertical-align:middle;margin-left:4px;padding:2px 7px;font-size:.7rem;line-height:1.3;background:rgba(150,50,50,.65);border-color:#c06060">删除盒子</button>',sel+'<div class="box-grid">'+cells+'</div>');}
 
 function tasksHTML(){var t=stat_data.任务||{},html='';if(t.主线)html+='<div class="task-item"><span class="task-tag main">主线</span><div class="task-text">'+esc(t.主线)+'</div></div>';if(t.传说)html+='<div class="task-item"><span class="task-tag legend">传说</span><div class="task-text">'+esc(t.传说).split(/[；;\n]/).join('<br>')+'</div></div>';if(t.支线)html+='<div class="task-item"><span class="task-tag random">支线</span><div class="task-text">'+esc(t.支线).split(/[；;\n]/).join('<br>')+'</div></div>';if(!html)html='<div class="empty">暂无任务</div>';return frameP('任务',html);}
@@ -5164,7 +4499,7 @@ d.cat=t2s(cleanText(grab(/\|damagecategory=([^\n|]+)/)||grab(/\|分类=([^\n|]+)
   return d;
 }
 /* ==== GitHub 仓库数据源（特性/招式/道具效果）==== */
-var PKM_DATA_REV='r20260930ad';
+var PKM_DATA_REV='r20260930am';
 var PKM_DB={abil:null,move:null,item:null,dex:null},PKM_DB_LOADING={abil:false,move:false,item:false,dex:false},PKM_DB_CBS={abil:[],move:[],item:[],dex:[]};
 function pkmDbBuildIndex(data,fields){
   var idx={};
@@ -5449,18 +4784,7 @@ function dexSearch(){
   dexTimer=hudScope.setTimeout(dexApplyFilter,150);
 }
 var REGIONAL_DEX={'关都':1,'城都':1,'丰缘':1,'神奥':1,'合众':1,'卡洛斯':1,'阿罗拉':1,'伽勒尔':1,'铠岛':1,'王冠雪原':1,'帕底亚':1,'北上乡':1,'蓝莓学院':1};
-var LOC_REGION={
-  '关都':'关都','城都':'城都','丰缘':'丰缘','神奥':'神奥','合众':'合众','卡洛斯':'卡洛斯','阿罗拉':'阿罗拉','伽勒尔':'伽勒尔','铠岛':'铠岛','铠之孤岛':'铠岛','王冠雪原':'王冠雪原','冠之雪原':'王冠雪原','帕底亚':'帕底亚','北上乡':'北上乡','北上':'北上乡','蓝莓学院':'蓝莓学院','蓝莓学园':'蓝莓学院',
-  '深灰市':'关都','尼比市':'关都','华蓝市':'关都','枯叶市':'关都','玉虹市':'关都','彩虹市':'关都','浅红市':'关都','金黄市':'关都','黄金市':'关都','红莲镇':'关都','红莲岛':'关都','常青市':'关都','常磐市':'关都','真新镇':'关都','紫苑镇':'关都','月见山':'关都','华蓝洞窟':'关都',
-  '桔梗市':'城都','桧皮镇':'城都','满金市':'城都','圆珠市':'城都','缘朱市':'城都','湛蓝市':'城都','浅葱市':'城都','卡吉镇':'城都','烟墨市':'城都','若叶镇':'城都','吉花市':'城都',
-  '卡那兹市':'丰缘','武斗镇':'丰缘','紫堇市':'丰缘','釜炎镇':'丰缘','橙华市':'丰缘','茵郁市':'丰缘','绿岭市':'丰缘','琉璃市':'丰缘','未白镇':'丰缘',
-  '黑金市':'神奥','百代市':'神奥','帷幕市':'神奥','野原市':'神奥','家缘市':'神奥','水脉市':'神奥','雪峰市':'神奥','滨海市':'神奥','双叶镇':'神奥','真砂镇':'神奥','祝庆市':'神奥','神和镇':'神奥','花苑镇':'神奥','随意镇':'神奥',
-  '三曜市':'合众','七宝市':'合众','立涌市':'合众','飞云市':'合众','雷文市':'合众','帆巴市':'合众','吹寄市':'合众','雪花市':'合众','双龙市':'合众','青海波市':'合众','鹿子镇':'合众',
-  '白檀市':'卡洛斯','遥香市':'卡洛斯','娑罗市':'卡洛斯','比翼市':'卡洛斯','香薰市':'卡洛斯','百刻市':'卡洛斯','映雪市':'卡洛斯','朝香镇':'卡洛斯','密阿雷市':'卡洛斯','古木镇':'卡洛斯','石香镇':'卡洛斯','古香镇':'卡洛斯','风絮镇':'卡洛斯','连理镇':'卡洛斯','名水镇':'卡洛斯','奇楠市':'卡洛斯',
-  '好奥乐市':'阿罗拉','利利小镇':'阿罗拉','美乐美乐岛':'阿罗拉','阿卡拉岛':'阿罗拉','乌拉乌拉岛':'阿罗拉','波尼岛':'阿罗拉',
-  '草路镇':'伽勒尔','水舟镇':'伽勒尔','机擎市':'伽勒尔','溯传镇':'伽勒尔','舞姿镇':'伽勒尔','战竞镇':'伽勒尔','尖钉镇':'伽勒尔','拳关市':'伽勒尔','化朗镇':'伽勒尔',
-  '圆模镇':'帕底亚','深钵镇':'帕底亚','玻瓶市':'帕底亚','酿光市':'帕底亚','锦汇市':'帕底亚','霜抹山':'帕底亚','冰柜镇':'帕底亚','焙固镇':'帕底亚','小匙镇':'帕底亚'
-};
+var LOC_REGION={};
 function regionFromLocation(loc){
   var s=t2s(String(loc||'').trim());
   if(!s)return '';
@@ -6038,10 +5362,12 @@ fetchPokemon(name,curPkmNdex,function(d){
   renderPkmForm(0);
 });
 }
-function t2s(s){
-  var m={'㑯':'㑔','㑳':'㑇','㑶':'㐹','㓨':'刾','㗲':'𠵾','㘚':'㘎','㜄':'㚯','㜏':'㛣','㜢':'𡞱','㠏':'㟆','㠣':'𫵷','㥮':'㤘','㩜':'㨫','㩳':'㧐','㩵':'擜','㺏':'𤠋','䁪':'𥇢','䁻':'䀥','䃮':'鿎','䊷':'䌶','䋙':'䌺','䋚':'䌻','䋹':'䌿','䋻':'䌾','䍦':'䍠','䎱':'䎬','䓣':'𬜯','䙡':'䙌','䜀':'䜧','䝼':'䞍','䡵':'𫟦','䥇':'䦂','䥑':'鿏','䥕':'𬭯','䥱':'䥾','䦛':'䦶','䦟':'䦷','䧢':'𨸟','䮄':'𫠊','䯀':'䯅','䰾':'鲃','䱷':'䲣','䱽':'䲝','䲁':'鳚','䲘':'鳤','䴉':'鹮','丟':'丢','並':'并','乾':'干','亂':'乱','亙':'亘','亞':'亚','佇':'伫','佈':'布','佔':'占','併':'并','來':'来','侖':'仑','侶':'侣','侷':'局','俁':'俣','係':'系','俔':'伣','俠':'侠','俥':'伡','俬':'私','倀':'伥','倆':'俩','倈':'俫','倉':'仓','個':'个','們':'们','倖':'幸','倫':'伦','倲':'㑈','偉':'伟','偑':'㐽','側':'侧','偵':'侦','偽':'伪','傌':'㐷','傑':'杰','傖':'伧','傘':'伞','備':'备','傢':'家','傭':'佣','傯':'偬','傳':'传','傴':'伛','債':'债','傷':'伤','傾':'倾','僂':'偻','僅':'仅','僉':'佥','僑':'侨','僕':'仆','僞':'伪','僤':'𫢸','僥':'侥','僨':'偾','僱':'雇','價':'价','儀':'仪','儁':'俊','儂':'侬','億':'亿','儈':'侩','儉':'俭','儎':'傤','儐':'傧','儔':'俦','儕':'侪','儘':'尽','償':'偿','優':'优','儲':'储','儷':'俪','儸':'㑩','儺':'傩','儻':'傥','儼':'俨','兇':'凶','兌':'兑','兒':'儿','兗':'兖','內':'内','兩':'两','冊':'册','冑':'胄','冪':'幂','凈':'净','凍':'冻','凜':'凛','凱':'凯','別':'别','刪':'删','剄':'刭','則':'则','剋':'克','剎':'刹','剗':'刬','剛':'刚','剝':'剥','剮':'剐','剴':'剀','創':'创','剷':'铲','劃':'划','劄':'札','劇':'剧','劉':'刘','劊':'刽','劌':'刿','劍':'剑','劏':'㓥','劑':'剂','劚':'㔉','勁':'劲','動':'动','務':'务','勛':'勋','勝':'胜','勞':'劳','勢':'势','勣':'𪟝','勩':'勚','勱':'劢','勳':'勋','勵':'励','勸':'劝','勻':'匀','匭':'匦','匯':'汇','匱':'匮','區':'区','協':'协','卹':'恤','卻':'却','卽':'即','厙':'厍','厠':'厕','厤':'历','厭':'厌','厲':'厉','厴':'厣','參':'参','叄':'叁','叢':'丛','吒':'咤','吳':'吴','吶':'呐','呂':'吕','咼':'呙','員':'员','唄':'呗','唸':'念','問':'问','啓':'启','啞':'哑','啟':'启','啢':'唡','喎':'㖞','喚':'唤','喪':'丧','喫':'吃','喬':'乔','單':'单','喲':'哟','嗆':'呛','嗇':'啬','嗊':'唝','嗎':'吗','嗚':'呜','嗩':'唢','嗰':'𠮶','嗶':'哔','嘆':'叹','嘍':'喽','嘓':'啯','嘔':'呕','嘖':'啧','嘗':'尝','嘜':'唛','嘩':'哗','嘮':'唠','嘯':'啸','嘰':'叽','嘵':'哓','嘸':'呒','嘽':'啴','噁':'恶','噓':'嘘','噚':'㖊','噝':'咝','噠':'哒','噥':'哝','噦':'哕','噯':'嗳','噲':'哙','噴':'喷','噸':'吨','噹':'当','嚀':'咛','嚇':'吓','嚌':'哜','嚐':'尝','嚕':'噜','嚙':'啮','嚥':'咽','嚦':'呖','嚧':'𠰷','嚨':'咙','嚮':'向','嚲':'亸','嚳':'喾','嚴':'严','嚶':'嘤','囀':'啭','囁':'嗫','囂':'嚣','囅':'冁','囈':'呓','囉':'啰','囌':'苏','囑':'嘱','囪':'囱','圇':'囵','國':'国','圍':'围','園':'园','圓':'圆','圖':'图','團':'团','垻':'坝','埡':'垭','埨':'𫭢','埰':'采','執':'执','堅':'坚','堊':'垩','堖':'垴','堝':'埚','堯':'尧','報':'报','場':'场','塊':'块','塋':'茔','塏':'垲','塒':'埘','塗':'涂','塚':'冢','塢':'坞','塤':'埙','塵':'尘','塸':'𫭟','塹':'堑','塿':'𪣻','墊':'垫','墜':'坠','墠':'𫮃','墮':'堕','墰':'坛','墳':'坟','墶':'垯','墻':'墙','墾':'垦','壇':'坛','壋':'垱','壎':'埙','壓':'压','壗':'𡋤','壘':'垒','壙':'圹','壚':'垆','壜':'坛','壞':'坏','壟':'垄','壠':'垅','壢':'坜','壩':'坝','壪':'塆','壯':'壮','壺':'壶','壼':'壸','壽':'寿','夠':'够','夢':'梦','夥':'伙','夾':'夹','奐':'奂','奧':'奥','奩':'奁','奪':'夺','奬':'奖','奮':'奋','奼':'姹','妝':'妆','姍':'姗','姦':'奸','娙':'𫰛','娛':'娱','婁':'娄','婦':'妇','婭':'娅','媧':'娲','媯':'妫','媰':'㛀','媼':'媪','媽':'妈','嫋':'袅','嫗':'妪','嫵':'妩','嫺':'娴','嫻':'娴','嫿':'婳','嬀':'妫','嬃':'媭','嬈':'娆','嬋':'婵','嬌':'娇','嬙':'嫱','嬡':'嫒','嬤':'嬷','嬪':'嫔','嬰':'婴','嬸':'婶','孃':'娘','孋':'㛤','孌':'娈','孫':'孙','學':'学','孻':'𡥧','孿':'孪','宮':'宫','寀':'采','寢':'寝','實':'实','寧':'宁','審':'审','寫':'写','寬':'宽','寵':'宠','寶':'宝','將':'将','專':'专','尋':'寻','對':'对','導':'导','尷':'尴','屆':'届','屍':'尸','屓':'屃','屜':'屉','屢':'屡','層':'层','屨':'屦','屬':'属','岡':'冈','峯':'峰','峴':'岘','島':'岛','峽':'峡','崍':'崃','崑':'昆','崗':'岗','崙':'仑','崢':'峥','崬':'岽','嵐':'岚','嵗':'岁','嵽':'𫶇','嵾':'㟥','嶁':'嵝','嶄':'崭','嶇':'岖','嶔':'嵚','嶗':'崂','嶠':'峤','嶢':'峣','嶧':'峄','嶨':'峃','嶮':'崄','嶸':'嵘','嶺':'岭','嶼':'屿','嶽':'岳','巋':'岿','巒':'峦','巔':'巅','巖':'岩','巘':'𪩘','巰':'巯','巹':'卺','帥':'帅','師':'师','帳':'帐','帶':'带','幀':'帧','幃':'帏','幓':'㡎','幗':'帼','幘':'帻','幟':'帜','幣':'币','幫':'帮','幬':'帱','幷':'并','幹':'干','幾':'几','庫':'库','廁':'厕','廂':'厢','廄':'厩','廈':'厦','廎':'庼','廕':'荫','廚':'厨','廝':'厮','廞':'𫷷','廟':'庙','廠':'厂','廡':'庑','廢':'废','廣':'广','廩':'廪','廬':'庐','廳':'厅','弒':'弑','弔':'吊','弳':'弪','張':'张','強':'强','彄':'𫸩','彆':'别','彈':'弹','彌':'弥','彎':'弯','彔':'录','彙':'汇','彠':'彟','彥':'彦','彫':'雕','彲':'彨','彿':'佛','後':'后','徑':'径','從':'从','徠':'徕','復':'复','徵':'征','徹':'彻','恆':'恒','恥':'耻','悅':'悦','悞':'悮','悵':'怅','悶':'闷','悽':'凄','惡':'恶','惱':'恼','惲':'恽','惻':'恻','愛':'爱','愜':'惬','愨':'悫','愴':'怆','愷':'恺','愾':'忾','慄':'栗','態':'态','慍':'愠','慘':'惨','慚':'惭','慟':'恸','慣':'惯','慤':'悫','慪':'怄','慫':'怂','慮':'虑','慳':'悭','慶':'庆','慺':'㥪','慼':'戚','慾':'欲','憂':'忧','憊':'惫','憐':'怜','憑':'凭','憒':'愦','憖':'慭','憚':'惮','憤':'愤','憫':'悯','憮':'怃','憲':'宪','憶':'忆','懇':'恳','應':'应','懌':'怿','懍':'懔','懞':'蒙','懟':'怼','懣':'懑','懤':'㤽','懨':'恹','懲':'惩','懶':'懒','懷':'怀','懸':'悬','懺':'忏','懼':'惧','懾':'慑','戀':'恋','戇':'戆','戔':'戋','戧':'戗','戩':'戬','戰':'战','戱':'戯','戲':'戏','戶':'户','扞':'捍','拋':'抛','拚':'拼','挩':'捝','挱':'挲','挾':'挟','捨':'舍','捫':'扪','捱':'挨','捲':'卷','掃':'扫','掄':'抡','掆':'㧏','掗':'挜','掙':'挣','掛':'挂','採':'采','揀':'拣','揚':'扬','換':'换','揮':'挥','揯':'搄','損':'损','搖':'摇','搗':'捣','搧':'扇','搵':'揾','搶':'抢','摑':'掴','摜':'掼','摟':'搂','摯':'挚','摳':'抠','摶':'抟','摺':'折','摻':'掺','撈':'捞','撏':'挦','撐':'撑','撓':'挠','撝':'㧑','撟':'挢','撣':'掸','撥':'拨','撫':'抚','撲':'扑','撳':'揿','撻':'挞','撾':'挝','撿':'捡','擁':'拥','擄':'掳','擇':'择','擊':'击','擋':'挡','擓':'㧟','擔':'担','據':'据','擠':'挤','擡':'抬','擣':'捣','擬':'拟','擯':'摈','擰':'拧','擱':'搁','擲':'掷','擴':'扩','擷':'撷','擺':'摆','擻':'擞','擼':'撸','擽':'㧰','擾':'扰','攄':'摅','攆':'撵','攏':'拢','攔':'拦','攖':'撄','攙':'搀','攛':'撺','攜':'携','攝':'摄','攢':'攒','攣':'挛','攤':'摊','攪':'搅','攬':'揽','敎':'教','敓':'敚','敗':'败','敘':'叙','敵':'敌','數':'数','斂':'敛','斃':'毙','斆':'敩','斕':'斓','斬':'斩','斷':'断','於':'于','旂':'旗','旣':'既','昇':'升','時':'时','晉':'晋','晛':'𬀪','晝':'昼','暈':'晕','暉':'晖','暐':'𬀩','暘':'旸','暢':'畅','暫':'暂','曄':'晔','曆':'历','曇':'昙','曉':'晓','曏':'向','曖':'暧','曠':'旷','曥':'𣆐','曨':'昽','曬':'晒','書':'书','會':'会','朥':'𦛨','朧':'胧','朮':'术','東':'东','枴':'拐','柵':'栅','柺':'拐','査':'查','桱':'𣐕','桿':'杆','梔':'栀','梘':'枧','梜':'𬂩','條':'条','梟':'枭','梲':'棁','棄':'弃','棊':'棋','棖':'枨','棗':'枣','棟':'栋','棡':'㭎','棧':'栈','棲':'栖','棶':'梾','椏':'桠','椲':'㭏','楊':'杨','楓':'枫','楨':'桢','業':'业','極':'极','榘':'矩','榦':'干','榪':'杩','榮':'荣','榲':'榅','榿':'桤','構':'构','槍':'枪','槓':'杠','槤':'梿','槧':'椠','槨':'椁','槮':'椮','槳':'桨','槶':'椢','槼':'椝','樁':'桩','樂':'乐','樅':'枞','樑':'梁','樓':'楼','標':'标','樞':'枢','樢':'㭤','樣':'样','樧':'榝','樫':'㭴','樳':'桪','樸':'朴','樹':'树','樺':'桦','樿':'椫','橈':'桡','橋':'桥','機':'机','橢':'椭','橫':'横','橯':'𣓿','檁':'檩','檉':'柽','檔':'档','檜':'桧','檟':'槚','檢':'检','檣':'樯','檮':'梼','檯':'台','檳':'槟','檸':'柠','檻':'槛','櫃':'柜','櫍':'𬃊','櫓':'橹','櫚':'榈','櫛':'栉','櫝':'椟','櫞':'橼','櫟':'栎','櫥':'橱','櫧':'槠','櫨':'栌','櫪':'枥','櫫':'橥','櫬':'榇','櫱':'蘖','櫳':'栊','櫸':'榉','櫻':'樱','欄':'栏','欅':'榉','權':'权','欏':'椤','欒':'栾','欓':'𣗋','欖':'榄','欞':'棂','欽':'钦','歎':'叹','歐':'欧','歟':'欤','歡':'欢','歲':'岁','歷':'历','歸':'归','歿':'殁','殘':'残','殞':'殒','殤':'殇','殨':'㱮','殫':'殚','殭':'僵','殮':'殓','殯':'殡','殰':'㱩','殲':'歼','殺':'杀','殻':'壳','殼':'壳','毀':'毁','毆':'殴','毿':'毵','氂':'牦','氈':'毡','氌':'氇','氣':'气','氫':'氢','氬':'氩','氳':'氲','氾':'泛','汎':'泛','汙':'污','決':'决','沒':'没','沖':'冲','況':'况','泝':'溯','洩':'泄','洶':'汹','浹':'浃','浿':'𬇙','涇':'泾','涗':'涚','涼':'凉','淒':'凄','淚':'泪','淥':'渌','淨':'净','淩':'凌','淪':'沦','淵':'渊','淶':'涞','淺':'浅','渙':'涣','減':'减','渢':'沨','渦':'涡','測':'测','渾':'浑','湊':'凑','湋':'𣲗','湞':'浈','湧':'涌','湯':'汤','溈':'沩','準':'准','溝':'沟','溫':'温','溮':'浉','溳':'涢','溼':'湿','滄':'沧','滅':'灭','滌':'涤','滎':'荥','滙':'汇','滬':'沪','滯':'滞','滲':'渗','滷':'卤','滸':'浒','滻':'浐','滾':'滚','滿':'满','漁':'渔','漊':'溇','漍':'𬇹','漚':'沤','漢':'汉','漣':'涟','漬':'渍','漲':'涨','漵':'溆','漸':'渐','漿':'浆','潁':'颍','潑':'泼','潔':'洁','潕':'𣲘','潙':'沩','潚':'㴋','潛':'潜','潤':'润','潯':'浔','潰':'溃','潷':'滗','潿':'涠','澀':'涩','澆':'浇','澇':'涝','澐':'沄','澗':'涧','澠':'渑','澤':'泽','澦':'滪','澩':'泶','澫':'𬇕','澮':'浍','澱':'淀','澾':'㳠','濁':'浊','濃':'浓','濄':'㳡','濆':'𣸣','濕':'湿','濘':'泞','濚':'溁','濛':'蒙','濜':'浕','濟':'济','濤':'涛','濧':'㳔','濫':'滥','濰':'潍','濱':'滨','濺':'溅','濼':'泺','濾':'滤','瀂':'澛','瀅':'滢','瀆':'渎','瀇':'㲿','瀉':'泻','瀋':'沈','瀏':'浏','瀕':'濒','瀘':'泸','瀝':'沥','瀟':'潇','瀠':'潆','瀦':'潴','瀧':'泷','瀨':'濑','瀰':'弥','瀲':'潋','瀾':'澜','灃':'沣','灄':'滠','灑':'洒','灒':'𪷽','灕':'漓','灘':'滩','灙':'𣺼','灝':'灏','灡':'㳕','灣':'湾','灤':'滦','灧':'滟','灩':'滟','災':'灾','為':'为','烏':'乌','烴':'烃','無':'无','煉':'炼','煒':'炜','煙':'烟','煢':'茕','煥':'焕','煩':'烦','煬':'炀','煱':'㶽','熅':'煴','熒':'荧','熗':'炝','熰':'𬉼','熱':'热','熲':'颎','熾':'炽','燀':'𬊤','燁':'烨','燈':'灯','燉':'炖','燒':'烧','燖':'𬊈','燙':'烫','燜':'焖','營':'营','燦':'灿','燬':'毁','燭':'烛','燴':'烩','燶':'㶶','燻':'熏','燼':'烬','燾':'焘','爍':'烁','爐':'炉','爛':'烂','爭':'争','爲':'为','爺':'爷','爾':'尔','牀':'床','牆':'墙','牘':'牍','牴':'抵','牽':'牵','犖':'荦','犛':'牦','犢':'犊','犧':'牺','狀':'状','狹':'狭','狽':'狈','猙':'狰','猶':'犹','猻':'狲','獁':'犸','獃':'呆','獄':'狱','獅':'狮','獎':'奖','獨':'独','獪':'狯','獫':'猃','獮':'狝','獰':'狞','獱':'㺍','獲':'获','獵':'猎','獷':'犷','獸':'兽','獺':'獭','獻':'献','獼':'猕','玀':'猡','現':'现','琱':'雕','琺':'珐','琿':'珲','瑋':'玮','瑒':'玚','瑣':'琐','瑤':'瑶','瑩':'莹','瑪':'玛','瑲':'玱','璉':'琏','璊':'𫞩','璕':'𬍤','璗':'𬍡','璡':'琎','璣':'玑','璦':'瑷','璫':'珰','璯':'㻅','環':'环','璵':'玙','璸':'瑸','璽':'玺','璿':'璇','瓅':'𬍛','瓊':'琼','瓏':'珑','瓔':'璎','瓚':'瓒','瓛':'𤩽','甌':'瓯','甕':'瓮','產':'产','産':'产','畝':'亩','畢':'毕','畫':'画','異':'异','畵':'画','當':'当','疇':'畴','疊':'叠','痙':'痉','痠':'酸','痾':'疴','瘂':'痖','瘋':'疯','瘍':'疡','瘓':'痪','瘞':'瘗','瘡':'疮','瘧':'疟','瘮':'瘆','瘲':'疭','瘺':'瘘','瘻':'瘘','療':'疗','癆':'痨','癇':'痫','癉':'瘅','癒':'愈','癘':'疠','癟':'瘪','癡':'痴','癢':'痒','癤':'疖','癥':'症','癧':'疬','癩':'癞','癬':'癣','癭':'瘿','癮':'瘾','癰':'痈','癱':'瘫','癲':'癫','發':'发','皁':'皂','皚':'皑','皰':'疱','皸':'皲','皺':'皱','盃':'杯','盜':'盗','盞':'盏','盡':'尽','監':'监','盤':'盘','盧':'卢','盪':'荡','眞':'真','眥':'眦','眾':'众','睍':'𪾢','睏':'困','睜':'睁','睞':'睐','瞘':'眍','瞜':'䁖','瞞':'瞒','瞶':'瞆','瞼':'睑','矇':'蒙','矓':'眬','矚':'瞩','矯':'矫','硃':'朱','硜':'硁','硤':'硖','硨':'砗','硯':'砚','碕':'埼','碩':'硕','碭':'砀','碸':'砜','確':'确','碼':'码','碽':'䂵','磑':'硙','磚':'砖','磠':'硵','磣':'碜','磧':'碛','磯':'矶','磽':'硗','磾':'䃅','礄':'硚','礎':'础','礐':'𬒈','礙':'碍','礦':'矿','礪':'砺','礫':'砾','礬':'矾','礱':'砻','祕':'秘','祿':'禄','禍':'祸','禎':'祯','禕':'祎','禡':'祃','禦':'御','禪':'禅','禮':'礼','禰':'祢','禱':'祷','禿':'秃','秈':'籼','稅':'税','稈':'秆','稏':'䅉','稜':'棱','稟':'禀','種':'种','稱':'称','穀':'谷','穇':'䅟','穌':'稣','積':'积','穎':'颖','穠':'秾','穡':'穑','穢':'秽','穩':'稳','穫':'获','穭':'穞','窩':'窝','窪':'洼','窮':'穷','窯':'窑','窵':'窎','窶':'窭','窺':'窥','竄':'窜','竅':'窍','竇':'窦','竈':'灶','竊':'窃','竪':'竖','競':'竞','筆':'笔','筍':'笋','筧':'笕','筴':'䇲','箇':'个','箋':'笺','箏':'筝','箚':'札','節':'节','範':'范','築':'筑','篋':'箧','篔':'筼','篠':'筿','篢':'𬕂','篤':'笃','篩':'筛','篳':'筚','篸':'𥮾','簀':'箦','簍':'篓','簑':'蓑','簞':'箪','簡':'简','簣':'篑','簫':'箫','簹':'筜','簽':'签','簾':'帘','籃':'篮','籅':'𥫣','籌':'筹','籔':'䉤','籙':'箓','籛':'篯','籜':'箨','籟':'籁','籠':'笼','籤':'签','籩':'笾','籪':'簖','籬':'篱','籮':'箩','籲':'吁','粵':'粤','糉':'粽','糝':'糁','糞':'粪','糧':'粮','糰':'团','糲':'粝','糴':'籴','糶':'粜','糹':'纟','糾':'纠','紀':'纪','紂':'纣','紃':'𬘓','約':'约','紅':'红','紆':'纡','紇':'纥','紈':'纨','紉':'纫','紋':'纹','納':'纳','紐':'纽','紓':'纾','純':'纯','紕':'纰','紖':'纼','紗':'纱','紘':'纮','紙':'纸','級':'级','紛':'纷','紜':'纭','紝':'纴','紞':'𬘘','紡':'纺','紬':'䌷','紮':'扎','細':'细','紱':'绂','紲':'绁','紳':'绅','紵':'纻','紹':'绍','紺':'绀','紼':'绋','紿':'绐','絀':'绌','終':'终','絃':'弦','組':'组','絅':'䌹','絆':'绊','絎':'绗','結':'结','絕':'绝','絛':'绦','絝':'绔','絞':'绞','絡':'络','絢':'绚','給':'给','絨':'绒','絪':'𬘡','絰':'绖','統':'统','絲':'丝','絳':'绛','絶':'绝','絹':'绢','絺':'𫄨','綁':'绑','綃':'绡','綄':'𬘫','綆':'绠','綈':'绨','綉':'绣','綌':'绤','綎':'𬘩','綏':'绥','綐':'䌼','綑':'捆','經':'经','綖':'𫄧','綜':'综','綝':'𬘭','綞':'缍','綠':'绿','綡':'𫟅','綢':'绸','綣':'绻','綧':'𬘯','綪':'𬘬','綫':'线','綬':'绶','維':'维','綯':'绹','綰':'绾','綱':'纲','網':'网','綳':'绷','綴':'缀','綵':'彩','綸':'纶','綹':'绺','綺':'绮','綻':'绽','綽':'绰','綾':'绫','綿':'绵','緄':'绲','緇':'缁','緊':'紧','緋':'绯','緑':'绿','緒':'绪','緓':'绬','緔':'绱','緗':'缃','緘':'缄','緙':'缂','線':'线','緝':'缉','緞':'缎','締':'缔','緡':'缗','緣':'缘','緦':'缌','編':'编','緩':'缓','緬':'缅','緯':'纬','緱':'缑','緲':'缈','練':'练','緶':'缏','緹':'缇','緻':'致','緼':'缊','縈':'萦','縉':'缙','縊':'缢','縋':'缒','縐':'绉','縑':'缣','縕':'缊','縗':'缞','縛':'缚','縝':'缜','縞':'缟','縟':'缛','縣':'县','縧':'绦','縫':'缝','縭':'缡','縮':'缩','縯':'𬙂','縱':'纵','縲':'缧','縳':'䌸','縴':'纤','縵':'缦','縶':'絷','縷':'缕','縹':'缥','總':'总','績':'绩','繃':'绷','繅':'缫','繆':'缪','繒':'缯','織':'织','繕':'缮','繚':'缭','繞':'绕','繡':'绣','繢':'缋','繩':'绳','繪':'绘','繫':'系','繭':'茧','繮':'缰','繯':'缳','繰':'缲','繳':'缴','繶':'𫄷','繸':'䍁','繹':'绎','繻':'𦈡','繼':'继','繽':'缤','繾':'缱','繿':'䍀','纁':'𫄸','纆':'𬙊','纇':'颣','纈':'缬','纊':'纩','續':'续','纍':'累','纏':'缠','纓':'缨','纔':'才','纕':'𬙋','纖':'纤','纘':'缵','纜':'缆','缽':'钵','罃':'䓨','罈':'坛','罌':'罂','罎':'坛','罰':'罚','罵':'骂','罷':'罢','羅':'罗','羆':'罴','羈':'羁','羋':'芈','羣':'群','羥':'羟','羨':'羡','義':'义','羶':'膻','習':'习','翫':'玩','翬':'翚','翹':'翘','翽':'翙','耬':'耧','耮':'耢','聖':'圣','聞':'闻','聯':'联','聰':'聪','聲':'声','聳':'耸','聵':'聩','聶':'聂','職':'职','聹':'聍','聽':'听','聾':'聋','肅':'肃','脅':'胁','脈':'脉','脛':'胫','脣':'唇','脩':'修','脫':'脱','脹':'胀','腎':'肾','腖':'胨','腡':'脶','腦':'脑','腫':'肿','腳':'脚','腸':'肠','膃':'腽','膕':'腘','膚':'肤','膞':'䏝','膠':'胶','膢':'𦝼','膩':'腻','膽':'胆','膾':'脍','膿':'脓','臉':'脸','臍':'脐','臏':'膑','臘':'腊','臚':'胪','臟':'脏','臠':'脔','臢':'臜','臥':'卧','臨':'临','臺':'台','與':'与','興':'兴','舉':'举','舊':'旧','舖':'铺','舘':'馆','艙':'舱','艤':'舣','艦':'舰','艫':'舻','艱':'艰','艷':'艳','芻':'刍','苧':'苎','茲':'兹','荊':'荆','莊':'庄','莖':'茎','莢':'荚','莧':'苋','華':'华','菴':'庵','菸':'烟','萇':'苌','萊':'莱','萬':'万','萴':'荝','萵':'莴','葉':'叶','葒':'荭','葤':'荮','葦':'苇','葯':'药','葷':'荤','蒍':'𫇭','蒐':'搜','蒓':'莼','蒔':'莳','蒕':'蒀','蒞':'莅','蒼':'苍','蓀':'荪','蓆':'席','蓋':'盖','蓮':'莲','蓯':'苁','蓴':'莼','蓽':'荜','蔄':'𬜬','蔔':'卜','蔘':'参','蔞':'蒌','蔣':'蒋','蔥':'葱','蔦':'茑','蔭':'荫','蔯':'𫈟','蔿':'𫇭','蕁':'荨','蕆':'蒇','蕎':'荞','蕒':'荬','蕓':'芸','蕕':'莸','蕘':'荛','蕢':'蒉','蕩':'荡','蕪':'芜','蕭':'萧','蕷':'蓣','薀':'蕰','薈':'荟','薊':'蓟','薌':'芗','薑':'姜','薔':'蔷','薘':'荙','薟':'莶','薦':'荐','薩':'萨','薴':'苧','薵':'䓓','薹':'苔','薺':'荠','藍':'蓝','藎':'荩','藝':'艺','藥':'药','藪':'薮','藭':'䓖','藴':'蕴','藶':'苈','藹':'蔼','藺':'蔺','蘀':'萚','蘄':'蕲','蘆':'芦','蘇':'苏','蘊':'蕴','蘋':'苹','蘚':'藓','蘞':'蔹','蘟':'𦻕','蘢':'茏','蘭':'兰','蘺':'蓠','蘿':'萝','虆':'蔂','虉':'𬟁','處':'处','虛':'虚','虜':'虏','號':'号','虧':'亏','虯':'虬','蛺':'蛱','蛻':'蜕','蜆':'蚬','蝀':'𬟽','蝕':'蚀','蝟':'猬','蝦':'虾','蝨':'虱','蝸':'蜗','螄':'蛳','螞':'蚂','螢':'萤','螮':'䗖','螻':'蝼','螿':'螀','蟄':'蛰','蟈':'蝈','蟎':'螨','蟣':'虮','蟬':'蝉','蟯':'蛲','蟲':'虫','蟳':'𫊻','蟶':'蛏','蟻':'蚁','蠁':'蚃','蠅':'蝇','蠆':'虿','蠍':'蝎','蠐':'蛴','蠑':'蝾','蠔':'蚝','蠟':'蜡','蠣':'蛎','蠨':'蟏','蠱':'蛊','蠶':'蚕','蠻':'蛮','衆':'众','衊':'蔑','術':'术','衕':'同','衚':'胡','衛':'卫','衝':'冲','袞':'衮','袷':'夹','裊':'袅','裏':'里','補':'补','裝':'装','裡':'里','製':'制','複':'复','褌':'裈','褘':'袆','褲':'裤','褳':'裢','褸':'褛','褻':'亵','襀':'𫌀','襇':'裥','襉':'裥','襏':'袯','襖':'袄','襝':'裣','襠':'裆','襤':'褴','襪':'袜','襬':'摆','襯':'衬','襲':'袭','襴':'襕','覈':'核','見':'见','覎':'觃','規':'规','覓':'觅','視':'视','覘':'觇','覡':'觋','覥':'觍','覦':'觎','親':'亲','覬':'觊','覯':'觏','覲':'觐','覷':'觑','覺':'觉','覽':'览','覿':'觌','觀':'观','觴':'觞','觶':'觯','觸':'触','訁':'讠','訂':'订','訃':'讣','計':'计','訊':'讯','訌':'讧','討':'讨','訏':'𬣙','訐':'讦','訒':'讱','訓':'训','訕':'讪','訖':'讫','託':'托','記':'记','訛':'讹','訝':'讶','訟':'讼','訢':'䜣','訣':'诀','訥':'讷','訩':'讻','訪':'访','設':'设','許':'许','訴':'诉','訶':'诃','診':'诊','註':'注','証':'证','詀':'𧮪','詁':'诂','詆':'诋','詎':'讵','詐':'诈','詒':'诒','詔':'诏','評':'评','詖':'诐','詗':'诇','詘':'诎','詛':'诅','詝':'𬣞','詞':'词','詠':'咏','詡':'诩','詢':'询','詣':'诣','試':'试','詩':'诗','詪':'𬣳','詫':'诧','詬':'诟','詭':'诡','詮':'诠','詰':'诘','話':'话','該':'该','詳':'详','詵':'诜','詷':'𫍣','詼':'诙','詿':'诖','誄':'诔','誅':'诛','誆':'诓','誇':'夸','誌':'志','認':'认','誑':'诳','誒':'诶','誕':'诞','誘':'诱','誚':'诮','語':'语','誠':'诚','誡':'诫','誣':'诬','誤':'误','誥':'诰','誦':'诵','誨':'诲','說':'说','説':'说','誰':'谁','課':'课','誶':'谇','誹':'诽','誼':'谊','誾':'訚','調':'调','諂':'谄','諄':'谆','談':'谈','諉':'诿','請':'请','諍':'诤','諏':'诹','諑':'诼','諒':'谅','諓':'𬣡','論':'论','諗':'谂','諛':'谀','諜':'谍','諝':'谞','諞':'谝','諟':'𬤊','諡':'谥','諢':'诨','諤':'谔','諦':'谛','諧':'谐','諫':'谏','諭':'谕','諮':'咨','諱':'讳','諲':'𬤇','諳':'谙','諴':'𫍯','諶':'谌','諷':'讽','諸':'诸','諺':'谚','諼':'谖','諾':'诺','謀':'谋','謁':'谒','謂':'谓','謄':'誊','謅':'诌','謊':'谎','謎':'谜','謏':'𫍲','謐':'谧','謔':'谑','謖':'谡','謗':'谤','謙':'谦','謚':'谥','講':'讲','謝':'谢','謠':'谣','謡':'谣','謨':'谟','謫':'谪','謬':'谬','謭':'谫','謳':'讴','謹':'谨','謾':'谩','譁':'哗','證':'证','譎':'谲','譏':'讥','譓':'𬤝','譖':'谮','識':'识','譙':'谯','譚':'谭','譜':'谱','譞':'𫍽','譟':'噪','譫':'谵','譭':'毁','譯':'译','議':'议','譴':'谴','護':'护','譸':'诪','譽':'誉','譾':'谫','讀':'读','讅':'谉','變':'变','讋':'詟','讌':'䜩','讎':'雠','讒':'谗','讓':'让','讕':'谰','讖':'谶','讚':'赞','讜':'谠','讞':'谳','谿':'溪','豈':'岂','豎':'竖','豐':'丰','豔':'艳','豬':'猪','豶':'豮','貍':'狸','貓':'猫','貙':'䝙','貝':'贝','貞':'贞','貟':'贠','負':'负','財':'财','貢':'贡','貧':'贫','貨':'货','販':'贩','貪':'贪','貫':'贯','責':'责','貯':'贮','貰':'贳','貲':'赀','貳':'贰','貴':'贵','貶':'贬','買':'买','貸':'贷','貺':'贶','費':'费','貼':'贴','貽':'贻','貿':'贸','賀':'贺','賁':'贲','賂':'赂','賃':'赁','賄':'贿','賅':'赅','資':'资','賈':'贾','賊':'贼','賑':'赈','賒':'赊','賓':'宾','賕':'赇','賙':'赒','賚':'赉','賜':'赐','賞':'赏','賠':'赔','賡':'赓','賢':'贤','賣':'卖','賤':'贱','賦':'赋','賧':'赕','質':'质','賫':'赍','賬':'账','賭':'赌','賰':'䞐','賴':'赖','賵':'赗','賺':'赚','賻':'赙','購':'购','賽':'赛','賾':'赜','贄':'贽','贅':'赘','贇':'赟','贈':'赠','贊':'赞','贋':'赝','贍':'赡','贏':'赢','贐':'赆','贓':'赃','贔':'赑','贖':'赎','贗':'赝','贛':'赣','贜':'赃','赬':'赪','趕':'赶','趙':'赵','趨':'趋','趲':'趱','跡':'迹','踐':'践','踰':'逾','踴':'踊','蹌':'跄','蹕':'跸','蹟':'迹','蹠':'跖','蹣':'蹒','蹤':'踪','蹺':'跷','躂':'跶','躉':'趸','躊':'踌','躋':'跻','躍':'跃','躎':'䟢','躑':'踯','躒':'跞','躓':'踬','躕':'蹰','躚':'跹','躡':'蹑','躥':'蹿','躦':'躜','躪':'躏','軀':'躯','車':'车','軋':'轧','軌':'轨','軍':'军','軏':'𫐄','軑':'轪','軒':'轩','軔':'轫','軛':'轭','軝':'𬨂','軟':'软','軤':'轷','軫':'轸','軲':'轱','軸':'轴','軹':'轵','軺':'轺','軻':'轲','軼':'轶','軾':'轼','較':'较','輄':'𨐈','輅':'辂','輇':'辁','輈':'辀','載':'载','輊':'轾','輋':'𪨶','輒':'辄','輓':'挽','輔':'辅','輕':'轻','輗':'𫐐','輛':'辆','輜':'辎','輝':'辉','輞':'辋','輟':'辍','輥':'辊','輦':'辇','輩':'辈','輪':'轮','輬':'辌','輮':'𫐓','輯':'辑','輳':'辏','輶':'𬨎','輸':'输','輻':'辐','輼':'辒','輾':'辗','輿':'舆','轀':'辒','轂':'毂','轄':'辖','轅':'辕','轆':'辘','轉':'转','轍':'辙','轎':'轿','轔':'辚','轟':'轰','轡':'辔','轢':'轹','轤':'轳','辦':'办','辭':'辞','辮':'辫','辯':'辩','農':'农','迴':'回','逕':'径','這':'这','連':'连','週':'周','進':'进','遊':'游','運':'运','過':'过','達':'达','違':'违','遙':'遥','遜':'逊','遞':'递','遠':'远','遡':'溯','適':'适','遲':'迟','遶':'绕','遷':'迁','選':'选','遺':'遗','遼':'辽','邁':'迈','還':'还','邇':'迩','邊':'边','邏':'逻','邐':'逦','郟':'郏','郵':'邮','鄆':'郓','鄉':'乡','鄒':'邹','鄔':'邬','鄖':'郧','鄧':'邓','鄩':'𬩽','鄭':'郑','鄰':'邻','鄲':'郸','鄳':'𫑡','鄴':'邺','鄶':'郐','鄺':'邝','酇':'酂','酈':'郦','醃':'腌','醖':'酝','醜':'丑','醞':'酝','醟':'蒏','醣':'糖','醫':'医','醬':'酱','醱':'酦','醲':'𬪩','釀':'酿','釁':'衅','釃':'酾','釅':'酽','釋':'释','釐':'厘','釒':'钅','釓':'钆','釔':'钇','釕':'钌','釗':'钊','釘':'钉','釙':'钋','針':'针','釣':'钓','釤':'钐','釦':'扣','釧':'钏','釩':'钒','釴':'𬬩','釵':'钗','釷':'钍','釹':'钕','釺':'钎','釾':'䥺','釿':'𬬱','鈀':'钯','鈁':'钫','鈃':'钘','鈄':'钭','鈅':'钥','鈇':'𫓧','鈈':'钚','鈉':'钠','鈍':'钝','鈎':'钩','鈐':'钤','鈑':'钣','鈒':'钑','鈔':'钞','鈕':'钮','鈞':'钧','鈡':'钟','鈣':'钙','鈥':'钬','鈦':'钛','鈧':'钪','鈮':'铌','鈰':'铈','鈳':'钶','鈴':'铃','鈷':'钴','鈸':'钹','鈹':'铍','鈺':'钰','鈽':'钸','鈾':'铀','鈿':'钿','鉀':'钾','鉅':'巨','鉆':'钻','鉈':'铊','鉉':'铉','鉊':'𬬿','鉋':'铇','鉍':'铋','鉑':'铂','鉕':'钷','鉗':'钳','鉚':'铆','鉛':'铅','鉝':'𫟷','鉞':'钺','鉢':'钵','鉤':'钩','鉥':'𬬸','鉦':'钲','鉧':'𬭁','鉬':'钼','鉭':'钽','鉮':'𬬹','鉳':'锫','鉶':'铏','鉷':'𫟹','鉸':'铰','鉺':'铒','鉻':'铬','鉿':'铪','銀':'银','銃':'铳','銅':'铜','銈':'𫓯','銍':'铚','銑':'铣','銓':'铨','銖':'铢','銘':'铭','銚':'铫','銛':'铦','銜':'衔','銠':'铑','銣':'铷','銥':'铱','銦':'铟','銨':'铵','銩':'铥','銪':'铕','銫':'铯','銬':'铐','銱':'铞','銳':'锐','銶':'𨱇','銷':'销','銹':'锈','銻':'锑','銼':'锉','鋁':'铝','鋃':'锒','鋅':'锌','鋇':'钡','鋌':'铤','鋏':'铗','鋐':'𬭎','鋒':'锋','鋗':'𫓶','鋙':'铻','鋝':'锊','鋟':'锓','鋣':'铘','鋤':'锄','鋥':'锃','鋦':'锔','鋨':'锇','鋩':'铓','鋪':'铺','鋭':'锐','鋮':'铖','鋯':'锆','鋰':'锂','鋱':'铽','鋶':'锍','鋸':'锯','鋹':'𬬮','鋼':'钢','錀':'𬬭','錁':'锞','錄':'录','錆':'锖','錇':'锫','錈':'锩','錏':'铔','錐':'锥','錒':'锕','錕':'锟','錘':'锤','錙':'锱','錚':'铮','錛':'锛','錞':'𬭚','錟':'锬','錠':'锭','錡':'锜','錢':'钱','錤':'𫓹','錦':'锦','錨':'锚','錩':'锠','錫':'锡','錮':'锢','錯':'错','録':'录','錳':'锰','錶':'表','錸':'铼','錼':'镎','鍀':'锝','鍁':'锨','鍃':'锪','鍅':'钫','鍆':'钔','鍇':'锴','鍈':'锳','鍊':'炼','鍋':'锅','鍍':'镀','鍔':'锷','鍘':'铡','鍚':'钖','鍛':'锻','鍠':'锽','鍤':'锸','鍥':'锲','鍩':'锘','鍬':'锹','鍭':'𬭤','鍰':'锾','鍵':'键','鍶':'锶','鍺':'锗','鍼':'针','鍾':'钟','鎂':'镁','鎄':'锿','鎇':'镅','鎊':'镑','鎌':'镰','鎓':'𬭩','鎔':'镕','鎖':'锁','鎘':'镉','鎚':'锤','鎛':'镈','鎝':'𨱏','鎡':'镃','鎢':'钨','鎣':'蓥','鎦':'镏','鎧':'铠','鎩':'铩','鎪':'锼','鎬':'镐','鎭':'镇','鎮':'镇','鎰':'镒','鎲':'镋','鎳':'镍','鎵':'镓','鎶':'鿔','鎸':'镌','鎿':'镎','鏃':'镞','鏇':'旋','鏈':'链','鏌':'镆','鏍':'镙','鏏':'𬭬','鏐':'镠','鏑':'镝','鏗':'铿','鏘':'锵','鏜':'镗','鏝':'镘','鏞':'镛','鏟':'铲','鏡':'镜','鏢':'镖','鏤':'镂','鏨':'錾','鏰':'镚','鏵':'铧','鏷':'镤','鏹':'镪','鏺':'䥽','鏻':'𬭸','鏽':'锈','鐃':'铙','鐄':'𨱑','鐇':'𫔍','鐋':'铴','鐍':'𫔎','鐏':'𨱔','鐐':'镣','鐒':'铹','鐓':'镦','鐔':'镡','鐘':'钟','鐙':'镫','鐝':'镢','鐠':'镨','鐥':'䦅','鐦':'锎','鐧':'锏','鐨':'镄','鐩':'𬭼','鐫':'镌','鐮':'镰','鐯':'䦃','鐲':'镯','鐳':'镭','鐵':'铁','鐶':'镮','鐸':'铎','鐺':'铛','鐽':'𫟼','鐿':'镱','鑄':'铸','鑊':'镬','鑌':'镔','鑑':'鉴','鑒':'鉴','鑔':'镲','鑕':'锧','鑞':'镴','鑠':'铄','鑣':'镳','鑥':'镥','鑪':'𬬻','鑭':'镧','鑰':'钥','鑱':'镵','鑲':'镶','鑷':'镊','鑹':'镩','鑼':'锣','鑽':'钻','鑾':'銮','鑿':'凿','钁':'镢','钂':'镋','長':'长','門':'门','閂':'闩','閃':'闪','閆':'闫','閈':'闬','閉':'闭','開':'开','閌':'闶','閎':'闳','閏':'闰','閑':'闲','閒':'闲','間':'间','閔':'闵','閘':'闸','閡':'阂','閣':'阁','閤':'合','閥':'阀','閨':'闺','閩':'闽','閫':'阃','閬':'阆','閭':'闾','閱':'阅','閲':'阅','閶':'阊','閹':'阉','閻':'阎','閼':'阏','閽':'阍','閾':'阈','閿':'阌','闃':'阒','闆':'板','闇':'暗','闈':'闱','闉':'𬮱','闊':'阔','闋':'阕','闌':'阑','闍':'阇','闐':'阗','闑':'𫔶','闒':'阘','闓':'闿','闔':'阖','闕':'阙','闖':'闯','關':'关','闞':'阚','闠':'阓','闡':'阐','闢':'辟','闤':'阛','闥':'闼','陘':'陉','陝':'陕','陞':'升','陣':'阵','陰':'阴','陳':'陈','陸':'陆','陽':'阳','隉':'陧','隊':'队','階':'阶','隑':'𬮿','隕':'陨','際':'际','隤':'𬯎','隨':'随','險':'险','隮':'𬯀','隯':'陦','隱':'隐','隴':'陇','隸':'隶','隻':'只','雋':'隽','雖':'虽','雙':'双','雛':'雏','雜':'杂','雞':'鸡','離':'离','難':'难','雲':'云','電':'电','霑':'沾','霢':'霡','霧':'雾','霽':'霁','靂':'雳','靄':'霭','靆':'叇','靈':'灵','靉':'叆','靚':'靓','靜':'静','靝':'靔','靦':'腼','靨':'靥','鞏':'巩','鞝':'绱','鞦':'秋','鞽':'鞒','韁':'缰','韃':'鞑','韆':'千','韉':'鞯','韋':'韦','韌':'韧','韍':'韨','韓':'韩','韙':'韪','韜':'韬','韝':'鞲','韞':'韫','韻':'韵','響':'响','頁':'页','頂':'顶','頃':'顷','項':'项','順':'顺','頇':'顸','須':'须','頊':'顼','頌':'颂','頍':'𫠆','頎':'颀','頏':'颃','預':'预','頑':'顽','頒':'颁','頓':'顿','頔':'𬱖','頗':'颇','領':'领','頜':'颌','頠':'𬱟','頡':'颉','頤':'颐','頦':'颏','頫':'𫖯','頭':'头','頮':'颒','頰':'颊','頲':'颋','頴':'颕','頵':'𫖳','頷':'颔','頸':'颈','頹':'颓','頻':'频','頽':'颓','顆':'颗','題':'题','額':'额','顎':'颚','顏':'颜','顒':'颙','顓':'颛','顔':'颜','顗':'𫖮','願':'愿','顙':'颡','顛':'颠','類':'类','顢':'颟','顥':'颢','顧':'顾','顫':'颤','顬':'颥','顯':'显','顰':'颦','顱':'颅','顳':'颞','顴':'颧','風':'风','颭':'飐','颮':'飑','颯':'飒','颱':'台','颳':'刮','颶':'飓','颸':'飔','颺':'飏','颻':'飖','颼':'飕','飀':'飗','飄':'飘','飆':'飙','飈':'飚','飛':'飞','飠':'饣','飢':'饥','飣':'饤','飥':'饦','飩':'饨','飪':'饪','飫':'饫','飭':'饬','飯':'饭','飱':'飧','飲':'饮','飴':'饴','飼':'饲','飽':'饱','飾':'饰','飿':'饳','餃':'饺','餄':'饸','餅':'饼','餈':'糍','餉':'饷','養':'养','餌':'饵','餎':'饹','餏':'饻','餑':'饽','餒':'馁','餓':'饿','餕':'馂','餖':'饾','餗':'𫗧','餘':'余','餚':'肴','餛':'馄','餜':'馃','餞':'饯','餡':'馅','館':'馆','餬':'糊','餱':'糇','餳':'饧','餵':'喂','餶':'馉','餷':'馇','餸':'𩠌','餺':'馎','餼':'饩','餾':'馏','餿':'馊','饁':'馌','饃':'馍','饅':'馒','饈':'馐','饉':'馑','饊':'馓','饋':'馈','饌':'馔','饑':'饥','饒':'饶','饗':'飨','饘':'𫗴','饜':'餍','饞':'馋','饢':'馕','馬':'马','馭':'驭','馮':'冯','馱':'驮','馳':'驰','馴':'驯','馹':'驲','馼':'𫘜','駁':'驳','駃':'𫘝','駉':'𬳶','駐':'驻','駑':'驽','駒':'驹','駓':'𬳵','駔':'驵','駕':'驾','駘':'骀','駙':'驸','駛':'驶','駝':'驼','駟':'驷','駡':'骂','駢':'骈','駪':'𬳽','駭':'骇','駰':'骃','駱':'骆','駸':'骎','駼':'𬳿','駿':'骏','騁':'骋','騂':'骍','騄':'𫘧','騅':'骓','騊':'𫘦','騌':'骔','騍':'骒','騎':'骑','騏':'骐','騑':'𬴂','騖':'骛','騙':'骗','騞':'𬴃','騠':'𫘨','騤':'骙','騧':'䯄','騫':'骞','騭':'骘','騮':'骝','騰':'腾','騱':'𫘬','騵':'𫘪','騶':'驺','騷':'骚','騸':'骟','騾':'骡','驀':'蓦','驁':'骜','驂':'骖','驃':'骠','驄':'骢','驅':'驱','驊':'骅','驌':'骕','驍':'骁','驎':'𬴊','驏':'骣','驕':'骄','驗':'验','驚':'惊','驛':'驿','驟':'骤','驢':'驴','驤':'骧','驥':'骥','驦':'骦','驪':'骊','驫':'骉','骯':'肮','髏':'髅','髒':'脏','體':'体','髕':'髌','髖':'髋','髮':'发','鬆':'松','鬍':'胡','鬚':'须','鬢':'鬓','鬥':'斗','鬧':'闹','鬨':'哄','鬩':'阋','鬮':'阄','鬱':'郁','鬹':'鬶','魎':'魉','魘':'魇','魚':'鱼','魛':'鱽','魟':'𫚉','魢':'鱾','魨':'鲀','魯':'鲁','魴':'鲂','魷':'鱿','魺':'鲄','鮀':'𬶍','鮁':'鲅','鮃':'鲆','鮆':'𫚖','鮈':'𬶋','鮊':'鲌','鮋':'鲉','鮍':'鲏','鮎':'鲇','鮐':'鲐','鮑':'鲍','鮒':'鲋','鮓':'鲊','鮚':'鲒','鮜':'鲘','鮝':'鲞','鮞':'鲕','鮟':'𩽾','鮠':'𬶏','鮡':'𬶐','鮣':'䲟','鮦':'鲖','鮪':'鲔','鮫':'鲛','鮭':'鲑','鮮':'鲜','鮳':'鲓','鮶':'鲪','鮸':'𩾃','鮺':'鲝','鯀':'鲧','鯁':'鲠','鯇':'鲩','鯉':'鲤','鯊':'鲨','鯒':'鲬','鯔':'鲻','鯕':'鲯','鯖':'鲭','鯗':'鲞','鯛':'鲷','鯝':'鲴','鯡':'鲱','鯢':'鲵','鯤':'鲲','鯧':'鲳','鯨':'鲸','鯪':'鲮','鯫':'鲰','鯰':'鲶','鯴':'鲺','鯷':'鳀','鯻':'𬶟','鯽':'鲫','鯿':'鳊','鰁':'鳈','鰂':'鲗','鰃':'鳂','鰆':'䲠','鰈':'鲽','鰉':'鳇','鰊':'𬶠','鰌':'䲡','鰍':'鳅','鰏':'鲾','鰐':'鳄','鰒':'鳆','鰓':'鳃','鰛':'鳁','鰜':'鳒','鰟':'鳑','鰠':'鳋','鰣':'鲥','鰤':'𫚕','鰥':'鳏','鰧':'䲢','鰨':'鳎','鰩':'鳐','鰭':'鳍','鰮':'鳁','鰱':'鲢','鰲':'鳌','鰳':'鳓','鰵':'鳘','鰶':'𬶭','鰷':'鲦','鰹':'鲣','鰺':'鲹','鰻':'鳗','鰼':'鳛','鰾':'鳔','鱀':'𬶨','鱂':'鳉','鱅':'鳙','鱇':'𩾌','鱈':'鳕','鱉':'鳖','鱒':'鳟','鱔':'鳝','鱖':'鳜','鱗':'鳞','鱘':'鲟','鱚':'𬶮','鱝':'鲼','鱟':'鲎','鱠':'鲙','鱣':'鳣','鱤':'鳡','鱧':'鳢','鱨':'鲿','鱭':'鲚','鱯':'鳠','鱲':'𫚭','鱷':'鳄','鱸':'鲈','鱺':'鲡','鳥':'鸟','鳧':'凫','鳩':'鸠','鳬':'凫','鳲':'鸤','鳳':'凤','鳴':'鸣','鳶':'鸢','鳾':'䴓','鴆':'鸩','鴇':'鸨','鴉':'鸦','鴒':'鸰','鴕':'鸵','鴛':'鸳','鴝':'鸲','鴞':'鸮','鴟':'鸱','鴣':'鸪','鴦':'鸯','鴨':'鸭','鴯':'鸸','鴰':'鸹','鴴':'鸻','鴷':'䴕','鴻':'鸿','鴿':'鸽','鵁':'䴔','鵂':'鸺','鵃':'鸼','鵏':'𬷕','鵐':'鹀','鵑':'鹃','鵒':'鹆','鵓':'鹁','鵜':'鹈','鵝':'鹅','鵟':'𫛭','鵠':'鹄','鵡':'鹉','鵪':'鹌','鵬':'鹏','鵮':'鹐','鵯':'鹎','鵰':'雕','鵲':'鹊','鵷':'鹓','鵾':'鹍','鶄':'䴖','鶇':'鸫','鶉':'鹑','鶊':'鹒','鶓':'鹋','鶖':'鹙','鶘':'鹕','鶚':'鹗','鶠':'𬸘','鶡':'鹖','鶥':'鹛','鶩':'鹜','鶪':'䴗','鶬':'鸧','鶯':'莺','鶱':'𬸣','鶲':'鹟','鶴':'鹤','鶹':'鹠','鶺':'鹡','鶻':'鹘','鶼':'鹣','鶿':'鹚','鷀':'鹚','鷁':'鹢','鷂':'鹞','鷄':'鸡','鷉':'䴘','鷊':'鹝','鷓':'鹧','鷖':'鹥','鷗':'鸥','鷙':'鸷','鷚':'鹨','鷟':'𬸦','鷥':'鸶','鷦':'鹪','鷫':'鹔','鷭':'𬸪','鷯':'鹩','鷲':'鹫','鷳':'鹇','鷴':'鹇','鷸':'鹬','鷹':'鹰','鷺':'鹭','鷽':'鸴','鸂':'㶉','鸇':'鹯','鸊':'䴙','鸌':'鹱','鸏':'鹲','鸑':'𬸚','鸕':'鸬','鸘':'鹴','鸚':'鹦','鸛':'鹳','鸝':'鹂','鸞':'鸾','鹵':'卤','鹹':'咸','鹺':'鹾','鹼':'碱','鹽':'盐','麗':'丽','麥':'麦','麩':'麸','麪':'面','麫':'面','麬':'𤿲','麯':'曲','麳':'𪎌','麴':'曲','麵':'面','麼':'么','麽':'么','黃':'黄','黌':'黉','點':'点','黨':'党','黲':'黪','黴':'霉','黶':'黡','黷':'黩','黽':'黾','黿':'鼋','鼂':'鼌','鼉':'鼍','鼕':'冬','鼴':'鼹','齊':'齐','齋':'斋','齎':'赍','齏':'齑','齒':'齿','齔':'龀','齕':'龁','齗':'龂','齘':'𬹼','齙':'龅','齜':'龇','齟':'龃','齠':'龆','齡':'龄','齣':'出','齦':'龈','齧':'啮','齪':'龊','齬':'龉','齮':'𬺈','齯':'𫠜','齲':'龋','齶':'腭','齷':'龌','齼':'𬺓','龍':'龙','龎':'厐','龐':'庞','龑':'䶮','龔':'龚','龕':'龛','龜':'龟','鿁':'䜤','鿓':'鿒','𠁞':'𠀾','𠗣':'㓆','𡃕':'𠴛','𡅏':'𠲥','𡑍':'𫭼','𡑭':'𡋗','𡓾':'𡋀','𡔖':'𡍣','𡞵':'㛟','𡠹':'㛿','𡢃':'㛠','𡮉':'𡭜','𡮣':'𡭬','𡳳':'𡳃','𡻕':'岁','𡾱':'㟜','𢣚':'𢘝','𢶫':'𢫞','𢹿':'𢬦','𣈶':'暅','𣙎':'㭣','𣞻':'𣘓','𣠩':'𣞎','𣠲':'𣑶','𣯶':'毶','𣾷':'㳢','𤁣':'𣺽','𤅶':'𣷷','𤓩':'𤊰','𤪺':'㻘','𤫩':'㻏','𤳸':'𤳄','𥊝':'𥅿','𥌃':'𥅘','𥕥':'𥐰','𥖅':'𥐯','𥗽':'𬒗','𥢢':'䅪','𥸠':'𥮋','𥼽':'𥹥','𦘧':'𡳒','𦣎':'𦟗','𦪙':'䑽','𧜗':'䘞','𧜵':'䙊','𧝞':'䘛','𧟀':'𧝧','𧩙':'䜥','𧵳':'䞌','𧶧':'䞎','𨊰':'䢀','𨊸':'䢁','𨋢':'䢂','𨤻':'𨤰','𨦫':'䦀','𨧀':'𬭊','𨧜':'䦁','𨨏':'𬭛','𨭆':'𬭶','𨭎':'𬭳','𨯅':'䥿','𩞯':'䭪','𩠴':'𩠠','𩣑':'䯃','𩶘':'䲞','𰻞':'𰻝'};
-  return String(s||'').split('').map(function(c){return m[c]||c;}).join('');
-}
+var T2S_MAP={};
+var t2sReady=false;
+var t2sPromise=null;
+function ensureT2S(){if(t2sPromise)return t2sPromise;t2sPromise=hudFetch(PKM_DATA_BASE+'t2s-map.json').then(function(r){return r.ok?r.json():null;}).then(function(j){var m=(j&&j.data&&typeof j.data==='object'&&!Array.isArray(j.data))?j.data:((j&&typeof j==='object'&&!Array.isArray(j))?j:{});T2S_MAP={};for(var k in m){if(m[k])T2S_MAP[k]=String(m[k]);}t2sReady=true;try{pkmHudRenderCurrent();}catch(e){}return T2S_MAP;}).catch(function(){return T2S_MAP;});return t2sPromise;}
+function t2s(s){if(!t2sReady)return String(s||'');return String(s||'').split('').map(function(c){return T2S_MAP[c]||c;}).join('');}
+
 var abiCache={},abiLoading={};
 function parseAbi(wt,html){
   var d={name:'',enname:'',text:'',detail:''};
@@ -6611,6 +5937,35 @@ function openPhoneCasePicker(){
     overlay.innerHTML='<div class="modal"><div class="modal-head"><div class="modal-name">选择手机壳</div><button class="close" data-close>✕</button></div><div class="modal-body"><div class="phone-grid">'+grid+'</div></div></div>';
     overlay.classList.add('open');
   });
+}
+function openBagRecatPicker(name){
+  name=String(name==null?'':name);
+  if(!name)return;
+  var cur=itemCategoryOf(name,(stat_data.背包&&stat_data.背包[name]&&stat_data.背包[name].类型)||'');
+  var grid=BAG_CATS.map(function(c){
+    var on=(c.key===cur)?' on':'';
+    return '<div class="phone-cell'+on+'" data-bag-recat-pick="'+esc(c.key)+'" data-bag-recat-name="'+esc(name)+'"><img src="'+esc(bagCatIconURL(c))+'" onerror="itemImgErr(this)"><span class="phone-cell-name">'+esc(c.key)+'</span></div>';
+  }).join('');
+  clearBack();
+  overlay.innerHTML='<div class="modal"><div class="modal-head"><div class="modal-name">改分类：'+esc(name)+'</div><button class="close" data-close>✕</button></div><div class="modal-body"><div class="phone-grid">'+grid+'</div></div></div>';
+  overlay.classList.add('open');
+}
+function pickBagCat(name,cat){
+  name=String(name==null?'':name);
+  var bag=stat_data.背包=stat_data.背包||{};
+  var it=bag[name];
+  if(!it||typeof it!=='object'){hudMsg('找不到该道具');return;}
+  it.类型=String(cat||'');
+  var done=function(){
+    overlay.classList.remove('open');
+    clearBack();
+    if(pageOverlay&&pageOverlay.classList.contains('open')){
+      var list=pageOverlay.querySelector('#bag-list');
+      if(list){list.innerHTML=bagItemsHTML();resolveItemImgs(pageOverlay);}
+    }
+    pkmHudRenderCurrent();
+  };
+  pkmHudPersistStatData().then(done,done);
 }
 function pickPhoneCase(name){
   name=String(name==null?'':name);
@@ -8128,6 +7483,11 @@ pageOverlay.querySelectorAll('.nearby-cell[data-nearby]').forEach(function(el){e
   pageOverlay.querySelectorAll('.bag-tab[data-bag]').forEach(function(btn){btn.addEventListener('click',function(){activeBag=btn.getAttribute('data-bag');pageOverlay.querySelectorAll('.bag-tab').forEach(function(b){b.classList.toggle('active',b===btn);});var list=pageOverlay.querySelector('#bag-list');if(list){list.innerHTML=bagItemsHTML();resolveItemImgs(pageOverlay);}});});
   pageOverlay.querySelectorAll('.badge-tab[data-bregion]').forEach(function(b){b.addEventListener('click',function(){badgeSel=b.getAttribute('data-bregion');try{localStorage.setItem('pk_badge_sel',JSON.stringify({region:badgeSel}));}catch(e){}var pg=pageOverlay.querySelector('.page');var oldTabs=pageOverlay.querySelector('.badge-tabs');var pageTop=pg?pg.scrollTop:0;var tabsLeft=oldTabs?oldTabs.scrollLeft:0;pageOverlay.querySelector('.page-body').innerHTML=badgePageHTML();bindPageInteractions();if(pg){pg.scrollTop=pageTop;}var newTabs=pageOverlay.querySelector('.badge-tabs');if(newTabs){newTabs.scrollLeft=tabsLeft;}});});
   pageOverlay.querySelectorAll('[data-bag-discard]').forEach(function(btn){btn.addEventListener('click',function(e){e.stopPropagation();discardBagItemAsk(btn.getAttribute('data-bag-discard'));});});
+  var bce=pageOverlay.querySelector('[data-bag-cat-edit]');
+  if(bce){bce.addEventListener('click',function(e){e.stopPropagation();bagCatEdit=!bagCatEdit;bagDiscardMode=false;pageOverlay.querySelector('.page-body').innerHTML=bagHTML();bindPageInteractions();resolveItemImgs(pageOverlay);});}
+  var bdm=pageOverlay.querySelector('[data-bag-discard-mode]');
+  if(bdm){bdm.addEventListener('click',function(e){e.stopPropagation();bagDiscardMode=!bagDiscardMode;bagCatEdit=false;pageOverlay.querySelector('.page-body').innerHTML=bagHTML();bindPageInteractions();resolveItemImgs(pageOverlay);});}
+  pageOverlay.querySelectorAll('[data-bag-recat]').forEach(function(btn){btn.addEventListener('click',function(e){e.stopPropagation();openBagRecatPicker(btn.getAttribute('data-bag-recat'));});});
 var bn=pageOverlay.querySelector('[data-box-new]');
 if(bn){bn.addEventListener('click',function(e){e.stopPropagation();openNewBoxModal();});}
 var bd=pageOverlay.querySelector('[data-box-del]');
@@ -8750,6 +8110,7 @@ function hudBindRootDelegation(app){
     var rel=x('[data-rel]');if(rel){e.stopPropagation();showRelPortrait(rel.getAttribute('data-rel'));return;}
     var bag=x('#home-fold .bag-tab[data-bag]');if(bag){activeBag=bag.getAttribute('data-bag');var home2=app.querySelector('#home-fold');if(home2){home2.querySelectorAll('.bag-tab').forEach(function(b){b.classList.toggle('active',b===bag);});var list=home2.querySelector('#bag-list');if(list){list.innerHTML=bagItemsHTML();resolveItemImgs(home2);}}resizeFrame();return;}
     var bd=x('#home-fold [data-bag-discard]');if(bd){e.stopPropagation();discardBagItemAsk(bd.getAttribute('data-bag-discard'));return;}
+    var br=x('#home-fold [data-bag-recat]');if(br){e.stopPropagation();openBagRecatPicker(br.getAttribute('data-bag-recat'));return;}
     var tmv=x('#home-fold .item-entry[data-tm]');if(tmv){e.stopPropagation();showMoveInfo(tmv.getAttribute('data-tm'));return;}
     var item=x('#home-fold .item-entry[data-item]');if(item){e.stopPropagation();if(itemClickEnabled)showItemInfo(item.getAttribute('data-item'),false,item.getAttribute('data-item-en')||'');return;}
     var bc=x('#badge-cycle');if(bc){badgeClick(e);return;}
@@ -8776,9 +8137,14 @@ function render(){
   '</div>'+
   '<div class="tab-bar"><button class="tab-btn active" data-tab="1">主页</button><button class="tab-btn" data-tab="2">世界</button><button class="tab-btn" data-tab="3">战场</button><button class="tab-btn" data-tab="4">菜单</button></div></div>';
 hudBindRefreshProgrammaticGuard(app);
+ensureT2S();
 ensureItemAlias();
 ensureMoveAlias();
 ensurePortraits();
+ensureItemCategories();
+ensureNearbySpecial();
+ensureBadgeRules();
+ensureMapLocations();
 
 resolvePkmImgs(app);
 resolveItemImgs(app);
@@ -8842,6 +8208,7 @@ var rcl=e.target.closest('[data-relset-clear]');if(rcl){e.stopPropagation();var 
 var rdl=e.target.closest('[data-reldel]');if(rdl){e.stopPropagation();deleteRelAsk(rdl.getAttribute('data-reldel'));return;}
 var pcb=e.target.closest('[data-phone-case-btn]');if(pcb){e.stopPropagation();openPhoneCasePicker();return;}
 var pcp=e.target.closest('[data-phone-pick]');if(pcp){e.stopPropagation();pickPhoneCase(pcp.getAttribute('data-phone-pick')||'');return;}
+var brp=e.target.closest('[data-bag-recat-pick]');if(brp){e.stopPropagation();pickBagCat(brp.getAttribute('data-bag-recat-name'),brp.getAttribute('data-bag-recat-pick'));return;}
 var itm=e.target.closest('[data-item]');if(itm){e.stopPropagation();if(itemClickEnabled)showItemInfo(itm.getAttribute('data-item'),true,itm.getAttribute('data-item-en')||'');return;}
     if(e.target===overlay){if(e.cancelable)e.preventDefault();hudArmGestureShield(overlay,750);diyVisionCancel();var _pb2=popBack();if(_pb2){overlay.innerHTML=_pb2;}else{overlay.classList.remove('open');}return;}
         if(e.target.closest('[data-close]')){if(e.cancelable)e.preventDefault();hudArmGestureShield(overlay,750);diyVisionCancel();overlay.classList.remove('open');clearBack();return;}

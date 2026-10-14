@@ -44,7 +44,9 @@ function kojiBagClick(e){
   if(typeof resolveBagItemClick!=='function')return false;
   var target=e.target&&e.target.closest?e.target:null;
   var row=target&&target.closest('.item-entry');
-  if(!row||target.closest('[data-bag-discard],[data-tm]'))return false;
+  var recat=target&&target.closest('[data-bag-recat]');
+  if(row&&recat&&typeof pickBagCat==='function'){e.preventDefault();e.stopImmediatePropagation();openBagRecatPicker(recat.getAttribute('data-bag-recat'));return true;}
+  if(!row||target.closest('[data-bag-discard],[data-tm],[data-bag-recat]'))return false;
   e.preventDefault();e.stopImmediatePropagation();
   if(!row.classList.contains('item-no-click')&&!row.hasAttribute('data-bag-item')&&row.hasAttribute('data-item')&&itemClickEnabled)showItemInfo(row.getAttribute('data-item'),true,row.getAttribute('data-item-en')||'');
   return true;

@@ -421,3 +421,9 @@ button:hover:not(:disabled)>.bw2-button-rim polygon{fill:#3b5664;stroke:#c9e6fb}
 .bw2-host .bw2-console .koji-phone-modal .modal-body button.phone-cell.on{background:#243e4b!important;color:#eef8fa!important;border-color:#72c6d2!important;box-shadow:inset 0 -3px #72c6d2!important}
 .bw2-host .bw2-console .koji-phone-modal .modal-body button.phone-cell:hover{background:#344657!important;border-color:#9bdce5!important}
 .bw2-host .koji-phone-modal .phone-cell>.bw2-button-rim{display:none}
+
+.bw2-host .bw2-console .bag-tabs{display:flex;flex-wrap:nowrap;overflow-x:auto;max-width:100%;gap:5px;padding:4px 1px;scroll-snap-type:none;justify-content:flex-start}
+.bw2-host .bw2-console .bag-tab{display:flex;flex:0 0 auto;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:48px;padding:6px;font-size:.7rem}
+.bw2-host .bw2-console .bag-cat-icon{display:block;width:20px;height:20px;object-fit:contain}
+.bw2-host .bw2-console .bag-list>.item-entry{grid-template-columns:28px minmax(0,1fr) 36px auto}
+.bw2-host .bw2-console .koji-bag-toolbar{display:flex;justify-content:flex-end;gap:6px;margin-bottom:6px}

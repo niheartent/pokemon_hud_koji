@@ -257,3 +257,11 @@
 :is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .phone-cell-name{max-width:100%;font-size:.72rem;line-height:1.25;text-align:center;overflow-wrap:anywhere}
 :is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .phone-cell:focus-visible{outline:2px solid var(--swsh-link);outline-offset:2px}
 @media(max-width:520px){:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .phone-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .bag-tabs{display:flex;flex-wrap:nowrap;overflow-x:auto;max-width:100%;gap:5px;padding:4px 1px;scroll-snap-type:none;justify-content:flex-start}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .bag-tab{display:flex;flex:0 0 auto;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:48px;padding:6px;font-size:.7rem}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .bag-cat-icon{display:block;width:20px;height:20px;object-fit:contain}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .bag-list>.item-entry{grid-template-columns:28px minmax(0,1fr) 36px auto}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .koji-bag-toolbar{display:flex;justify-content:flex-end;gap:6px;margin-bottom:6px}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .koji-bag-mode{background:var(--swsh-surface-soft);color:var(--swsh-on-surface);border:1px solid var(--swsh-border);border-radius:6px;padding:5px 10px}
+:is(#pkm-hud-win,#pkm-hud-inline,.swsh-page-host) .koji-bag-mode.active{background:var(--swsh-accent-soft);border-color:var(--swsh-fold-accent);color:var(--swsh-on-surface)}

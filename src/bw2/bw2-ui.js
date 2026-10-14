@@ -13,7 +13,7 @@ function bw2LowerScreenPath(){return BW2_LOWER_SCREEN_POINTS.map(function(p,i){r
 try{bw2TrainerExpanded=localStorage.getItem('pk_bw2_trainer_expanded')==='1';}catch(e){}
 
 /* VIEW: compact trainer retains refresh, environment, money and badge controls. */
-function bw2TrainerHTML(){
+function bw2TrainerHTML(){if(typeof kojiReferenceReady==='function')kojiReferenceReady();
   var tr=stat_data.训练家||{},ev=stat_data.环境||{},hearts='';
   for(var i=0;i<num(tr.活力上限,3);i++)hearts+='<span class="heart'+(i<num(tr.活力,3)?'':' empty')+'">♥</span>';
   var badges=document.createElement('div');badges.innerHTML=badgeRowHTML();badges.firstElementChild.className='bw2-profile-field bw2-profile-badges';
@@ -116,12 +116,12 @@ function bw2PanelHTML(key){
 }
 function bw2PanelSignature(key){
   // Depend only on the data each view reads. Hidden views catch up on activation.
-  if(key==='trainer')return JSON.stringify([stat_data.训练家,stat_data.环境,pickRegion(parseBadges()),typeof inBattle==='function'&&inBattle()]);
+  if(key==='trainer')return JSON.stringify([stat_data.训练家,stat_data.环境,pickRegion(parseBadges()),typeof inBattle==='function'&&inBattle(),typeof BADGE_MAP==='undefined'?null:BADGE_MAP]);
   if(key==='party')return JSON.stringify([stat_data.队伍,stat_data.战场&&stat_data.战场.场上,pkmSource,diyStorageRawSeen]);
   if(key==='1')return bw2PanelSignature('trainer')+'|'+bw2PanelSignature('party');
   if(key==='2')return JSON.stringify([stat_data.环境&&stat_data.环境.赛程,stat_data.任务,stat_data.世界事件]);
   if(key==='3')return JSON.stringify(stat_data.战场||{});
-  if(key==='controls-1')return JSON.stringify([stat_data.附近宝可梦,pkmSource,diyStorageRawSeen]);
+  if(key==='controls-1')return JSON.stringify([stat_data.附近宝可梦,pkmSource,diyStorageRawSeen,typeof NEARBY_SPECIAL==='undefined'?null:NEARBY_SPECIAL]);
   if(key==='controls-2')return JSON.stringify([stat_data.劲敌,stat_data.人际关系]);
   if(key==='controls-3')return JSON.stringify([hudPendingActions,hudCmdOpen]);
   return key;
