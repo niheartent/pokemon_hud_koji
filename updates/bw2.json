@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "bw2",
-  "ui": "0.4.13",
+  "ui": "0.4.14",
   "core": "5.2.7",
   "testedCore": [
     "3.3.19",
     "5.2.7"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.13/versions/bw2/0.4.13/hud.js",
-  "sha256": "011be50aaa2f2f4a72ee52f48f06219e855718685f97a9c089ae957cadc7f289",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.13/versions/bw2/0.4.13/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.13",
-  "notes": "# 黑白2 v0.4.13\n\n- 背包八个分类按钮按相同宽度居中排布，统一按钮间距与两侧留白。\n- 根据分类栏实际可用宽度自动采用八列或四列两行，窄屏不横向溢出。\n- 同步主页背包与独立背包页，保留现有明暗配色及分类功能。\n\n完整版：设置 → 检查更新 → 安装后刷新。黑白独立版：重新导入 JSON。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.14/versions/bw2/0.4.14/hud.js",
+  "sha256": "3da08b341f53948d5359fb7af277646f664405bc350062e157d6224d12f33d0f",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.14/versions/bw2/0.4.14/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.14",
+  "notes": "# 黑白2 v0.4.14\n\n- 背包八个分类固定单行，按钮等宽、居中、均匀排布。\n- 默认只显示分类图标，鼠标悬停显示名称，保留无障碍名称。\n- 缩小按钮高度，窄屏自适应间距，保留明暗配色和分类功能。\n\n完整版：设置 → 检查更新 → 安装后刷新。黑白独立版：重新导入 JSON。\n"
 }
