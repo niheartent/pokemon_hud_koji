@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.6.13",
+  "ui": "1.6.14",
   "core": "5.2.7",
   "testedCore": [
     "3.3.19",
     "5.2.7"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.13/versions/swsh/1.6.13/hud.js",
-  "sha256": "06ff277ca5d8716e512df0a9c28b56efa3594d680121a98a3e12d634e1e9f1e4",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.13/versions/swsh/1.6.13/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.13",
-  "notes": "# 剑盾 v1.6.13\n\n- 背包八个分类固定单行，按钮等宽、居中、均匀排布。\n- 默认只显示分类图标，鼠标悬停显示名称，保留无障碍名称。\n- 缩小按钮高度，窄屏自适应间距，保留明暗配色和分类功能。\n\n完整版：设置 → 检查更新 → 安装后刷新。黑白独立版：重新导入 JSON。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.14/versions/swsh/1.6.14/hud.js",
+  "sha256": "72387a668b5d269a93d55275b5ae10e570a0a069c84688c255c5ab74e6bef81f",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.14/versions/swsh/1.6.14/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.14",
+  "notes": "# 剑盾 v1.6.14\n\n- 修复 TauriTavern 角色卡写回使用显示名称导致找不到角色的问题，改用当前卡头像文件对应的存储标识。\n- 写回前重新读取当前卡，只更新 HUD 所在扩展，保存后回读核对脚本。\n- 角色索引失效时自动清缓存重试一次；不再扫描并修改第一张含 HUD 的角色卡。\n- 设置新增「重新写回当前角色卡」，本地安装成功后可直接重试，无需等待下一次更新。\n- 写回失败显示具体原因，本地已保存的新版仍可在刷新后启用。\n\n完整版：设置 → 检查更新 → 安装后刷新。第一次从旧版安装时仍由旧写回逻辑执行，若提示本地已保存，请刷新以启用修复，然后点击「重新写回当前角色卡」补写。黑白独立版无需使用角色卡自动写回。\n"
 }

@@ -9,7 +9,7 @@ hudBindRootDelegation=function(app){
     var target=e.target&&e.target.closest?e.target:null;
     if(!target)return;
     if(target.closest('[data-phone-case-btn]')&&typeof loadPhoneCases==='function'){e.preventDefault();e.stopImmediatePropagation();if(subOverlay)subOverlay.classList.remove('open');openPhoneCasePicker();return;}
-    if(kojiBagClick(e))return;
+    if(kojiWritebackClick(e)||kojiBagClick(e))return;
     var settings=target.closest('[data-rel-settings]'),del=target.closest('[data-rel-del-open]');
     if(!settings&&!del)return;
     e.preventDefault();e.stopPropagation();
@@ -20,7 +20,7 @@ var kojiBasePageBinding=bindPageInteractions;
 bindPageInteractions=function(){
   kojiBasePageBinding();
   if(pageOverlay.querySelector('#tc-def-wrap')&&typeof typeChartSwitchMode==='function')typeChartSwitchMode('def');
-  if(!pageOverlay._kojiBagBound){pageOverlay._kojiBagBound=true;hudScope.listen(pageOverlay,'click',kojiBagClick,true);}
+  if(!pageOverlay._kojiBagBound){pageOverlay._kojiBagBound=true;hudScope.listen(pageOverlay,'click',function(e){if(!kojiWritebackClick(e))kojiBagClick(e);},true);}
 
   if(typeof relHasPortrait!=='function')return;
   pageOverlay.querySelectorAll('[data-rel-settings]').forEach(function(button){
@@ -50,4 +50,10 @@ function kojiBagClick(e){
   e.preventDefault();e.stopImmediatePropagation();
   if(!row.classList.contains('item-no-click')&&!row.hasAttribute('data-bag-item')&&row.hasAttribute('data-item')&&itemClickEnabled)showItemInfo(row.getAttribute('data-item'),true,row.getAttribute('data-item-en')||'');
   return true;
+}
+
+function kojiWritebackClick(e){
+  if(typeof kojiRetryWriteback!=='function')return false;
+  var button=e.target&&e.target.closest&&e.target.closest('[data-koji-writeback]');if(!button)return false;
+  e.preventDefault();e.stopImmediatePropagation();kojiRetryWriteback();return true;
 }
