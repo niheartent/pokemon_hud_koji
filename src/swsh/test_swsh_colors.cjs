@@ -50,6 +50,8 @@ for(const [core,code] of [['bundled',local],['3.3.19',updated]])for(const width 
   await page.locator('[data-tab="1"]').click();await page.locator('#tab-1').evaluate(el=>el.scrollTop=0);await page.locator('.hud').screenshot({path:path.join(out,`颜色-${core}-${width}-${theme}-主页.png`)});
   {
    await page.locator('.swsh-party-list>.card-frame').first().click();await page.locator('.detail-modal').waitFor();
+   const detailIcons=await page.locator('.detail-modal .type-ic,.detail-modal .move-cat-ic').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {width:r.width,height:r.height};}));
+   for(const icon of detailIcons)assert(icon.width<=20&&icon.height<=20,`detail icon must stay compact: ${JSON.stringify(icon)}`);
    const detailChecks=dark?[]:await scan(['.detail-modal .dt-name','.detail-modal .dt-hold','.detail-modal .dt-lv','.detail-modal .row .k','.detail-modal .row .v'],'--swsh-detail-bg');
    if(!dark)detailChecks.push(...await scan(['.detail-modal .move-name'],'--swsh-detail-move'));
    detailChecks.push(...await scan(['.detail-modal .iv'],'--swsh-iv-bg'));

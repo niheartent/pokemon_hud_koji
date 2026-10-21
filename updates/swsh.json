@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.6.17",
+  "ui": "1.6.18",
   "core": "5.6.0",
   "testedCore": [
     "3.3.19",
     "5.6.0"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.17/versions/swsh/1.6.17/hud.js",
-  "sha256": "e731435b8484db62d1ca250f1f30ab0f5b4123e47f0825e200be027e4d7563ec",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.17/versions/swsh/1.6.17/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.17",
-  "notes": "# 剑盾 v1.6.17\n\n- 旧会话检查更新后，当前安装按钮直接运行已验证包的独立安装器及写回器，不需要刷新或重开角色卡才能保存。\n- 仅更新当前角色卡内启用的对应美化脚本，跳过排在前面的禁用 HUD，防止写错脚本项。\n- 保存前按头像文件存储标识读取最新卡，保存后校验脚本内容；角色名称不再用于写入定位。\n- 沿用核心的原子更新槽事务与版本备份，不改宿主 API，不启动下载的 HUD；刷新仅用于加载新版界面。\n\n完整版：检查更新 → 安装，当前会话内完成角色卡保存。黑白独立版不带远程更新器。\n\n- 跟进弦九核心 v5.6.0（提交 e03c9853）：同步天气名称、特性/招式/道具资料修正、背包分类资料、属性图标和图鉴英文名补全。\n- 参考资料快照固定到 Pokemon 提交 b97f6159，保留断网回退并校验 SHA-256；数据源界面改为 GitHub 直连失败时回退镜像。\n- 自有详情、招式和战场属性标签接入核心属性图标；设置页接入面板宽度调节，保留本地主题和布局。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.18/versions/swsh/1.6.18/hud.js",
+  "sha256": "d47be5eb318201d9ae9ed79d5b2aeee408aac4c067b04b9965948d0a03f647a8",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.18/versions/swsh/1.6.18/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.18",
+  "notes": "# 剑盾 v1.6.18\n\n- 旧会话检查更新后，当前安装按钮直接运行已验证包的独立安装器及写回器，不需要刷新或重开角色卡才能保存。\n- 仅更新当前角色卡内启用的对应美化脚本，跳过排在前面的禁用 HUD，防止写错脚本项。\n- 保存前按头像文件存储标识读取最新卡，保存后校验脚本内容；角色名称不再用于写入定位。\n- 沿用核心的原子更新槽事务与版本备份，不改宿主 API，不启动下载的 HUD；刷新仅用于加载新版界面。\n\n完整版：检查更新 → 安装，当前会话内完成角色卡保存。黑白独立版不带远程更新器。\n\n- 跟进弦九核心 v5.6.0（提交 e03c9853）：同步天气名称、特性/招式/道具资料修正、背包分类资料、属性图标和图鉴英文名补全。\n- 参考资料快照固定到 Pokemon 提交 b97f6159，保留断网回退并校验 SHA-256；数据源界面改为 GitHub 直连失败时回退镜像。\n- 自有详情、招式和战场属性标签接入核心属性图标；设置页接入面板宽度调节，保留本地主题和布局。\n\n- 修复详情页属性与招式分类图标未受独立样式约束、按原始尺寸放大的问题。\r\n"
 }
