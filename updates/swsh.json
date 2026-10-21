@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.6.19",
+  "ui": "1.6.20",
   "core": "5.6.0",
   "testedCore": [
     "3.3.19",
     "5.6.0"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.19/versions/swsh/1.6.19/hud.js",
-  "sha256": "75deef4ac5dce3139efec830e0620bb6389f3f3489529405063e0dd298d46807",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.19/versions/swsh/1.6.19/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.19",
-  "notes": "# 剑盾 v1.6.19\n\n- 旧会话检查更新后，当前安装按钮直接运行已验证包的独立安装器及写回器，不需要刷新或重开角色卡才能保存。\n- 仅更新当前角色卡内启用的对应美化脚本，跳过排在前面的禁用 HUD，防止写错脚本项。\n- 保存前按头像文件存储标识读取最新卡，保存后校验脚本内容；角色名称不再用于写入定位。\n- 沿用核心的原子更新槽事务与版本备份，不改宿主 API，不启动下载的 HUD；刷新仅用于加载新版界面。\n\n完整版：检查更新 → 安装，当前会话内完成角色卡保存。黑白独立版不带远程更新器。\n\n- 跟进弦九核心 v5.6.0（提交 e03c9853）：同步天气名称、特性/招式/道具资料修正、背包分类资料、属性图标和图鉴英文名补全。\n- 参考资料快照固定到 Pokemon 提交 b97f6159，保留断网回退并校验 SHA-256；数据源界面改为 GitHub 直连失败时回退镜像。\n- 自有详情、招式和战场属性标签接入核心属性图标；设置页接入面板宽度调节，保留本地主题和布局。\n\n- 修复详情页属性与招式分类图标未受独立样式约束、按原始尺寸放大的问题。\r\n\n- 恢复详情页字体大小，统一加宽属性标签和技能栏，长名称不再被挤压。"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.20/versions/swsh/1.6.20/hud.js",
+  "sha256": "774c67419dbde39aef7292f29a11d9f8a89d7c618ab0d7fd19de46a2406c1af8",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.20/versions/swsh/1.6.20/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.20",
+  "notes": "# 剑盾 v1.6.20\n\n- 收紧详情页技能卡的内边距与最小高度，减少卡片空白。\n- 将技能属性图标放大到 14px，并与属性标签统一字号和视觉比例。\n- 保留双列技能布局和窄屏规则，技能名称仍可省略显示，不会撑破卡片。\n\n- 恢复详情页字体大小，统一加宽属性标签和技能栏，长名称不再被挤压。\n- 修复详情页属性与招式分类图标未受独立样式约束、按原始尺寸放大的问题。\n- 跟进弦九核心 v5.6.0（提交 e03c9853），同步资料修正、属性图标与图鉴英文名补全。\r\n"
 }
