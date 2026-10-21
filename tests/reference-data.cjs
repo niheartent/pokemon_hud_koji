@@ -1,0 +1,14 @@
+const fs=require('node:fs');
+const path=require('node:path');
+const assert=require('node:assert/strict');
+const manifest=JSON.parse(fs.readFileSync(path.join(__dirname,'../src/shared/reference-data/manifest.json'),'utf8'));
+const bundled=require('../src/shared/reference-data.cjs')();
+assert.equal(manifest.repository,'xianjiu0926/Pokemon');
+assert.match(manifest.commit,/^[0-9a-f]{40}$/);
+assert(!bundled.includes('__KOJI_REFERENCE_DATA__'));
+for(const file of ['map-locations.json','badge-rules.json','nearby-special.json','t2s-map.json','item-categories.json'])assert(manifest.files[file]);
+const maps=JSON.parse(fs.readFileSync(path.join(__dirname,'../src/shared/reference-data/map-locations.json'),'utf8'));
+const items=JSON.parse(fs.readFileSync(path.join(__dirname,'../src/shared/reference-data/item-categories.json'),'utf8'));
+assert(maps.maps.length>=8);
+assert(items.data['伤药']);
+console.log(JSON.stringify({passed:true,commit:manifest.commit,snapshots:Object.keys(manifest.files).length,maps:maps.maps.length,itemCategories:Object.keys(items.data).length}));

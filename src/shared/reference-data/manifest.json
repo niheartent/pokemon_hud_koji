@@ -1,0 +1,11 @@
+{
+  "repository": "xianjiu0926/Pokemon",
+  "commit": "b97f6159d485dc0cb84f65a7370a7dab4916642a",
+  "files": {
+    "map-locations.json": "b953723027e23ea070e2ec8bd9a2c38ce0714a1c8342b0f1a10dd6122785acd9",
+    "badge-rules.json": "1204311b7350e7198ead796c9d22abb33a31d430499c4381cbbda5f9c7817c1b",
+    "nearby-special.json": "31c38ec9da997594ead7e9ad2c507095abdf2a67115eb627b650f2dde6f1224a",
+    "t2s-map.json": "609e04a9a1596eb8f28e87d97960144b3274e96698b74168a58442e902bc4b2d",
+    "item-categories.json": "039d7eca9cdde70fc12f65f8c91eec3a2249fbd0c71e3f3f5b376f64ed212e90"
+  }
+}

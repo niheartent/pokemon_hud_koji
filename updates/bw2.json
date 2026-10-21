@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "bw2",
-  "ui": "0.4.17",
-  "core": "5.2.7",
+  "ui": "0.4.18",
+  "core": "5.6.0",
   "testedCore": [
     "3.3.19",
-    "5.2.7"
+    "5.6.0"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.17/versions/bw2/0.4.17/hud.js",
-  "sha256": "fec39f2eb3940100d3befefd9a330978dfd9975fc65139bf089f05af79882821",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.17/versions/bw2/0.4.17/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.17",
-  "notes": "# 黑白2 v0.4.17\n\n- 旧会话检查更新后，当前安装按钮直接运行已验证包的独立安装器及写回器，不需要刷新或重开角色卡才能保存。\n- 仅更新当前角色卡内启用的对应美化脚本，跳过排在前面的禁用 HUD，防止写错脚本项。\n- 保存前按头像文件存储标识读取最新卡，保存后校验脚本内容；角色名称不再用于写入定位。\n- 沿用核心的原子更新槽事务与版本备份，不改宿主 API，不启动下载的 HUD；刷新仅用于加载新版界面。\n\n完整版：检查更新 → 安装，当前会话内完成角色卡保存。黑白独立版不带远程更新器。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.18/versions/bw2/0.4.18/hud.js",
+  "sha256": "6a427d628c81923265861c6325458e678655c0ecd917f1055d78a61ae236dcf0",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.18/versions/bw2/0.4.18/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.18",
+  "notes": "# 黑白2 v0.4.18\n\n- 旧会话检查更新后，当前安装按钮直接运行已验证包的独立安装器及写回器，不需要刷新或重开角色卡才能保存。\n- 仅更新当前角色卡内启用的对应美化脚本，跳过排在前面的禁用 HUD，防止写错脚本项。\n- 保存前按头像文件存储标识读取最新卡，保存后校验脚本内容；角色名称不再用于写入定位。\n- 沿用核心的原子更新槽事务与版本备份，不改宿主 API，不启动下载的 HUD；刷新仅用于加载新版界面。\n\n完整版：检查更新 → 安装，当前会话内完成角色卡保存。黑白独立版不带远程更新器。\n\n- 跟进弦九核心 v5.6.0（提交 e03c9853）：同步天气名称、特性/招式/道具资料修正、背包分类资料、属性图标和图鉴英文名补全。\n- 参考资料快照固定到 Pokemon 提交 b97f6159，保留断网回退并校验 SHA-256；数据源界面改为 GitHub 直连失败时回退镜像。\n- 自有详情、招式和战场属性标签接入核心属性图标；设置页接入面板宽度调节，保留本地主题和布局。\n"
 }
