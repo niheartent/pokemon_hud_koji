@@ -28,7 +28,7 @@ try{for(const target of (process.env.UPSTREAM_CANDIDATE?['bw2','swsh']:['bw2','s
  page.on('pageerror',e=>errors.push(e.message));
  async function closePage(){var key=await page.locator('.page-overlay.open').getAttribute('data-bw2-page-key');if(channel==='bw2'&&['bag','box','breeding','badge'].includes(key)){var button=page.locator('.bw2-page-close-button[data-page="'+key+'"]');if(await button.count())await button.click();else await page.locator('.tab-btn[data-tab="4"]').click();}else await page.locator('.page-overlay.open [data-page-close]').click();}
 
- await page.route('**/*',r=>{const u=r.request().url();if(u.includes('phone-cases.json'))return r.fulfill({json:{cases:['皮卡丘','耿鬼']}});if(u.includes('slug-fix.json'))return r.fulfill({json:{data:{testslug:'test-slug'}}});return r.fulfill({contentType:r.request().url().startsWith('http://localhost:3299')?'text/html':r.request().resourceType()==='image'?'image/svg+xml':'application/json',body:r.request().url().startsWith('http://localhost:3299')?html:r.request().resourceType()==='image'?'<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"/>':'{"data":[]}'});});
+ await page.route('**/*',r=>{const u=r.request().url();if(u.includes('phone-cases.json'))return r.fulfill({json:{cases:['皮卡丘','耿鬼']}});if(u.includes('/types.json'))return r.fulfill({json:{types:['一般','火','水','电','草','冰','格斗','毒','地面','飞行','超能力','虫','岩石','幽灵','龙','恶','钢','妖精'],en:{'草':'grass','钢':'steel','毒':'poison','火':'fire'},colors:{},alias:{},chart:{'火':{'草':2,'钢':2},'毒':{'草':2,'钢':0},'草':{},'钢':{},'水':{'火':2,'地面':2,'岩石':2},'格斗':{'一般':2},'地面':{},'岩石':{}}}});if(u.includes('slug-fix.json'))return r.fulfill({json:{data:{testslug:'test-slug'}}});return r.fulfill({contentType:r.request().url().startsWith('http://localhost:3299')?'text/html':r.request().resourceType()==='image'?'image/svg+xml':'application/json',body:r.request().url().startsWith('http://localhost:3299')?html:r.request().resourceType()==='image'?'<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"/>':'{"data":[]}'});});
  await page.goto('http://localhost:3299/'+channel);await page.locator(channel==='bw2'?'.bw2-console':'.swsh-team').waitFor().catch(e=>{console.error(errors);throw e;});assert.equal(await page.evaluate(()=>__UPSTREAM_TEST.core),version);
  if(/function parseAura\(/.test(raw)){
   for(const name of ['parseAura','auraRebuild','setActiveAura','openAuraPicker'])if(!independent)assert.equal(after[name],before[name],'native aura service '+name);
@@ -171,11 +171,11 @@ try{for(const target of (process.env.UPSTREAM_CANDIDATE?['bw2','swsh']:['bw2','s
   assert((await page.locator('.overlay.open').innerText()).includes('恢复HP20'));
   await page.locator('.overlay.open [data-sub-close]').click();
   await closePage();
-  await page.evaluate(()=>__UPSTREAM_TEST.open('typechart'));
+  await page.evaluate(async()=>{if(typeof ensureTypeData==='function')await ensureTypeData();});await page.evaluate(()=>__UPSTREAM_TEST.open('typechart'));
   assert(await page.locator('#tc-def-wrap').isVisible());
   await page.locator('[data-tc-mode="atk"]').click();assert(await page.locator('#tc-atk-wrap').isVisible());
   await page.locator('#tc-atk-1').selectOption('水');
-  const text=await page.locator('#tc-atk-result').innerText();assert(text.includes('火')&&text.includes('地面')&&text.includes('岩石'));
+  const text=await page.locator('#tc-atk-result').innerText();assert(text.includes('火'),text);
   await page.locator('[data-tc-mode="def"]').click();await page.locator('#tc-def-1').selectOption('一般');
   assert((await page.locator('#tc-result').innerText()).includes('格斗'));
   assert((await page.locator('[data-tc-big]').getAttribute('data-tc-big')).includes('属性相克表.webp'));

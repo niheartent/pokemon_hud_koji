@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.6.21",
-  "core": "5.6.0",
+  "ui": "1.6.22",
+  "core": "5.8.5",
   "testedCore": [
     "3.3.19",
-    "5.6.0"
+    "5.8.5"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.21/versions/swsh/1.6.21/hud.js",
-  "sha256": "6f9bc766659a03ce5e028300f314686bdb74eadaec8be3afd4d0bfc809bbd816",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.21/versions/swsh/1.6.21/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.21",
-  "notes": "# 剑盾 v1.6.21\n\n- 按本地 HTML 详情页预览的实际计算样式修复技能框：此前低优先级样式被独立样式基础层覆盖，v1.6.20 的尺寸调整没有真正生效。\n- 收紧技能卡片；技能属性标签改为与宝可梦属性标签相同的内边距、最小宽度和高度。\n- 技能属性图标与属性标签统一为 14px。\n- 增加浏览器布局断言，验证卡片高度、两种属性标签高度及图标尺寸。\r\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.22/versions/swsh/1.6.22/hud.js",
+  "sha256": "7ae7f10ec4ac36b33ef6f9e94d0ae4464fda3a9b8d28c3f14b460f8f26002930",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.22/versions/swsh/1.6.22/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.22",
+  "notes": "# 剑盾 v1.6.22\n\n- 跟进弦九核心 v5.8.5（提交 `0da00865e9c94cdf8eb3c34f2d1c11922f2a22f`）。\n- 适配核心新增的异步资料加载：属性克制与属性颜色、地区图鉴、特性别名、英文图鉴名和新版资料修订号；加载完成后主动刷新自有页面。\n- 接入名称前缀隐藏、闪光/头目/搭档倾向标识及附近宝可梦新字段，保留剑盾独立队伍与详情展示层。\n- 外部跨域脚本的脱敏报错不再误报为 HUD 错误，诊断页单独计数；自身错误仍保留完整记录。\n- 继续使用本地主题、布局和颜色，不依赖弦九原版 HTML/CSS。\n\n验证：`npm test`、`npm run package`、`npm run verify` 均通过。\r\n"
 }
