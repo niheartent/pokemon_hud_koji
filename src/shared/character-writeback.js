@@ -5,7 +5,7 @@ function kojiTauriInvoke(command,args){
   if(!bridge||typeof bridge.invoke!=='function')return Promise.reject(Error('桌面端角色卡接口不可用'));
   try{return Promise.resolve((invoke||bridge.invoke).call(bridge,command,args));}catch(error){return Promise.reject(error);}
 }
-function kojiCharacterHud(card){
+function kojiCharacterHud(card,channel){
   var candidates=[card,card&&card.data,card&&card.character,card&&card.character&&card.character.data],hits=[],seen=[];
   for(var i=0;i<candidates.length;i++){
     var ext=candidates[i]&&candidates[i].extensions,scripts=ext&&ext.tavern_helper&&ext.tavern_helper.scripts;
@@ -13,15 +13,17 @@ function kojiCharacterHud(card){
     for(var j=0;j<scripts.length;j++){
       var script=scripts[j];
       if(!script||script.enabled===false||typeof script.content!=='string'||script.content.indexOf('pkm-hud-btn')<0||script.content.indexOf('PK_VER')<0)continue;
-      var match=script.content.match(/"channel":"(swsh|bw2)"/);
-      hits.push({extensions:ext,scripts:scripts,idx:j,channel:match?match[1]:null});
+      // Match only a package declaration owned by this updater, never an upstream HUD.
+      var pkgStart=script.content.indexOf('PK_BEAUTY_PACKAGE'),pkgText=pkgStart>=0?script.content.slice(pkgStart,pkgStart+500):'';
+      var marker=pkgText.indexOf('channel'),tail=marker>=0?pkgText.slice(marker,marker+40):'',colon=tail.indexOf(':'),value=colon>=0?tail.slice(colon+1,colon+20):'';
+      var match=value.indexOf('swsh')>=0?['','swsh']:value.indexOf('bw2')>=0?['','bw2']:null;
+      if(!match||channel&&match[1]!==channel)continue;
+      hits.push({extensions:ext,scripts:scripts,idx:j,channel:match[1]});
     }
   }
-  var own=channel?hits.filter(function(h){return h.channel===channel;}):hits;
-  if(own.length===1)return own[0];
-  if(own.length>1)throw Error('当前角色卡启用了多个相同版本类型的 HUD，请只启用一个');
-  var legacy=hits.filter(function(h){return !h.channel;});
-  return legacy.length===1?legacy[0]:null;
+  if(hits.length===1)return hits[0];
+  if(hits.length>1)throw Error('当前角色卡启用了多个相同版本类型的 HUD，请只启用一个');
+  return null;
 }
 function kojiCharacterStem(card){
   var avatar=card&&(card.avatar||(card.data&&card.data.avatar));
@@ -58,8 +60,8 @@ function kojiTauriWriteback(content){
     }).then(function(card){
       card=card&&card.character||card;
       if(!card||kojiCharacterStem(card)!==selected.key)throw Error('角色卡读取结果与当前存储标识不一致');
-      var fresh=JSON.parse(JSON.stringify(card)),hit=kojiCharacterHud(fresh);
-      if(!hit)throw Error('当前角色卡内没有可更新的 HUD 脚本');
+      var fresh=JSON.parse(JSON.stringify(card)),hit=kojiCharacterHud(fresh,channel);
+      if(!hit)throw Error('当前角色卡内没有匹配的美化版脚本；原版 HUD 不会被覆盖');
       hit.scripts[hit.idx].content=content;
       var extensions=hit.extensions;
       if(!extensions)throw Error('当前角色卡缺少 HUD 扩展字段');
@@ -68,12 +70,12 @@ function kojiTauriWriteback(content){
         return kojiTauriInvoke('update_character',{name:selected.key,dto:{extensions:extensions}});
       });
     }).then(function(){return kojiTauriInvoke('get_character',{name:selected.key});}).then(function(saved){
-      var hit=kojiCharacterHud(saved);
+      var hit=kojiCharacterHud(saved,channel);
       if(!hit||hit.scripts[hit.idx].content!==content)throw Error('角色卡保存后回读校验未通过');
       return kojiCurrentCharacter().then(function(active){
         // Keep the active frontend copy consistent so a later host save cannot
         // overwrite the verified script with the pre-update cached content.
-        if(active.key===selected.key){var cached=kojiCharacterHud(active.card);if(cached)cached.scripts[cached.idx].content=content;}
+        if(active.key===selected.key){var cached=kojiCharacterHud(active.card,channel);if(cached)cached.scripts[cached.idx].content=content;}
         return {ok:true,msg:'角色卡脚本已保存并回读验证'};
       },function(){return {ok:true,msg:'角色卡脚本已保存并回读验证'};});
     });
