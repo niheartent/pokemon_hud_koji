@@ -1,12 +1,13 @@
 /* Build from original Xianjiu core, not the Sword/Shield delivery. */
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const acorn=require('acorn');
+const releaseConfig=require('../../tools/release-config.cjs');
 // Identical release bytes on Windows and Linux.
 const readText=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
 const root=__dirname,out=path.join(root,'HUD黑白2版-第一版');fs.mkdirSync(out,{recursive:true});
 const payload=JSON.parse(readText(path.join(root,'pkm-hud-upstream.json')).replace(/^\uFEFF/,''));
 const upstream=require('../shared/upstream-core.cjs')();let original,code;const patches=[];
-const version='0.4.21';
+const version=require('./package.json').version;
 const nativeVisualCss=readText(path.join(root,'bw2-native-base.css'));
 const presentation=readText(path.join(root,'../shared/presentation.js'));
 const presentationContract=require('../shared/presentation-contract.json');
@@ -24,7 +25,7 @@ const originalGrid=gridBlock.match(/background-image:([^;]+)(?:;|$)/)[1];
 const css=('.bw2-host{--bw2-original-grid:'+originalGrid+';}\n'+readText(path.join(root,'bw2-theme.css'))+'\n'+readText(path.join(root,'bw2-hud.css'))+'\n'+readText(path.join(root,'bw2-detail.css'))+'\n'+readText(path.join(root,'bw2-popup.css'))+'\n'+readText(path.join(root,'bw2-console.css'))+'\n'+readText(path.join(root,'bw2-trainer.css'))).replace(/@media\s*\(max-width:/g,'@container bw2-layout (max-width:');
 const parserLicense=readText(path.join(path.dirname(require.resolve('acorn')),'../LICENSE'));
 const parser='(function(){var exports={},module={exports:exports};\n/* '+parserLicense+' */\n'+readText(require.resolve('acorn'))+'\nreturn module.exports;})()';
-const pkg={schema:2,styleOwnership:'bw2',channel:'bw2',runtimeDb:'pk_hud_koji_bw2_runtime_v1',updateUrl:'https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/main/updates/bw2.json',updateRuntime,writebackRuntime:readText(path.join(root,'../shared/character-writeback.js')),installRuntime:require('../shared/install-runtime.cjs')(),version,parser,presentation,presentationContract,nativeCss:nativeVisualCss,runtime,beauty,css};
+const pkg={schema:2,repository:releaseConfig.repository,styleOwnership:'bw2',channel:'bw2',runtimeDb:'pk_hud_koji_bw2_runtime_v1',updateUrl:`https://raw.githubusercontent.com/${releaseConfig.repository}/main/updates/bw2.json`,updateRuntime,writebackRuntime:readText(path.join(root,'../shared/character-writeback.js')),installRuntime:require('../shared/install-runtime.cjs')(),version,parser,presentation,presentationContract,nativeCss:nativeVisualCss,runtime,beauty,css};
 code=require('../shared/presentation-boundary.js').insert(code,acorn,'var PK_BEAUTY_PACKAGE='+JSON.stringify(pkg)+';\n'+runtime+'\n'+beauty+'\n'+updateRuntime+'\ncss += '+JSON.stringify(css)+';');
 new Function(code);acorn.parse(code,{ecmaVersion:'latest'});
 payload.name='宝可梦 HUD 黑白2版（第一版）';

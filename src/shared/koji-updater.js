@@ -14,7 +14,7 @@ function kojiUpdateButtons(ready){
 }
 function kojiVersion(code){var match=code.match(/var PK_VER='(\d+\.\d+\.\d+(?:-[\w.-]+)?)';/);if(!match)throw new Error('缺少核心版本号');return match[1];}
 function kojiOwnURL(url){
-  var parsed=new URL(url),prefix='https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/';
+  var parsed=new URL(url),manifestURL=new URL(PK_BEAUTY_PACKAGE.updateUrl),prefix=manifestURL.origin+manifestURL.pathname.replace(/\/main\/updates\/[^/]+$/,'/');
   if(parsed.href.indexOf(prefix)!==0||parsed.username||parsed.password)throw new Error('美化更新地址不属于发布仓库');return parsed.href;
 }
 function kojiFetchText(url){return hudFetch(url,{cache:'no-store'}).then(function(response){if(!response.ok)throw new Error('下载失败 HTTP '+response.status);return response.text();});}

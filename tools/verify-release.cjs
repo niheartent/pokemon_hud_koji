@@ -2,7 +2,12 @@ const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypt
 const root=path.join(__dirname,'..'),sha=data=>crypto.createHash('sha256').update(data).digest('hex');
 for(const channel of ['bw2','swsh']){
   const m=JSON.parse(fs.readFileSync(path.join(root,'updates',channel+'.json'),'utf8')),dir=path.join(root,'versions',channel,m.ui),tag=channel+'-v'+m.ui;
-  const code=fs.readFileSync(path.join(dir,'hud.js'),'utf8');assert.equal(sha(code),m.sha256);assert.ok(m.script.includes('/'+tag+'/'));acorn.parse(code,{ecmaVersion:'latest'});new Function(code);
+  const expectedVersion=require(path.join(root,'src',channel,'package.json')).version,repo=require('./release-config.cjs').repository,code=fs.readFileSync(path.join(dir,'hud.js'),'utf8');
+  assert.equal(m.channel,channel);assert.equal(m.ui,expectedVersion);assert.equal(m.release,'https://github.com/'+repo+'/releases/tag/'+tag);
+  const base='https://raw.githubusercontent.com/'+repo+'/'+tag+'/versions/'+channel+'/'+m.ui+'/';assert.equal(m.script,base+'hud.js');assert.equal(m.import,base+'hud.json');
+  assert.equal(sha(code),m.sha256);acorn.parse(code,{ecmaVersion:'latest'});new Function(code);
+  let beautyPackage;function visit(n){if(!n||!n.type)return;if(n.type==='VariableDeclarator'&&n.id.name==='PK_BEAUTY_PACKAGE')beautyPackage=JSON.parse(code.slice(n.init.start,n.init.end));for(const v of Object.values(n))if(Array.isArray(v))v.forEach(visit);else if(v&&v.type)visit(v);}visit(acorn.parse(code,{ecmaVersion:'latest'}));
+  assert.ok(beautyPackage);assert.equal(beautyPackage.channel,channel);assert.equal(beautyPackage.version,m.ui);assert.equal(beautyPackage.repository,repo);assert.equal(beautyPackage.updateUrl,'https://raw.githubusercontent.com/'+repo+'/main/updates/'+channel+'.json');
   assert.equal(JSON.parse(fs.readFileSync(path.join(dir,'hud.json'),'utf8')).content,code);assert.ok(code.includes('kojiCheckUpdate'));
   for(const entry of JSON.parse(fs.readFileSync(path.join(dir,'SHA256SUMS.json'),'utf8')).files)assert.equal(sha(fs.readFileSync(path.join(dir,entry.file))),entry.sha256);
   if(channel==='bw2'){const independent=fs.readFileSync(path.join(dir,'independent/hud.js'),'utf8');assert.ok(!independent.includes('kojiCheckUpdate')&&!independent.includes('PK_BEAUTY_PACKAGE'));}

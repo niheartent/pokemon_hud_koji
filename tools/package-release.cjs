@@ -1,5 +1,5 @@
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),{zipSync}=require('fflate');
-const root=path.join(__dirname,'..'),repo='niheartent/pokemon_hud_koji',sha=data=>crypto.createHash('sha256').update(data).digest('hex');
+const root=path.join(__dirname,'..'),repo=require('./release-config.cjs').repository,sha=data=>crypto.createHash('sha256').update(data).digest('hex');
 const selected=process.argv[2]?[process.argv[2]]:['bw2','swsh'];
 for(const channel of selected){
   if(!['bw2','swsh'].includes(channel))throw Error('channel must be bw2 or swsh');

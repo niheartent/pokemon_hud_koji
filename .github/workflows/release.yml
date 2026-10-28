@@ -9,7 +9,7 @@ on:
         required: true
         type: string
 concurrency:
-  group: hud-release-${{ github.ref }}
+  group: hud-release-${{ inputs.tag || github.ref_name }}
   cancel-in-progress: false
 permissions:
   contents: write
@@ -35,7 +35,7 @@ jobs:
         env:
           RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
         run: |
-          node -e "const [channel,v]=process.env.RELEASE_TAG.split('-v');const actual=require('./src/'+channel+'/package.json').version;if(v!==actual)throw Error('Tag and UI version differ')"
+          node -e "const match=process.env.RELEASE_TAG.match(/^(bw2|swsh)-v(\d+\.\d+\.\d+)$/);if(!match)throw Error('Invalid release tag');const [,channel,v]=match;const actual=require('./src/'+channel+'/package.json').version;if(v!==actual)throw Error('Tag and UI version differ')"
       - name: Publish assets
         env:
           GH_TOKEN: ${{ github.token }}

@@ -1,13 +1,13 @@
 /* Read-only compatibility probe. Never installs or publishes a candidate. */
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto'),acorn=require('acorn');
-const root=path.join(__dirname,'..');
+const root=path.join(__dirname,'..'),upstreamRepository=require('../src/shared/upstream/manifest.json').repository;
 async function main(){
   let raw=require('../src/shared/upstream-core.cjs')(),commit=require('../src/shared/upstream/manifest.json').commit;
   if(process.argv.includes('--fetch')){
-    const response=await fetch('https://api.github.com/repos/xianjiu0926/pkm-hud/commits?path=pkm-hud.js&per_page=1',{headers:{'User-Agent':'koji-compatibility'}});
+    const response=await fetch('https://api.github.com/repos/'+upstreamRepository+'/commits?path=pkm-hud.js&per_page=1',{headers:{'User-Agent':'koji-compatibility'}});
     if(!response.ok)throw Error('GitHub metadata HTTP '+response.status);
     commit=(await response.json())[0].sha;
-    const download=await fetch('https://raw.githubusercontent.com/xianjiu0926/pkm-hud/'+commit+'/pkm-hud.js');
+    const download=await fetch('https://raw.githubusercontent.com/'+upstreamRepository+'/'+commit+'/pkm-hud.js');
     if(!download.ok)throw Error('Upstream HTTP '+download.status);
     raw=await download.text();
   }

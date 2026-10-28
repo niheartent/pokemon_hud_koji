@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.6.24",
+  "ui": "1.6.25",
   "core": "5.8.5",
   "testedCore": [
     "3.3.19",
     "5.8.5"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.24/versions/swsh/1.6.24/hud.js",
-  "sha256": "6feae96888963a8a31885e953eedf7f148d31550dd1289a2bbede0c9e66c30a6",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.24/versions/swsh/1.6.24/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.24",
-  "notes": "# 剑盾 v1.6.24\n\n- 跟进弦九核心 v5.8.5（提交 `0da00865e9c94cdf8eb3c34f2d1c11922f2a22f`）。\n- 适配核心新增的异步资料加载：属性克制与属性颜色、地区图鉴、特性别名、英文图鉴名和新版资料修订号；加载完成后主动刷新自有页面。\n- 接入名称前缀隐藏、闪光/头目/搭档倾向标识及附近宝可梦新字段，保留剑盾独立队伍与详情展示层。\n- 外部跨域脚本的脱敏报错不再误报为 HUD 错误，诊断页单独计数；自身错误仍保留完整记录。\n- 继续使用本地主题、布局和颜色，不依赖弦九原版 HTML/CSS。\n\n- 修复角色卡写回隔离：只更新明确标记的剑盾美化脚本，找不到美化目标时拒绝写入，保护弦九原版 HUD。\n\n验证：`npm test`、`npm run package`、`npm run verify` 均通过。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.25/versions/swsh/1.6.25/hud.js",
+  "sha256": "176d0b5b2f9eb20cc363408453944089ba47289a7801364b382e2e4d2f96c2c5",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.25/versions/swsh/1.6.25/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.25",
+  "notes": "# 剑盾 v1.6.25\n\n- 收敛版本与仓库配置，修复更新器和发布重试时的地址/版本漂移风险。\n- 保持 v5.8.5 核心与前缀隐藏、角色卡写回隔离修复。\n\n- 跟进弦九核心 v5.8.5（提交 `0da00865e9c94cdf8eb3c34f2d1c11922f2a22f`）。\n- 适配核心新增的异步资料加载：属性克制与属性颜色、地区图鉴、特性别名、英文图鉴名和新版资料修订号；加载完成后主动刷新自有页面。\n- 接入名称前缀隐藏、闪光/头目/搭档倾向标识及附近宝可梦新字段，保留剑盾独立队伍与详情展示层。\n- 外部跨域脚本的脱敏报错不再误报为 HUD 错误，诊断页单独计数；自身错误仍保留完整记录。\n- 继续使用本地主题、布局和颜色，不依赖弦九原版 HTML/CSS。\n\n- 修复角色卡写回隔离：只更新明确标记的剑盾美化脚本，找不到美化目标时拒绝写入，保护弦九原版 HUD。\n\n验证：`npm test`、`npm run package`、`npm run verify` 均通过。\n"
 }
