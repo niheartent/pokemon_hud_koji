@@ -1,6 +1,6 @@
 {
   "name": "swsh-hud-workspace",
-  "version": "1.6.23",
+  "version": "1.6.24",
   "private": true,
   "scripts": {
     "build": "node build_swsh_hud.cjs && node preview_swsh.cjs",
