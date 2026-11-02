@@ -6,15 +6,15 @@
 
 | 版本 | 下载入口 | 更新方式 |
 | --- | --- | --- |
-| 黑白2完整版 v0.4.22 | [黑白2发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.22) | 设置 → 检查更新，检查美化版与弦九核心 |
-| 黑白2独立版 v0.4.22 | 同一发布页的 independent JSON | 重新导入升级 |
-| 剑盾版 v1.6.25 | [剑盾发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.25) | 设置 → 检查更新，检查美化版与弦九核心 |
+| 黑白2完整版 v0.4.25 | [黑白2发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.25) | 设置 → 检查更新，检查美化版与弦九核心 |
+| 黑白2独立版 v0.4.25 | 同一发布页的 independent JSON | 重新导入升级 |
+| 剑盾版 v1.6.28 | [剑盾发布页](https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.28) | 设置 → 检查更新，检查美化版与弦九核心 |
 
 下载 Release 附件中的 JSON，导入酒馆助手脚本并替换对应旧版。只启用一个 HUD 脚本。旧版首次接入本仓库更新源需要重新导入一次。
 
 两版的功能、安装方式和设计目标分别见 [黑白2 HUD 文档](docs/BW2-README.md) 与 [剑盾 HUD 文档](docs/SWSH-README.md)。
 
-两套内置核心均为 v5.8.5。页面模板、根布局、属性色表和基础样式由本仓库维护，下载的新核心不提供最终页面模板或 CSS。核心数据、操作、图片解析与宿主交互继续通过功能边界接入。
+两套内置核心均为 v5.9.2。页面模板、根布局、属性色表和基础样式由本仓库维护，下载的新核心不提供最终页面模板或 CSS。核心数据、操作、图片解析与宿主交互继续通过功能边界接入。
 
 ## 更新逻辑
 

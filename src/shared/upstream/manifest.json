@@ -1,6 +1,6 @@
 {
-  "version": "5.8.5",
-  "commit": "0da00865e9c94cdf8eb3c34f2d1c11922f2a22f",
-  "sha256": "02c9759db65a022ebb62e665e129132bed8e572d43b391730383c8d1fcddd10c",
+  "version": "5.9.2",
+  "commit": "f831dcc736b71071e8f32411d2c5ceae90026533",
+  "sha256": "8af33609d2605e29428d1ca44f6061fbbdd21370eb278068e170929dafcda622",
   "repository": "xianjiu0926/pkm-hud"
 }
