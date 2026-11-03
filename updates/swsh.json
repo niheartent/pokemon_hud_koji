@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.7.1",
+  "ui": "1.7.2",
   "core": "5.9.2",
   "testedCore": [
     "3.3.19",
     "5.9.2"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.1/versions/swsh/1.7.1/hud.js",
-  "sha256": "b84a65c1a5188a98c2f1e4c1359d072b5f2213225e75f0ce809001daa950643e",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.1/versions/swsh/1.7.1/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.7.1",
-  "notes": "# 剑盾 v1.7.1\n\n- 为野外宝可梦图鉴弹窗补上剑盾本地样式：弹窗标题、形态按钮、宝可梦展示区和资料行跟随白天／暗色主题，并统一边框、文字对比和交互色。\n- 小屏幕下限制弹窗边界并允许内容区滚动，避免图鉴超出视口。\n- 继续使用弦九核心 v5.9.2 的图鉴数据与行为；只接管剑盾本地视觉样式，不复用弦九原版图鉴配色。\n\n验证：构建、双色主题下野外图鉴浏览器检查及仓库发布校验通过。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.2/versions/swsh/1.7.2/hud.js",
+  "sha256": "3239419ae17c3932ceb99f2215184da81d6444d9fcbe97f674e86a3958a2d141",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.2/versions/swsh/1.7.2/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.7.2",
+  "notes": "# 剑盾 v1.7.2\n\n- 优化低性能设备和省流量网络下的流畅度：自动关闭高成本背景模糊、持续装饰动画和卡片过渡。\n- 低功耗档只在设备核心数不超过 2、浏览器启用省流量或网络类型为 2G/slow-2G 时启用，普通设备保持原有视觉效果。\n- 保留剑盾本地布局、双色主题和弦九核心 v5.9.2 的功能接口。\n\n验证：构建、完整测试、低功耗样式回归、发布包校验和安全审计通过。\n"
 }
