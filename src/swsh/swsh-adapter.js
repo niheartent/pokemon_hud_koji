@@ -2,6 +2,25 @@
 var swshBaseViews={teamHTML:teamHTML,trainerHTML:trainerHTML,quickHTML:quickHTML,homeFoldHTML:homeFoldHTML,menuHTML:menuHTML,worldHTML:worldHTML,cmdPanelHTML:cmdPanelHTML,settingsHTML:settingsHTML,render:render,pkCheckUpdate:pkCheckUpdate,pkDoUpdate:pkDoUpdate,pkRepair:pkRepair,showNoticeModal:showNoticeModal,pkSetUpdateMsg:pkSetUpdateMsg};
 // Newer cores have a hue/lightness engine; the two fixed palettes replace it.
 if(typeof pkThemeApplyScheme==='function')pkThemeApplyScheme=function(){};
+// Coalesce host events inside one short, bounded refresh window.
+var swshEventRefreshTimer=null;
+pkBindAutoRefresh=function(){
+  if(pkmAutoRefreshBound)return pkmEventSourceActive;
+  pkmAutoRefreshBound=true;
+  try{
+    var w=WIN,ST=w&&w.SillyTavern,ctx=ST&&ST.getContext?ST.getContext():null;
+    if(!(ctx&&ctx.eventSource&&typeof ctx.eventSource.on==='function'))return false;
+    var evs=[(ctx.eventTypes&&ctx.eventTypes.MESSAGE_RECEIVED)||'message_received',(ctx.eventTypes&&ctx.eventTypes.MESSAGE_SENT)||'message_sent',(ctx.eventTypes&&ctx.eventTypes.CHAT_CHANGED)||'chat_changed',(ctx.eventTypes&&ctx.eventTypes.MESSAGE_SWIPED)||'message_swiped'].filter(Boolean);
+    var handler=function(){
+      if(swshEventRefreshTimer!==null)return;
+      swshEventRefreshTimer=hudScope.setTimeout(function(){swshEventRefreshTimer=null;pkRefreshData();try{pkmAutoSnap=pkmStateSnapshot(stat_data);}catch(e){}},50);
+    };
+    evs.forEach(function(ev){hudScope.emitter(ctx.eventSource,ev,handler);});
+    pkmEventSourceActive=evs.length>0;
+    if(pkmEventSourceActive)hudDiagEvent('auto-sync','SillyTavern eventSource 主通道（合并短时重复事件）');
+    return pkmEventSourceActive;
+  }catch(e){hudDiagError('auto-refresh eventSource',e);return false;}
+};
 function swshDOM(html){var el=document.createElement('div');el.innerHTML=html;return el;}
 // One last result per renderer: bounded, in-memory, and owned base generation still runs.
 var swshDecorationCache=Object.create(null);

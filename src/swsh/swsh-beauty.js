@@ -42,19 +42,11 @@ function swshStepPartyCard(app,button){
 var swshDarkTheme=true;
 // Missing preference uses dark; an explicit day preference survives upgrades.
 try{swshDarkTheme=localStorage.getItem('pk_swsh_dark_theme')!=='0';}catch(e){}
-// Avoid GPU-heavy effects only on constrained devices and save-data connections.
-function swshShouldUseLitePerformance(nav){
-  try{var conn=nav&&nav.connection;return !!((conn&&(conn.saveData||/^(slow-2g|2g)$/.test(String(conn.effectiveType||''))))||Number(nav&&nav.hardwareConcurrency||99)<=2);}catch(e){return false;}
-}
-var swshPerformanceLite=swshShouldUseLitePerformance(typeof navigator!=='undefined'?navigator:null);
 function swshApplyTheme(app){
   if(typeof pageOverlay!=='undefined'&&pageOverlay){pageOverlay.classList.toggle('swsh-page-host',pageOverlay.classList.contains('popout'));pageOverlay.classList.toggle('swsh-dark',swshDarkTheme);}
   if(app)app.classList.toggle('swsh-dark',swshDarkTheme);
   var win=document.getElementById('pkm-hud-win');if(win)win.classList.toggle('swsh-dark',swshDarkTheme);
   var inline=document.getElementById('pkm-hud-inline');if(inline)inline.classList.toggle('swsh-dark',swshDarkTheme);
-  if(app)app.classList.toggle('swsh-performance-lite',swshPerformanceLite);
-  if(win)win.classList.toggle('swsh-performance-lite',swshPerformanceLite);
-  if(inline)inline.classList.toggle('swsh-performance-lite',swshPerformanceLite);
 }
 
 var swshHudWidth=null;

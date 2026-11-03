@@ -3,7 +3,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {chromium}=require('./browser-runtime.cjs');
 const out=path.join(__dirname,'HUD美化版-交付');
 let html=fs.readFileSync(path.join(out,'剑盾版预览.html'),'utf8');
-html=html.replace('window.__SWSH_TEST={',`window.__OPT={refresh:function(){return refreshHudPanels(document.getElementById('pkm-hud-inline'));},cache:function(){return swshDecorationCache;},native:swshBaseViews,state:function(){return stat_data;},lite:swshShouldUseLitePerformance,setLite:function(v){swshPerformanceLite=v;swshApplyTheme(document.getElementById('pkm-hud-inline'));}};window.__SWSH_TEST={`);
+html=html.replace('window.__SWSH_TEST={',`window.__OPT={refresh:function(){return refreshHudPanels(document.getElementById('pkm-hud-inline'));},cache:function(){return swshDecorationCache;},native:swshBaseViews,state:function(){return stat_data;}};window.__SWSH_TEST={`);
 const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jv14AAAAASUVORK5CYII=','base64');
 (async()=>{const browser=await chromium.launch({headless:true,...require('./browser-runtime.cjs').launchOptions}),errors=[];
 try{const page=await browser.newPage({viewport:{width:1000,height:1000}});page.on('pageerror',e=>errors.push(e.message));
@@ -24,17 +24,8 @@ const update=await page.evaluate(async()=>{var team=previewState.队伍;
   await __SWSH_TEST.refresh();return document.querySelector('.swsh-party-list').textContent;
 });assert(update.includes('优化验证新名字'),'new data must invalidate cache');assert(update.includes('123/211'),'HP change must render');
 const imageChanged=await page.evaluate(async()=>{previewState.队伍['1'].图标='https://opt-assets.test/new-sprite.png';await __SWSH_TEST.refresh();return document.querySelector('.swsh-party-focus img').getAttribute('src');});assert.equal(imageChanged,'https://opt-assets.test/new-sprite.png','changed sprite must invalidate cache');
-const performance=await page.evaluate(()=>{
-  var detection={desktop:__OPT.lite({hardwareConcurrency:8,connection:{effectiveType:'4g',saveData:false}}),lowCore:__OPT.lite({hardwareConcurrency:2}),saveData:__OPT.lite({hardwareConcurrency:8,connection:{saveData:true}}),slowNetwork:__OPT.lite({hardwareConcurrency:8,connection:{effectiveType:'slow-2g'}})};
-  var root=document.getElementById('pkm-hud-inline'),overlay=document.createElement('div'),near=document.createElement('div');overlay.className='overlay';near.className='nb-cell';root.appendChild(overlay);root.appendChild(near);
-  __OPT.setLite(true);
-  var result={detection:detection,enabled:root.classList.contains('swsh-performance-lite'),backdrop:getComputedStyle(overlay).backdropFilter,transition:getComputedStyle(document.querySelector('.tab-btn')).transition,animation:getComputedStyle(near).animationName};
-  __OPT.setLite(false);overlay.remove();near.remove();return result;
-});
-assert.deepEqual(performance.detection,{desktop:false,lowCore:true,saveData:true,slowNetwork:true});
-assert.equal(performance.enabled,true);assert.equal(performance.backdrop,'none');assert.equal(performance.transition,'none');assert.equal(performance.animation,'none');
 assert.equal(await page.evaluate(()=>previewWrites),0);assert.deepEqual(errors,[]);
-const result={passed:true,scope:'隔离模拟宿主',unchangedDecorationReused:true,unchangedPanelNodesRetained:true,ownedBaseGenerationStillRuns:true,liveMutationInvalidates:true,iconSizeInvalidates:true,ownedTemplateAdditionsVisible:true,nameAndHpChangeVisible:true,spriteChangeVisible:true,unusedPartyBordersRemoved:true,lowPowerConditionsAndCssVerified:true,presentationWrites:0,errors};
+const result={passed:true,scope:'隔离模拟宿主',unchangedDecorationReused:true,unchangedPanelNodesRetained:true,ownedBaseGenerationStillRuns:true,liveMutationInvalidates:true,iconSizeInvalidates:true,ownedTemplateAdditionsVisible:true,nameAndHpChangeVisible:true,spriteChangeVisible:true,unusedPartyBordersRemoved:true,presentationWrites:0,errors};
 fs.writeFileSync(path.join(out,'优化验证.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));
 }finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});
 

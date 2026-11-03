@@ -347,20 +347,5 @@
   :is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big) .modal-body{padding:10px 11px 13px}
   :is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big) .pkm-big{min-height:150px}
 }
-
-/* Low-power mode keeps layout and palette intact while avoiding costly compositing. */
-:is(#pkm-hud-win,#pkm-hud-inline).swsh-performance-lite :is(.page-overlay,.overlay),
-:is(#pkm-hud-win,#pkm-hud-inline).swsh-performance-lite .page-overlay.popout.map-focus{
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-}
-:is(#pkm-hud-win,#pkm-hud-inline).swsh-performance-lite :is(.card-frame,.nearby-card,.nb-cell,.nearby-grid .nearby-cell,.tab-btn,.menu-item,.btn-small,.cmd-btn,.act-btn){
-  transition:none!important;
-}
-:is(#pkm-hud-win,#pkm-hud-inline).swsh-performance-lite :is(.nb-cell,.nearby-grid .nearby-cell,.map-pin,.map-island-label.hl,.fab-update-dot){
-  animation:none!important;
-}
-:is(#pkm-hud-win,#pkm-hud-inline).swsh-performance-lite :is(.card-frame,.nearby-card,.nb-cell,.nearby-grid .nearby-cell){
-  filter:none!important;
-}
 .koji-tc-image .dim{font-size:.72rem;margin-top:4px}
 .item-entry.item-no-click{cursor:default}.item-entry.item-no-click:hover{background:transparent}

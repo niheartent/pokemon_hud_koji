@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.7.2",
+  "ui": "1.7.3",
   "core": "5.9.2",
   "testedCore": [
     "3.3.19",
     "5.9.2"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.2/versions/swsh/1.7.2/hud.js",
-  "sha256": "3239419ae17c3932ceb99f2215184da81d6444d9fcbe97f674e86a3958a2d141",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.2/versions/swsh/1.7.2/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.7.2",
-  "notes": "# 剑盾 v1.7.2\n\n- 优化低性能设备和省流量网络下的流畅度：自动关闭高成本背景模糊、持续装饰动画和卡片过渡。\n- 低功耗档只在设备核心数不超过 2、浏览器启用省流量或网络类型为 2G/slow-2G 时启用，普通设备保持原有视觉效果。\n- 保留剑盾本地布局、双色主题和弦九核心 v5.9.2 的功能接口。\n\n验证：构建、完整测试、低功耗样式回归、发布包校验和安全审计通过。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.3/versions/swsh/1.7.3/hud.js",
+  "sha256": "21d4f3a0f268a2a547bb1adcebd6acdc1a02850fff4520b686a05e07a29d6602",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.3/versions/swsh/1.7.3/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.7.3",
+  "notes": "# 剑盾 v1.7.3\n\n- 回滚 v1.7.2 中依据网络类型、流量设置和 CPU 核数切换样式的方案；这些条件不能代表 HUD 操作是否流畅。\n- 酒馆同一轮短时连续事件现在共用一个固定 50 毫秒刷新窗口，避免事件处理器重复触发整套 HUD 刷新；后续事件仍会单独刷新。\n- 刷新窗口不会随着后续事件重置，最迟在首次事件后 50 毫秒触发；白天／暗色视觉效果保持原样。\n- 保留剑盾本地布局、双色主题和弦九核心 v5.9.2 的功能接口。\n\n验证：通过 VM 事件源测试验证事件爆发只触发一次刷新、不会重复绑定、后续独立事件仍会刷新；完整测试与发布校验结果以 CI 为准。该模拟测试验证刷新调度逻辑，不代表真实设备帧率测量。\n"
 }
