@@ -10,7 +10,7 @@ visit(acorn.parse(local,{ecmaVersion:'latest'}));
 const scope={PK_BEAUTY_PACKAGE:pkg};vm.createContext(scope);vm.runInContext(pkg.runtime,scope);
 const updated=scope.pkBeautyBuildRemote(fs.readFileSync(path.join(__dirname,'../bw2/upstream-update-fixture.js'),'utf8'));
 const fixture={人际关系:{小霞:65,小刚:42},战场:{规则:'野生霸主狂暴战｜胜负:击倒或收服',场景:'第1回合｜暴雨:水×1.5 火×0.5',场上:{'伯劳·钢铠鸦(我方)':'Lv.72 251/251｜攻181 防190 特攻82 特防143 速130｜特性:镜甲｜招式:勇鸟猛攻/急速折返｜阶级:攻+1 防-1','红色暴鲤龙(敌方)':'Lv.74 496/496｜特性:威吓｜招式:攀瀑/龙之舞｜阶级:防+1｜状态:霸主狂暴'},各方:{红色暴鲤龙:'战术:狂暴攻击｜后备0'}}};
-const bridge='window.__COLOR_TEST={theme:function(value){swshDarkTheme=value;swshApplyTheme(document.getElementById("pkm-hud-inline"));},open:openPage,refresh:pkRefreshData};loadDexList=function(region,callback){callback(Array.from({length:30},function(_,i){return {id:String(i+1),ndex:String(i+1),name:i===0?"君主蛇":"测试精灵"+i};}));};';
+const bridge='window.__COLOR_TEST={theme:function(value){swshDarkTheme=value;swshApplyTheme(document.getElementById("pkm-hud-inline"));},open:openPage,refresh:pkRefreshData,dex:function(){showPokemonInfo("君主蛇",497);}};loadDexList=function(region,callback){callback(Array.from({length:30},function(_,i){return {id:String(i+1),ndex:String(i+1),name:i===0?"君主蛇":"测试精灵"+i};}));};';
 function htmlFor(code){code=code.replace('try{pkReadUpdateCache();}catch(e){}',bridge+'\ntry{pkReadUpdateCache();}catch(e){}');const start=template.lastIndexOf('<script>'),end=template.lastIndexOf('</script>');return template.slice(0,start+8)+'Object.assign(previewState,'+JSON.stringify(fixture)+');'+code.replaceAll('</script','<\\/script')+template.slice(end);}
 function rgb(s){const nums=s.match(/[\d.]+/g).map(Number);return nums.slice(0,3).map(v=>v/255);}
 function luminance(c){return rgb(c).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);}
@@ -94,6 +94,36 @@ for(const [core,code] of [['bundled',local],['3.3.19',updated]])for(const width 
   await page.locator('.page-overlay.open').evaluate(el=>{const body=el.querySelector('.page-body');if(body)body.scrollTop=0;});
   await page.locator('.page-overlay.open .page').screenshot({path:path.join(out,`颜色-${core}-${width}-${dark?'dark':'light'}-设置.png`)});
  }
+  for(const dark of [false,true]){
+   await page.evaluate(value=>__COLOR_TEST.theme(value),dark);
+   await page.evaluate(()=>__COLOR_TEST.dex());
+   const modal=page.locator('.overlay.open .modal:has(#pkm-big)');await modal.waitFor();
+   await page.waitForFunction(()=>{const body=document.querySelector('.overlay.open #pkm-body');return body&&body.textContent.includes('失败');});
+   await modal.evaluate(el=>{
+    el.querySelector('#pkm-formbar').innerHTML='<div class="pkm-forms"><button class="btn-small pkm-form-btn active">普通形态</button><button class="btn-small pkm-form-btn">地区形态</button></div>';
+    el.querySelector('#pkm-body').innerHTML='<div class="row"><span class="k">分类</span><span class="v">草蛇宝可梦</span></div><div class="row"><span class="k">特性</span><span class="v"><span class="abi-link">茂盛</span> <span class="dim">隐藏:</span> <span class="abi-link">唱反调</span></span></div>';
+   });
+   const metrics=await modal.evaluate(el=>{
+    const root=document.getElementById('pkm-hud-inline'),probe=document.createElement('span');root.appendChild(probe);
+    const token=name=>{probe.style.color='var('+name+')';return getComputedStyle(probe).color;};
+    const canvas=token('--swsh-canvas'),soft=token('--swsh-surface-soft'),stage=token('--swsh-dex-stage');probe.remove();
+    const head=el.querySelector('.modal-head'),name=el.querySelector('.modal-name'),close=el.querySelector('.close'),art=el.querySelector('.pkm-big'),form=el.querySelector('.pkm-form-btn'),key=el.querySelector('#pkm-body .k'),value=el.querySelector('#pkm-body .v'),link=el.querySelector('.abi-link');
+    const rect=el.getBoundingClientRect();return {canvas,soft,stage,modal:getComputedStyle(el).backgroundColor,head:getComputedStyle(head).backgroundColor,headShadow:getComputedStyle(head).boxShadow,name:getComputedStyle(name).color,close:getComputedStyle(close).color,form:getComputedStyle(form).color,formBg:getComputedStyle(form).backgroundColor,key:getComputedStyle(key).color,value:getComputedStyle(value).color,link:getComputedStyle(link).color,art:getComputedStyle(art).backgroundImage,width:rect.width,right:rect.right,viewport:innerWidth};
+   });
+   assert.equal(metrics.modal,metrics.canvas,'wild Pokédex shell must use the opaque local canvas');
+   assert.equal(metrics.head,metrics.soft,'wild Pokédex header must use the local soft surface');
+   assert(metrics.headShadow.includes(dark?'143, 185, 217':'184, 46, 70'),`wild Pokédex theme edge color: ${JSON.stringify(metrics)}`);
+   if(dark)assert(!/red|\b(184, 46, 70|240, 139, 156)\b/i.test(metrics.headShadow),`dark wild Pokédex must not have a red edge: ${JSON.stringify(metrics)}`);
+   assert(contrast(metrics.name,metrics.soft)>=4.5,`wild Pokédex title contrast: ${JSON.stringify(metrics)}`);
+   assert(contrast(metrics.close,metrics.soft)>=4.5,`wild Pokédex close contrast: ${JSON.stringify(metrics)}`);
+   assert(contrast(metrics.form,metrics.formBg)>=4.5,`wild Pokédex form control contrast: ${JSON.stringify(metrics)}`);
+   assert(contrast(metrics.key,metrics.canvas)>=4.5&&contrast(metrics.value,metrics.canvas)>=4.5,`wild Pokédex row contrast: ${JSON.stringify(metrics)}`);
+   assert(contrast(metrics.link,metrics.canvas)>=4.5,`wild Pokédex ability link contrast: ${JSON.stringify(metrics)}`);
+   assert(metrics.art.includes(metrics.stage),`wild Pokédex sprite stage must use the local theme: ${JSON.stringify(metrics)}`);
+   assert(metrics.width<=metrics.viewport&&metrics.right<=metrics.viewport+1,`wild Pokédex must fit viewport: ${JSON.stringify(metrics)}`);
+   await modal.screenshot({path:path.join(out,`颜色-${core}-${width}-${dark?'dark':'light'}-野外图鉴.png`)});
+   await modal.locator('.close').click();
+  }
  await page.locator('[data-toggle="swsh-dark"]').uncheck();
  assert.equal(await page.evaluate(()=>localStorage.getItem('pk_swsh_dark_theme')),'0');await page.reload();await page.locator('.swsh-trainer').waitFor();assert(!(await page.locator('#pkm-hud-inline').evaluate(el=>el.classList.contains('swsh-dark'))),'saved day survives reload');
  assert.equal(await page.evaluate(()=>previewWrites),0);await context.close();

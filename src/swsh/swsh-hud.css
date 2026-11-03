@@ -328,5 +328,24 @@
 .detail-modal .row .type-chip{min-width:5.8em;padding:3px 9px 3px 23px;font-size:.82rem;line-height:1.35}
 .detail-modal .row .type-chip .type-ic{left:6px;width:14px;height:14px}
 @media(max-width:520px){.detail-modal .dt-move-cell{gap:6px;padding:6px}.detail-modal .dt-move-cell .move-type{width:5.2em!important;min-width:5.2em!important;font-size:.76rem}.detail-modal .dt-move-cell .move-name{font-size:.82rem}}
+
+/* Wild encounter Pokédex popup: refine the upstream structure inside SwSh-owned themes. */
+:is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big){
+  box-sizing:border-box;width:min(100%,520px);max-width:min(520px,calc(100vw - 24px));max-height:min(88vh,760px);overflow:auto;border-radius:14px;
+}
+:is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big) .modal-head{position:sticky;top:0;z-index:2;padding:12px 14px}
+:is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big) .modal-name{min-width:0;overflow-wrap:anywhere}
+:is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big) .modal-body{padding:12px 14px 16px}
+:is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big) #pkm-formbar:empty{display:none}
+:is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big) .pkm-forms{gap:7px;padding:8px 0 10px;border-bottom-style:solid}
+:is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big) .pkm-big{min-height:clamp(150px,28vh,210px);margin:10px 0 8px;padding:12px;border:1px solid var(--swsh-border);border-radius:12px}
+:is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big) .pkm-big-img{width:min(38vw,158px);height:min(38vw,158px);max-height:180px;filter:drop-shadow(0 7px 9px rgba(15,24,38,.24))}
+:is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big) #pkm-body .row{align-items:flex-start;border-bottom-style:solid}
+:is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big) #pkm-body .row:last-child{border-bottom:0}
+@media(max-width:520px){
+  :is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big){max-width:calc(100vw - 16px);max-height:90vh}
+  :is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big) .modal-body{padding:10px 11px 13px}
+  :is(#pkm-hud-win,#pkm-hud-inline) .overlay .modal:has(#pkm-big) .pkm-big{min-height:150px}
+}
 .koji-tc-image .dim{font-size:.72rem;margin-top:4px}
 .item-entry.item-no-click{cursor:default}.item-entry.item-no-click:hover{background:transparent}

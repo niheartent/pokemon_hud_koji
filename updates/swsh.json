@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.6.28",
+  "ui": "1.7.1",
   "core": "5.9.2",
   "testedCore": [
     "3.3.19",
     "5.9.2"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.28/versions/swsh/1.6.28/hud.js",
-  "sha256": "8b9427f55d8d08911c88518744eb17a131b6b1536426d9cb7a2ff23e9dbb9685",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.6.28/versions/swsh/1.6.28/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.28",
-  "notes": "# 剑盾 v1.6.28\n\n- 跟进弦九核心 v5.9.2（提交 f831dcc736b71071e8f32411d2c5ceae90026533）。\n- 保留详情页和附近行动页图鉴入口及返回行为。\n- 接入搭档加点弹窗、六项上限计算、确认写回、可加点提示和超上限自动归零。\n- 页面模板、布局、字体、明暗颜色和 CSS 继续由剑盾本地维护，不复用弦九原版视觉层。\n\n验证：npm test、npm run package、npm run verify、npm audit --audit-level=moderate 均通过。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.1/versions/swsh/1.7.1/hud.js",
+  "sha256": "b84a65c1a5188a98c2f1e4c1359d072b5f2213225e75f0ce809001daa950643e",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.1/versions/swsh/1.7.1/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.7.1",
+  "notes": "# 剑盾 v1.7.1\n\n- 为野外宝可梦图鉴弹窗补上剑盾本地样式：弹窗标题、形态按钮、宝可梦展示区和资料行跟随白天／暗色主题，并统一边框、文字对比和交互色。\n- 小屏幕下限制弹窗边界并允许内容区滚动，避免图鉴超出视口。\n- 继续使用弦九核心 v5.9.2 的图鉴数据与行为；只接管剑盾本地视觉样式，不复用弦九原版图鉴配色。\n\n验证：构建、双色主题下野外图鉴浏览器检查及仓库发布校验通过。\n"
 }

@@ -1,6 +1,6 @@
 # 剑盾 HUD 美化版
 
-当前版本：**v1.6.28**，内置弦九核心 **v5.9.2**。
+当前版本：**v1.7.1**，内置弦九核心 **v5.9.2**。
 
 剑盾版的目标是以剑盾风格重新组织 HUD：核心只提供数据、图片、业务处理和宿主交互，本地模板负责队伍、训练家、附近宝可梦、详情和所有页面的最终渲染，避免弦九更新把原版 CSS 或模板重新带回来。
 
@@ -15,7 +15,7 @@
 
 ## 安装和更新
 
-从 [swsh-v1.6.28 Release](https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.6.28) 下载 `swsh-v1.6.28-hud.json`，导入酒馆并替换旧脚本，确保只启用一个剑盾 HUD。
+从 [swsh-v1.7.1 Release](https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.7.1) 下载 `swsh-v1.7.1-hud.json`，导入酒馆并替换旧脚本，确保只启用一个剑盾 HUD。
 
 在设置中检查更新后，先检查美化版，再检查弦九核心并生成已验证的组合脚本。点击安装后，桌面端按当前角色卡的存储标识写回，只更新明确标记的剑盾美化脚本；原版 HUD 和其他角色卡保持不变。
 
