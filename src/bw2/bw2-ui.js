@@ -162,6 +162,8 @@ function bw2BindUI(app){
     var battleToggle=target.closest('[data-bw2-battle-toggle]');if(battleToggle){e.preventDefault();e.stopPropagation();bw2BattleCollapsed=!bw2BattleCollapsed;bw2SyncBattleLayout(app);bw2ResizeConsole();return;}
     var boxTab=target.closest('[data-bw2-box-tab]');if(boxTab){e.preventDefault();e.stopPropagation();bw2SwitchBox(boxTab.getAttribute('data-bw2-box-tab'));return;}
     var nearbyStep=target.closest('[data-bw2-nearby-step]');if(nearbyStep){e.preventDefault();e.stopPropagation();var nearbyGrid=nearbyStep.parentElement.querySelector('.nb-grid');if(nearbyGrid){var offsets=bw2NearbyOffsets(nearbyGrid),index=bw2NearbyIndex(nearbyGrid)+Number(nearbyStep.dataset.bw2NearbyStep);index=Math.max(0,Math.min(offsets.length-1,index));nearbyGrid.scrollTo({left:offsets[index],behavior:'smooth'});}return;}
+    var nearbyDex=target.closest('[data-pkm-dex]');
+    if(nearbyDex){e.preventDefault();e.stopImmediatePropagation();var nearbyKey=nearbyDex.getAttribute('data-key'),nearbyPkm=nearbyKey&&stat_data.附近宝可梦&&stat_data.附近宝可梦[nearbyKey];if(nearbyPkm)bw2OpenDexForCard({species:nearbyPkm.名字,name:nearbyPkm.名字,where:'nearby',slot:nearbyKey});return;}
     var quickCommand=target.closest('.bw2-command-screen [data-cmd]');
     if(quickCommand){e.preventDefault();e.stopPropagation();var commandLabel=quickCommand.querySelector('.menu-label'),labelText=quickCommand._bw2CommandLabel||commandLabel.textContent;quickCommand._bw2CommandLabel=labelText;
       if(fillInput(quickCommand.getAttribute('data-cmd'))){commandLabel.textContent='已填入';quickCommand.classList.add('bw2-cmd-filled');hudScope.setTimeout(function(){if(quickCommand.isConnected){commandLabel.textContent=labelText;quickCommand.classList.remove('bw2-cmd-filled');}},1200);}
@@ -170,7 +172,7 @@ function bw2BindUI(app){
     var toggle=target.closest('[data-bw2-trainer]');
     if(toggle){e.preventDefault();e.stopPropagation();bw2ToggleTrainer(toggle);return;}
     var info=target.closest('[data-bw2-info]');
-    if(info){e.preventDefault();e.stopPropagation();bw2OpenInfo(currentDetailCard);return;}
+    if(info){e.preventDefault();e.stopPropagation();bw2OpenDexForCard(currentDetailCard);return;}
     var held=target.closest('[data-bw2-held]');
     if(held){e.preventDefault();e.stopPropagation();bw2OpenHeldItem(currentDetailCard);return;}
     var heldAction=target.closest('[data-bw2-held-action]'),equip=target.closest('[data-bw2-equip-item]');
@@ -184,7 +186,7 @@ function bw2BindUI(app){
     var tab=target.closest('.tab-btn[data-tab]');
     if(tab){e.preventDefault();e.stopPropagation();bw2SelectConsoleTab(app,tab.getAttribute('data-tab'));}
   },true);
-  hudScope.listen(app,'keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-bw2-info]')){e.preventDefault();bw2OpenInfo(currentDetailCard);}});
+  hudScope.listen(app,'keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-bw2-info]')){e.preventDefault();bw2OpenDexForCard(currentDetailCard);}});
   hudScope.listen(app,'scroll',function(e){if(e.target.matches&&e.target.matches('.bw2-home-nearby .nb-grid'))bw2UpdateNearbyArrows(e.target);},true);
 }
 /* Ancillary identity and encounter fields remain accessible through the name. */
@@ -213,6 +215,14 @@ function bw2ReopenDetail(card){
   currentDetailCard=cardFromPkm(p,card.slot,card.where,card.boxName);overlay.innerHTML=detailHTML(currentDetailCard);overlay.classList.add('open');
   if(typeof pkImgFix==='function')pkImgFix(overlay);resolvePkmImgs(overlay);resolveMoveTypes(overlay);resolveItemImgs(overlay);hudResolvePkidbImages(overlay);
   resizeFrame();
+}
+
+function bw2OpenDexForCard(card){
+  if(!card)return;var p=getCardPkm(card)||{},raw=String(card.species||card.name||p.名字||'');
+  var base=typeof pkmFormParse==='function'?(pkmFormParse(raw).base||''):raw;
+  if(!base)base=raw.replace(/^(闪光|头目|霸主|搭档)\s*/,'');
+  if(!base||typeof showPokemonInfo!=='function')return;
+  overlay.classList.add('bw2-dex-overlay');showPokemonInfo(base,0,1);bw2PageIsolation();
 }
 
 /* PERF P04: merge host-event bursts; never alter persistence queue or asset guards. */

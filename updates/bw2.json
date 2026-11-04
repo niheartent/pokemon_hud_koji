@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "bw2",
-  "ui": "0.4.25",
+  "ui": "0.4.26",
   "core": "5.9.2",
   "testedCore": [
     "3.3.19",
     "5.9.2"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.25/versions/bw2/0.4.25/hud.js",
-  "sha256": "ca45bb1c9f87a50e02a3e4c8492e8ef0cdd70481589742161a14be5b97779a85",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.25/versions/bw2/0.4.25/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.25",
-  "notes": "# 黑白2 v0.4.25\n\n- 跟进弦九核心 v5.9.2（提交 f831dcc736b71071e8f32411d2c5ceae90026533）。\n- 接入详情页与附近行动页的图鉴入口。\n- 接入搭档加点弹窗、六项上限计算、确认写回、可加点提示和超上限自动归零。\n- 页面模板、布局、字体、颜色和 CSS 继续由黑白2本地维护，不复用弦九原版视觉层。\n\n验证：npm test、npm run package、npm run verify、npm audit --audit-level=moderate 均通过。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.26/versions/bw2/0.4.26/hud.js",
+  "sha256": "a03799d4c7a5e532ed0af1bea6af45379037662d3eadc6408a9e44e08065af91",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/bw2-v0.4.26/versions/bw2/0.4.26/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/bw2-v0.4.26",
+  "notes": "# 黑白2 v0.4.26\n\n- 图鉴可学招式列表固定属性/类别、等级与招式名列宽，表头和内容逐列对齐。\n- 调整图鉴全屏覆盖展示，并为附近宝可梦和队伍详情补充图鉴入口。\n- 统一属性标签为左侧图标、右侧名称，并按三字宽度对齐。\n\n验证：`npm run build:bw2`、`npm run test:bw2` 通过。\n\n## 历史版本\n\n# 黑白2 v0.4.25\n\n- 收敛版本与仓库配置，修复更新器和发布重试时的地址/版本漂移风险。\n- 跟进弦九核心 v5.9.2，并接入详情页与附近行动页的图鉴入口。\n\n- 跟进弦九核心 v5.8.5（提交 `0da00865e9c94cdf8eb3c34f2d1c11922f2a22f`）。\n- 适配核心新增的异步资料加载：属性克制与属性颜色、地区图鉴、特性别名、英文图鉴名和新版资料修订号；加载完成后主动刷新自有页面及独立版。\n- 接入名称前缀隐藏、闪光/头目/搭档倾向标识及附近宝可梦新字段，保留黑白双屏和独立版自己的展示层。\n- 外部跨域脚本的脱敏报错不再误报为 HUD 错误，诊断页单独计数；自身错误仍保留完整记录。\n- 更新器继续按当前角色卡内启用的脚本定位并校验写回，独立版不含远程更新器。\n- 继续使用本地主题、布局和颜色，不依赖弦九原版 HTML/CSS。\n\n- 修复角色卡写回隔离：只更新明确标记的黑白美化脚本，找不到美化目标时拒绝写入，保护弦九原版 HUD。\n\n验证：`npm test`、`npm run package`、`npm run verify` 均通过。\n"
 }

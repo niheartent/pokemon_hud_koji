@@ -44,8 +44,11 @@ function bw2PagePopout(on){
 function bw2SyncPageScreens(app,metrics){
   bw2NormalizeUpperPage();
   if(pageOverlay){var badgeGrid=pageOverlay.querySelector('.badge-grid'),rows=badgeGrid&&String(Math.ceil(badgeGrid.children.length/4));if(badgeGrid&&badgeGrid.style.getPropertyValue('--bw2-badge-rows')!==rows)badgeGrid.style.setProperty('--bw2-badge-rows',rows);}
-  if(!pageOverlay||!pageOverlay.classList.contains('bw2-upper-page'))return;var root=app.querySelector('.bw2-console');if(!root)return;metrics=metrics||bw2ConsoleMetrics(root);var r=metrics.root,screen=metrics.upper,scale=metrics.scale;
-  if(pageOverlay.classList.contains('bw2-full-page'))screen={left:screen.left,top:screen.top,width:screen.width,height:metrics.lower.bottom-screen.top};
+  if(!pageOverlay||!pageOverlay.classList.contains('bw2-upper-page'))return;var root=app.querySelector('.bw2-console');if(!root)return;
+  // Full Pokédex uses the whole dual-screen canvas; avoid recalculating a
+  // scaled rectangle while it opens, which makes the shell visibly jump.
+  if(pageOverlay.classList.contains('bw2-full-page')){['--bw2-page-left','--bw2-page-top','--bw2-page-width','--bw2-page-height'].forEach(function(key){pageOverlay.style.removeProperty(key);});return;}
+  metrics=metrics||bw2ConsoleMetrics(root);var r=metrics.root,screen=metrics.upper,scale=metrics.scale;
   var values={'--bw2-page-left':(screen.left-r.left)/scale-root.clientLeft+'px','--bw2-page-top':(screen.top-r.top)/scale-root.clientTop+'px','--bw2-page-width':screen.width/scale+'px','--bw2-page-height':screen.height/scale+'px'};Object.keys(values).forEach(function(key){if(pageOverlay.style.getPropertyValue(key)!==values[key])pageOverlay.style.setProperty(key,values[key]);});
 }
 function bw2PageIsolation(){
@@ -63,7 +66,7 @@ function bw2PageIsolation(){
 }
 function bw2CloseInteractions(){
   clearDexGrid();
-  if(overlay){overlay.classList.remove('open');overlay.innerHTML='';}if(subOverlay){subOverlay.classList.remove('open');subOverlay.innerHTML='';}
+  if(overlay){overlay.classList.remove('open','bw2-dex-overlay');overlay.innerHTML='';}if(subOverlay){subOverlay.classList.remove('open');subOverlay.innerHTML='';}
   if(pageOverlay){pageOverlay.classList.remove('open');bw2PagePopout(false);}currentPageKey='';bw2HeldContext=null;clearBack();
 }
 function bw2SyncInteractionScreens(app,metrics){

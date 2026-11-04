@@ -96,6 +96,85 @@
 .bw2-host .bw2-detail .dt-move-cell .move-name{font-size:3.5cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .bw2-host .bw2-detail .dt-move-cell .type-chip,.bw2-host .bw2-detail .dt-move-cell .move-type{font-size:3cqw;padding:0 1cqw;width:12cqw;min-width:12cqw;height:4.6cqw;display:flex;align-items:center;justify-content:center}
 .bw2-host .bw2-move-meta{grid-template-columns:12cqw 1fr;font-size:3.4cqw}
+.bw2-host .bw2-detail .dt-move-cell .move-type{grid-column:1;grid-row:1;justify-self:start;align-self:center}
+.bw2-host .bw2-detail .dt-move-cell .move-name{grid-column:2;grid-row:1;align-self:center;text-align:left}
+.bw2-host .bw2-detail .dt-move-cell .bw2-move-meta{grid-column:1;grid-row:2;display:flex;align-items:center;justify-content:flex-start;gap:1cqw;min-width:0}
+.bw2-host .bw2-detail .dt-move-cell .bw2-move-kind{text-align:left;white-space:nowrap}
+
+/* All BW2 type labels share one three-character name column: icon left,
+   label right, identical dimensions in detail, moves and nearby cards. */
+.bw2-host :is(.koji-detail-type-chip,.type-chip,.move-type,.nb-type-chip){box-sizing:border-box;display:inline-flex;align-items:center;justify-content:flex-start;gap:.28em;width:5.65em;min-width:5.65em;height:1.8em;padding:0 .38em;border-radius:0;white-space:nowrap;overflow:hidden;line-height:1}
+.bw2-host :is(.koji-detail-type-chip,.type-chip,.move-type,.nb-type-chip) .type-ic{flex:0 0 1em;width:1em;height:1em;margin:0}
+.bw2-host :is(.koji-detail-type-chip,.type-chip,.move-type,.nb-type-chip){text-align:left}
+.bw2-host .mv-c3 :is(.type-chip,.move-type){width:5.65em;min-width:5.65em;justify-content:flex-start}
+
+/* The full-screen dex entry keeps its own scroll area and never scales the
+   underlying dual-screen shell while remote data is loading. */
+.bw2-host .bw2-dex-overlay>.modal{display:flex;flex-direction:column;overflow:hidden;background:#121625;color:#e3ebf3}
+.bw2-host .bw2-dex-overlay>.modal>.modal-head{flex:0 0 44px;display:flex;align-items:center;background:#252a2b;border-bottom:1px solid #c9e6fb55}
+.bw2-host .bw2-dex-overlay>.modal>.modal-body{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;padding:14px;background:#121625}
+.bw2-host .bw2-dex-overlay #pkm-moves-row .k{width:100%;text-align:left;padding-bottom:8px}
+.bw2-host .bw2-dex-overlay #pkm-moves{width:100%;max-width:none}
+.bw2-host .bw2-dex-overlay .mv-row{grid-template-columns:minmax(0,1fr) 56px minmax(0,1.4fr);gap:8px;align-items:center}
+.bw2-host .bw2-dex-overlay .mv-c1{grid-column:2;text-align:right;white-space:nowrap}
+.bw2-host .bw2-dex-overlay .mv-c2{grid-column:3;text-align:left;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bw2-host .bw2-dex-overlay .mv-c3{grid-column:1;text-align:left;justify-content:flex-start;min-width:0}
+.bw2-host .bw2-dex-overlay .mv-head .mv-c1,.bw2-host .bw2-dex-overlay .mv-head .mv-c2,.bw2-host .bw2-dex-overlay .mv-head .mv-c3{color:#a9c4cb;font-size:.78em}
+
+/* Dex learnset columns are deliberately fixed: attribute/category on the
+   left, level in a narrow middle column, and the move name on the right.
+   Using `1fr` for the attribute column made every row shift when a type
+   label or category icon had a different width. */
+.bw2-host .bw2-dex-overlay #pkm-moves .mv-row{
+  --bw2-dex-type-col:8.1em;
+  --bw2-dex-level-col:3.5em;
+  display:grid;
+  grid-template-columns:var(--bw2-dex-type-col) var(--bw2-dex-level-col) minmax(0,1fr);
+  gap:.55em;
+  align-items:center;
+}
+.bw2-host .bw2-dex-overlay #pkm-moves .mv-c3{
+  grid-column:1;
+  grid-row:1;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:.35em;
+  text-align:left;
+}
+.bw2-host .bw2-dex-overlay #pkm-moves .mv-c1{
+  grid-column:2;
+  grid-row:1;
+  min-width:0;
+  text-align:right;
+  white-space:nowrap;
+}
+.bw2-host .bw2-dex-overlay #pkm-moves .mv-c2{
+  grid-column:3;
+  grid-row:1;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  text-align:left;
+  white-space:nowrap;
+}
+.bw2-host .bw2-dex-overlay #pkm-moves .mv-c3 .type-chip,
+.bw2-host .bw2-dex-overlay #pkm-moves .mv-c3 .move-type{
+  flex:0 0 5.65em;
+  width:5.65em;
+  min-width:5.65em;
+  justify-content:flex-start;
+}
+.bw2-host .bw2-dex-overlay #pkm-moves .mv-c3 .move-cat-ic{
+  flex:0 0 1.1em;
+  width:1.1em;
+  height:1.1em;
+  object-fit:contain;
+}
+.bw2-host .bw2-dex-overlay #pkm-moves .mv-head .mv-c3,
+.bw2-host .bw2-dex-overlay #pkm-moves .mv-head .mv-c1,
+.bw2-host .bw2-dex-overlay #pkm-moves .mv-head .mv-c2{font-size:.78em;}
 .bw2-host .bw2-move-actions{position:absolute;z-index:2;left:14.25%;top:86.2%;width:40%;height:9%;display:flex;align-items:stretch;gap:1cqw}
 .bw2-host .bw2-box-action,.bw2-host .bw2-detail .dt-more-btn{position:static;flex:1;min-width:0;min-height:0;width:auto;height:100%;margin:0;padding:0 1cqw;border:1px solid #91a5b3;border-radius:0;background:#cbd3d7;color:#35434d;font-family:inherit;font-size:3.1cqw;font-weight:600;line-height:1.1;white-space:nowrap;cursor:pointer}
 .bw2-host .bw2-box-action:disabled{opacity:.5;cursor:default}

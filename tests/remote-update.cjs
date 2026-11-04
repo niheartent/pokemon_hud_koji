@@ -2,6 +2,7 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),asse
 const {chromium,launchOptions}=require('../src/bw2/browser-runtime.cjs');
 const root=path.join(__dirname,'..'),sha=s=>crypto.createHash('sha256').update(s).digest('hex');
 function packageOf(code){let value;function visit(n){if(!n||!n.type)return;if(n.type==='VariableDeclarator'&&n.id.name==='PK_BEAUTY_PACKAGE')value=JSON.parse(code.slice(n.init.start,n.init.end));for(const v of Object.values(n))if(Array.isArray(v))v.forEach(visit);else if(v&&v.type)visit(v);}visit(acorn.parse(code,{ecmaVersion:'latest'}));return value;}
+async function waitHealthy(page,timeoutMs=12000){const deadline=Date.now()+timeoutMs;let record=null;while(Date.now()<deadline){record=await page.evaluate(()=>window.__KOJI_TEST&&__KOJI_TEST.record());if(record&&record.health==='healthy')return record;await page.waitForTimeout(100);}throw new Error('Installed IndexedDB record did not become healthy: '+String(record&&record.health||'missing'));}
 const bridge=`window.__KOJI_TEST={check:function(){return pkCheckUpdate();},install:function(){return pkDoUpdate();},snapshot:function(){return {core:PK_VER,ui:PK_BEAUTY_VER,prepared:kojiPrepared,log:document.getElementById('pk-update-msg')?.textContent};},record:function(){return pkSlotRead('active');},failDb:function(){pkInstallRecord=function(){return Promise.reject(new Error('mock database failure'));};},failWrite:function(){pkUpdateScript=function(){return Promise.resolve({ok:false});};}};`;
 (async()=>{const browser=await chromium.launch({headless:true,...launchOptions}),results=[];
 try{for(const channel of ['bw2','swsh']){
@@ -15,6 +16,7 @@ try{for(const channel of ['bw2','swsh']){
   const currentManifest={schema:1,channel,ui:version,core};
   const futureManifest={schema:1,channel,ui:nextUi,core,script:'https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/test/versions/'+channel+'/hud.js',sha256:sha(futureCode)};
   const template=fs.readFileSync(path.join(folder,channel==='bw2'?'预览与测试.html':'剑盾版预览.html'),'utf8');
+  assert.equal(template.includes('window.__PK_HUD_DELEGATED_BOOT__={coreReady:function(){},ready:function(){},reportError:function(){}};'),false,'preview must not fake a completed host handoff');
   const marker=template.lastIndexOf('try{ensureHud();}catch(e){}');assert.ok(marker>0);const html=template.slice(0,marker)+bridge+'\n'+template.slice(marker);
   let manifest=currentManifest,upstream=native,release=futureCode,uiFail=false,coreFail=false;
   const errors=[],page=await browser.newPage({viewport:{width:1000,height:1400}});page.on('pageerror',e=>errors.push(e.message));
@@ -56,11 +58,11 @@ try{for(const channel of ['bw2','swsh']){
   state=await page.evaluate(()=>__KOJI_TEST.snapshot());assert.equal(state.prepared.core,core);assert.equal(state.prepared.ui,nextUi);
   assert.deepEqual(await page.evaluate(()=>Promise.all([__KOJI_TEST.install(),__KOJI_TEST.install()])),[true,false]);
   const record=await page.evaluate(()=>__KOJI_TEST.record());assert.equal(record.contentSha,sha(record.content));
-  manifest={...currentManifest,ui:nextUi};await page.reload();await page.waitForFunction(v=>window.__KOJI_TEST&&__KOJI_TEST.snapshot().ui===v,nextUi);
+  manifest={...currentManifest,ui:nextUi};await page.reload();await waitHealthy(page);
   await page.locator(channel==='bw2'?'.bw2-console':'.swsh-team').waitFor();
   await page.locator('.tab-btn[data-tab="4"]').click();await page.locator('[data-page="settings"]').click();
-  await page.waitForFunction(async()=>{const record=await __KOJI_TEST.record();return record&&record.health==='healthy';});const healthy=await page.evaluate(()=>__KOJI_TEST.record());assert.equal(healthy.health,'healthy');
-  const secondUi=nextUi.replace(/\d+$/,n=>Number(n)+1),secondPkg={...future,version:secondUi};const secondScope={PK_BEAUTY_PACKAGE:secondPkg};vm.createContext(secondScope);vm.runInContext(secondPkg.runtime,secondScope);release=secondScope.pkBeautyBuildRemote(native);manifest={...futureManifest,ui:secondUi,sha256:sha(release)};await page.evaluate(()=>__KOJI_TEST.failWrite());assert.equal(await page.evaluate(()=>__KOJI_TEST.check()),true);assert.equal(await page.evaluate(()=>__KOJI_TEST.install()),true);manifest={...currentManifest,ui:secondUi};await page.reload();await page.waitForFunction(v=>window.__KOJI_TEST&&__KOJI_TEST.snapshot().ui===v,secondUi);
+  const healthy=await waitHealthy(page);assert.equal(healthy.health,'healthy');
+  const secondUi=nextUi.replace(/\d+$/,n=>Number(n)+1),secondPkg={...future,version:secondUi};const secondScope={PK_BEAUTY_PACKAGE:secondPkg};vm.createContext(secondScope);vm.runInContext(secondPkg.runtime,secondScope);release=secondScope.pkBeautyBuildRemote(native);manifest={...futureManifest,ui:secondUi,sha256:sha(release)};await page.evaluate(()=>__KOJI_TEST.failWrite());assert.equal(await page.evaluate(()=>__KOJI_TEST.check()),true);assert.equal(await page.evaluate(()=>__KOJI_TEST.install()),true);manifest={...currentManifest,ui:secondUi};await page.reload();await waitHealthy(page);
   assert.deepEqual(errors,[]);results.push({channel,core,ui:version,nextUi,pinnedLatestInterfacesComposedAndBooted:true,coreOnly:true,uiOnlyReloaded:true,twoConsecutiveUiUpdatesReloaded:true,both:true,checksumTamperingBlocked:true,crossChannelBlocked:true,incompatibleUpstreamUiFallback:true,independentNetworkFailures:true,concurrentInstallSingleWrite:true,realIndexedDbHealthy:true,realHostWriteBackTested:false});await page.close();
 }fs.mkdirSync(path.join(root,'artifacts'),{recursive:true});fs.writeFileSync(path.join(root,'artifacts/remote-update-tests.json'),JSON.stringify({passed:true,results},null,2));console.log(JSON.stringify({passed:true,channels:results}));
 }finally{await browser.close();}})().catch(error=>{console.error(error);process.exitCode=1;});
