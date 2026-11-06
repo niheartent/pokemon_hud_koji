@@ -245,7 +245,7 @@
 .bw2-host .bw2-upper-dialog>.bw2-encounter{display:flex;flex-direction:column;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;min-height:0;overflow:hidden}
 .bw2-host .bw2-upper-dialog>.bw2-popup>.modal-head{margin:0;padding:5px 12px;min-height:38px;border:0;border-bottom:1px solid #c9e6fb55}
 .bw2-host .bw2-upper-dialog>.bw2-popup>.modal-body{margin:0;padding:12px;border:0;min-height:0;max-height:none;flex:1;overflow:auto}
-.bw2-host .bw2-console:has(>.pkm-hud-overlay.open>.bw2-detail)>.pkm-hud-page-overlay,.bw2-host .bw2-console:has(>.bw2-upper-dialog.open)>.pkm-hud-page-overlay{visibility:hidden;pointer-events:none!important}
+.bw2-host .bw2-console:has(>.pkm-hud-overlay.open>.bw2-detail)>.pkm-hud-page-overlay,.bw2-host .bw2-console:has(>.bw2-upper-dialog.open)>.pkm-hud-page-overlay,.bw2-host .bw2-console:has(>.bw2-dex-overlay.open)>.pkm-hud-page-overlay{visibility:hidden;pointer-events:none!important}
 .bw2-host .bw2-console:has(>.bw2-upper-dialog.open) .bw2-display-area>*{visibility:hidden}
 .bw2-host .bw2-console:has(>.pkm-hud-sub.bw2-upper-dialog.open) .bw2-detail-header,.bw2-host .bw2-console:has(>.pkm-hud-sub.bw2-upper-dialog.open) .bw2-summary-scene{visibility:hidden}
 

@@ -177,6 +177,14 @@ function bw2BindUI(app){
   hudScope.cleanup(function(){if(pageOverlay&&pageOverlay.parentElement===document.body)pageOverlay.remove();});
   hudScope.listen(app,'click',function(e){
     var target=e.target;if(target&&target.nodeType!==1)target=target.parentElement;if(!target||!target.closest)return;
+    var dexCell=target.closest('.dex-cell[data-name]');
+    if(dexCell&&pageOverlay&&pageOverlay.contains(dexCell)){
+      e.preventDefault();e.stopImmediatePropagation();
+      showPokemonInfo(dexCell.getAttribute('data-name'),dexCell.getAttribute('data-id'));
+      overlay.classList.add('bw2-dex-overlay');
+      hudScope.setTimeout(function(){bw2BindDexClose(overlay);bw2PageIsolation();},0);
+      return;
+    }
     var pageButton=target.closest('.bw2-menu-button[data-page]');
     if(pageButton&&bw2IsTogglePage(pageButton.getAttribute('data-page'))){e.preventDefault();e.stopImmediatePropagation();var key=pageButton.getAttribute('data-page');if(pageOverlay.classList.contains('open')&&pageOverlay.getAttribute('data-bw2-page-key')===key)bw2CloseInteractions();else openPage(key);bw2SyncPageButtons();return;}
     var battleToggle=target.closest('[data-bw2-battle-toggle]');if(battleToggle){e.preventDefault();e.stopPropagation();bw2BattleCollapsed=!bw2BattleCollapsed;bw2SyncBattleLayout(app);bw2ResizeConsole();return;}
