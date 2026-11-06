@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>剑盾 HUD · 响应式交互样稿</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;color:#20242b;background:#f2f3f6;font-synthesis:none;text-rendering:optimizeLegibility}
+*{box-sizing:border-box}
+body{margin:0;min-width:320px;background:linear-gradient(135deg,#f7f7fa,#e9edf3);color:#20242b}
+button{font:inherit;cursor:pointer}
+.demo{max-width:1280px;margin:0 auto;padding:24px 28px 28px}
+.demo-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:18px}
+.eyebrow{font-size:11px;letter-spacing:.16em;font-weight:800;color:#7a8391;text-transform:uppercase}
+h1{margin:5px 0 4px;font-size:clamp(22px,3vw,32px);line-height:1.1;letter-spacing:-.025em}
+.intro{margin:0;color:#697383;font-size:14px}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.segmented{display:inline-flex;padding:4px;border:1px solid #d8dce4;border-radius:12px;background:#fff;gap:3px}
+.segmented button,.theme-toggle{min-height:40px;border:0;border-radius:9px;background:transparent;color:#535c69;padding:0 14px;font-size:13px;font-weight:700}
+.segmented button[aria-pressed="true"]{background:#20242b;color:#fff}
+.theme-toggle{border:1px solid #d8dce4;background:#fff;color:#343b46}
+button:focus-visible{outline:3px solid #3579bd;outline-offset:2px}
+.stage-wrap{display:flex;justify-content:center}
+.device{position:relative;width:min(100%,1120px);aspect-ratio:16/9;overflow:hidden;border:1px solid #d5d9e1;border-radius:18px;background:#101218;box-shadow:0 22px 56px rgba(31,43,62,.18);container-type:inline-size;transition:width .25s ease,aspect-ratio .25s ease}
+.demo[data-layout="portrait"] .device{width:min(100%,390px);aspect-ratio:9/16;border-radius:28px}
+.device::before{content:none}
+.app{position:absolute;inset:0;isolation:isolate;overflow:hidden;color:var(--text);background:var(--canvas);--text:#22262d;--muted:#66707d;--line:rgba(31,39,50,.14);--surface:rgba(255,255,255,.82);--surface-2:rgba(255,255,255,.55);--selected:#17191e;--selected-text:#fff;--swsh-red:#e33241;--swsh-red-dark:#c32834;--accent:var(--swsh-red);--canvas:#fbf7f8;--ribbon-left:var(--swsh-red-dark);--ribbon-center:var(--swsh-red);--ribbon-right:#d4ffff;--ribbon-secondary:var(--swsh-red-dark);--art-bg:#e8f7fa;--ring-primary:rgba(255,255,255,.82);--ring-secondary:rgba(255,255,255,.5);--ring-outline:rgba(255,255,255,.55)}
+.app[data-theme="night"]{--text:#edf2f8;--muted:#aeb8c7;--line:rgba(197,210,228,.2);--surface:rgba(32,42,56,.9);--surface-2:rgba(39,50,65,.74);--selected:#35455c;--selected-text:#fff;--accent:#72a8dc;--canvas:#18212d}
+.app[data-module="home"]{--canvas:var(--swsh-red);--accent:var(--swsh-red);--ribbon-left:var(--swsh-red-dark);--ribbon-center:var(--swsh-red);--ribbon-right:#d4ffff;--home-edge-left:#faedf0;--home-band:var(--swsh-red-dark);--home-main:var(--swsh-red);--home-edge-right:#d4ffff}
+.app[data-module="team"]{--canvas:#eaf8fb;--accent:var(--swsh-red);--ribbon-left:var(--swsh-red);--ribbon-center:#eaf8fb;--ribbon-right:#f8f5fb;--ribbon-secondary:var(--swsh-red-dark);--art-bg:#eaf9fb;--ring-primary:rgba(255,255,255,.84);--ring-secondary:rgba(255,255,255,.5);--ring-outline:rgba(255,255,255,.6)}
+.app[data-module="dex"]{--canvas:#fff1f0;--accent:var(--swsh-red);--ribbon-left:var(--swsh-red-dark);--ribbon-center:#fff1f0;--ribbon-right:#f7d9d5}
+.app[data-module="bag"]{--canvas:#fbf0e4;--accent:#d99124;--ribbon-left:#d99124;--ribbon-center:#fbf0e4;--ribbon-right:#f5dfc6}
+.app[data-module="map"]{--canvas:#e8f4f3;--accent:#38a5a0;--ribbon-left:#318f8e;--ribbon-center:#e8f4f3;--ribbon-right:#d2e9e6}
+.app[data-module="settings"]{--canvas:#f1effa;--accent:#7568bd;--ribbon-left:#7568bd;--ribbon-center:#f1effa;--ribbon-right:#dfdcf1}
+.app[data-module="records"]{--canvas:#eef1f7;--accent:#617ba8;--ribbon-left:#617ba8;--ribbon-center:#eef1f7;--ribbon-right:#d9e1ed}
+.app[data-theme="night"][data-module="home"]{--canvas:#182333;--accent:#68b9ce;--ribbon-left:#26354a;--ribbon-center:#182333;--ribbon-right:#2a414b;--home-edge-left:#26354a;--home-band:#2d4554;--home-main:#182333;--home-edge-right:#2a414b}
+.app[data-theme="night"][data-module="team"]{--canvas:#1b2633;--accent:#79a9d2;--ribbon-left:#304258;--ribbon-center:#1b2633;--ribbon-right:#273847;--ribbon-secondary:#26374a;--art-bg:#223240;--ring-primary:rgba(176,201,220,.46);--ring-secondary:rgba(145,172,194,.25);--ring-outline:rgba(190,210,228,.3)}
+.app[data-theme="night"][data-module="dex"]{--canvas:#202733;--accent:#91a9d1;--ribbon-left:#35475d;--ribbon-center:#202733;--ribbon-right:#303d50}
+.app[data-theme="night"][data-module="bag"]{--canvas:#282a31;--accent:#d1a25a;--ribbon-left:#4a3d2d;--ribbon-center:#282a31;--ribbon-right:#41382e}
+.app[data-theme="night"][data-module="map"]{--canvas:#1a2c31;--accent:#66b7ad;--ribbon-left:#274547;--ribbon-center:#1a2c31;--ribbon-right:#253a3c}
+.app[data-theme="night"][data-module="settings"]{--canvas:#26243a;--accent:#a39ae1;--ribbon-left:#3e3960;--ribbon-center:#26243a;--ribbon-right:#383451}
+.app[data-theme="night"][data-module="records"]{--canvas:#202b3a;--accent:#91a9d1;--ribbon-left:#35475d;--ribbon-center:#202b3a;--ribbon-right:#303d50}
+.backdrop{position:absolute;inset:0;z-index:-1;background:var(--canvas);transition:background .2s ease}
+.backdrop::before,.backdrop::after{content:"";position:absolute;inset:0;pointer-events:none}
+.backdrop::before{background:linear-gradient(118deg,var(--ribbon-left) 0 8%,var(--ribbon-center) 8% 92%,var(--ribbon-right) 92% 100%)}
+.backdrop::after{content:none}
+.app[data-module="team"] .backdrop{background:radial-gradient(ellipse 72% 66% at 74% 48%,rgba(194,255,255,.88) 0%,rgba(194,255,255,0) 74%),linear-gradient(138deg,#c8dddd 0%,#eaffff 24%,#d4ffff 55%,#fbffff 79%,#dcebef 100%)}
+/* The red underpaint tucks 0.2% beneath the dark stripe to cover the 1px clip-path antialias seam. */
+.app[data-view="team"] .backdrop::before{background:var(--swsh-red);clip-path:polygon(0 0,61.5% 0,36.7% 100%,0 100%)}
+.app[data-view="team"] .backdrop::after{content:"";background:var(--swsh-red-dark);clip-path:polygon(61.3% 0,71.4% 0,47.1% 100%,36.5% 100%)}
+.app[data-theme="night"][data-view="team"] .backdrop::before{background:#304258}
+.app[data-theme="night"][data-view="team"] .backdrop::after{background:#26374a}
+.app[data-view="party-detail"] .backdrop::before{background:var(--ribbon-left);clip-path:polygon(0 0,39.2% 0,14.4% 100%,0 100%)}
+.app[data-view="party-detail"] .backdrop::after{content:"";background:var(--ribbon-secondary);clip-path:polygon(39% 0,49.1% 0,24.8% 100%,14.2% 100%)}
+.app[data-view="party-detail"] .backdrop{background:linear-gradient(128deg,#dce4ec 0%,#d8e5eb 24%,#c6dedc 39%,#b4d9d6 51%,#c8e4e2 63%,#e8eef4 84%,#e3e9ef 100%)}
+.app[data-theme="night"][data-module="team"] .backdrop{background:linear-gradient(132deg,#1b2b3b 0%,#20313e 52%,#263441 100%)}
+.app[data-module="home"] .backdrop{background:var(--home-main)}
+.app[data-module="home"] .backdrop::before{background:linear-gradient(114deg,var(--home-edge-left) 0 11.3%,var(--home-band) 11.3% 22%,var(--home-main) 22% 79%,var(--home-band) 79% 89.3%,var(--home-edge-right) 89.3% 100%)}
+.screen-content{position:relative;height:calc(100% - 38px);overflow:auto;padding:0 2.3cqw 10px;scrollbar-width:thin;scrollbar-color:rgba(96,112,134,.45) transparent}
+.actionbar{height:38px;position:absolute;bottom:0;left:0;right:0;background:#101116;color:#fff;display:flex;justify-content:flex-end;align-items:center;gap:clamp(12px,2.4cqw,30px);padding:0 2.2cqw;font-size:clamp(10px,1.2cqw,14px);font-weight:700;z-index:2}
+.action{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.action-back{border:0;background:transparent;color:inherit;padding:0;font:inherit}
+.key{width:21px;height:21px;display:inline-grid;place-items:center;border:1.5px solid #fff;border-radius:50%;font-size:11px;font-weight:900}
+.action-key{width:22px;height:22px;object-fit:contain;display:block}
+.home-screen{height:100%;display:grid;grid-template-rows:1fr auto;align-items:center}
+.menu-grid{width:min(100%,1060px);height:100%;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));align-items:center;justify-items:center;gap:0;padding:0 0 34px}
+.menu-entry{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;height:100%;border:0;background:transparent;color:#fff;font-weight:800}
+.menu-entry .disc{position:relative;width:clamp(76px,11.45cqw,128px);height:clamp(76px,11.45cqw,128px);display:grid;place-items:center;border-radius:50%;background:#fff;box-shadow:0 6px 18px rgba(17,21,28,.12);transition:filter .12s ease,transform .12s ease}
+.menu-entry .disc-bg,.menu-entry .disc-shadow{display:none}
+.menu-entry .disc-bg{display:none}
+.menu-entry .menu-icon-source{position:relative;z-index:2;width:70%;height:70%;object-fit:contain}
+.menu-entry .menu-label{font-size:clamp(12px,1.65cqw,19px);text-shadow:0 1px 4px rgba(0,0,0,.18)}
+.menu-entry[aria-pressed="true"] .disc,.menu-entry:hover .disc,.menu-entry:focus-visible .disc,.menu-entry.is-pointer-active .disc,.menu-entry.is-focus-active .disc{transform:scale(1.02)}
+.menu-entry[aria-pressed="true"] .disc,.menu-entry:hover .disc,.menu-entry:focus-visible .disc,.menu-entry.is-pointer-active .disc,.menu-entry.is-focus-active .disc{background:#111318}
+.selection-arrow{position:absolute;z-index:6;left:0;top:0;width:52px;height:52px;overflow:visible;opacity:0;visibility:hidden;pointer-events:none;transform-origin:0 0;transform-box:fill-box;transform:translate3d(-80px,-80px,0);transition:transform .12s cubic-bezier(.2,.8,.2,1),opacity .1s ease,visibility .1s}
+.selection-arrow.is-visible{opacity:1;visibility:visible}
+.selection-arrow .arrow-glyph{fill:#111318;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.home-hint{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);width:min(64%,620px);padding:10px 20px 13px;background:rgba(31,32,36,.88);color:#fff;clip-path:polygon(4% 0,100% 0,96% 100%,0 100%);text-align:center;font-size:clamp(12px,1.5cqw,18px);font-weight:700}
+.page-layout{height:100%;display:grid;grid-template-columns:minmax(260px,.82fr) minmax(0,1.18fr);gap:clamp(12px,2cqw,24px);align-items:stretch}
+.section-label{display:flex;align-items:center;justify-content:space-between;margin:2px 0 9px;font-size:clamp(12px,1.25cqw,15px);font-weight:900;letter-spacing:.04em;color:var(--muted)}
+.team-list,.list-pane{display:flex;flex-direction:column;gap:7px;min-width:0}
+.team-row,.data-row,.item-row{position:relative;width:100%;min-height:clamp(38px,5.3cqw,54px);display:flex;align-items:center;gap:10px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--text);text-align:left}
+.data-row,.item-row{padding-left:12px}
+.team-row[aria-pressed="true"],.data-row[aria-pressed="true"],.item-row[aria-pressed="true"]{border-color:transparent;background:var(--selected);color:var(--selected-text)}
+.team-row:hover,.data-row:hover,.item-row:hover,.team-row:focus-visible,.data-row:focus-visible,.item-row:focus-visible,.team-row.is-pointer-active,.data-row.is-pointer-active,.item-row.is-pointer-active,.team-row.is-focus-active,.data-row.is-focus-active,.item-row.is-focus-active{border-color:transparent;background:var(--selected);color:var(--selected-text)}
+.sprite-mini{width:36px;height:36px;object-fit:contain;flex:0 0 auto}
+.row-name{font-size:clamp(12px,1.35cqw,16px);font-weight:850;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row-meta{margin-left:auto;font-size:clamp(10px,1.05cqw,13px);font-weight:750;opacity:.8;white-space:nowrap}
+.type-tag{display:inline-flex;align-items:center;gap:5px;min-height:24px;padding:3px 9px;border-radius:999px;background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--text);font-size:11px;font-weight:850}
+.type-dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.team-stage,.detail-stage,.info-stage{position:relative;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow:hidden;padding:16px;border:1px solid var(--line);border-radius:22px;background:var(--surface-2)}
+.team-stage::before,.detail-stage::before{content:"";position:absolute;width:72%;aspect-ratio:1;border:1px solid var(--line);border-radius:50%;box-shadow:0 0 0 18px color-mix(in srgb,var(--accent) 8%,transparent),0 0 0 38px color-mix(in srgb,var(--accent) 5%,transparent)}
+.big-sprite{position:relative;width:min(56%,210px);max-height:58%;object-fit:contain;z-index:1;filter:drop-shadow(0 12px 12px rgba(25,32,44,.16))}
+.stage-name{position:relative;margin-top:8px;font-size:clamp(17px,2.2cqw,25px);font-weight:900;z-index:1}
+.stage-sub{position:relative;margin-top:6px;color:var(--muted);font-size:clamp(11px,1.2cqw,14px);font-weight:700;z-index:1}
+.stage-actions{position:absolute;right:12px;bottom:12px;z-index:2}
+.primary-button{min-height:38px;border:0;border-radius:999px;background:var(--selected);color:var(--selected-text);padding:0 16px;font-size:clamp(11px,1.15cqw,14px);font-weight:850}
+.team-title{display:flex;align-items:center;gap:9px}
+.team-title .ball-mark{width:22px;height:22px}
+.detail-page{height:100%;display:grid;grid-template-rows:auto 1fr;gap:10px}
+.detail-tabs{display:flex;gap:7px;overflow-x:auto;padding:2px 0 4px;scrollbar-width:none}
+.detail-tabs button{min-height:32px;white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:0 12px;background:var(--surface);color:var(--text);font-size:clamp(10px,1.15cqw,14px);font-weight:800}
+.detail-tabs button[aria-pressed="true"]{background:var(--selected);border-color:transparent;color:var(--selected-text)}
+.detail-body{min-height:0}
+.overview-grid{display:grid;grid-template-columns:minmax(170px,.72fr) minmax(0,1.28fr);gap:12px;height:100%}
+.detail-stage{border-radius:18px}
+.stat-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-content:center}
+.stat-row{display:grid;grid-template-columns:40px 1fr 24px;align-items:center;gap:7px;font-size:clamp(10px,1.05cqw,13px);font-weight:800}
+.stat-track{height:8px;border-radius:99px;background:var(--surface);overflow:hidden}
+.stat-fill{height:100%;border-radius:inherit;background:var(--accent)}
+.move-table{width:100%;border-collapse:collapse;font-size:clamp(11px,1.15cqw,14px)}
+.move-table th,.move-table td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+.move-table th{font-size:.88em;color:var(--muted)}
+.move-table td:first-child{font-weight:850}
+.dex-layout{height:100%;display:grid;grid-template-columns:minmax(220px,.9fr) minmax(0,1.1fr);gap:16px}
+.dex-list{display:flex;flex-direction:column;gap:6px;overflow:auto;padding:2px 2px 2px 0}
+.dex-focus{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:12px;align-items:center}
+.dex-focus .detail-stage{height:100%}
+.dex-data{font-size:clamp(12px,1.4cqw,16px)}
+.dex-number{font-size:clamp(11px,1.1cqw,13px);color:var(--muted);font-weight:800}
+.count-pair{display:flex;gap:10px;margin:9px 0}
+.count-chip{padding:5px 9px;border-radius:999px;background:var(--surface);font-size:11px;font-weight:800}
+.bag-category-nav{display:grid;grid-template-columns:32px minmax(0,1fr) 32px;align-items:center;gap:3px;--bag-cat-color:var(--accent)}
+.bag-category-nav>button{position:relative;display:grid;place-items:center;width:32px;height:40px;border:0;background:transparent;color:var(--accent);font-size:27px;font-weight:900;line-height:1}
+.bag-category-nav>button{color:var(--bag-cat-color)}
+.bag-category-nav>button::before{content:"";width:0;height:0;border-top:10px solid transparent;border-bottom:10px solid transparent}
+.bag-category-nav>[data-action="bag-prev"]::before{border-right:12px solid currentColor}
+.bag-category-nav>[data-action="bag-next"]::before{border-left:12px solid currentColor}
+.bag-cats{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:0;overflow:visible;padding:2px 0;scrollbar-width:none}
+.bag-cats button{position:relative;display:grid;place-items:center;width:100%;height:46px;min-height:46px;min-width:0;white-space:nowrap;border:0;border-radius:8px;background:transparent;color:var(--text);padding:0;font-size:11px;font-weight:800;transition:background .12s ease,transform .12s ease}
+.bag-cats button .bag-cat-icon{width:clamp(24px,4cqw,38px);height:clamp(24px,4cqw,38px);display:block;object-fit:contain;filter:drop-shadow(0 1px 1px color-mix(in srgb,var(--bag-cat-color) 30%,transparent))}
+.bag-cats button>span:not(.bag-cat-icon){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.bag-cats button::after{content:attr(aria-label);position:absolute;z-index:8;left:50%;top:calc(100% + 5px);transform:translate(-50%,-3px);opacity:0;pointer-events:none;border-radius:6px;background:#17191e;color:#fff;padding:4px 7px;font-size:10px;font-weight:800;white-space:nowrap;transition:opacity .12s ease,transform .12s ease}
+.bag-cats button:hover::after,.bag-cats button:focus-visible::after{opacity:1;transform:translate(-50%,0)}
+.app[data-view="bag"] .selection-arrow{display:none}
+.app[data-view="bag"] .bag-cats button::after{display:none}
+.bag-cats button[aria-pressed="true"],.bag-cats button:hover,.bag-cats button:focus-visible,.bag-cats button.is-pointer-active,.bag-cats button.is-focus-active{background:color-mix(in srgb,var(--bag-cat-color) 24%,transparent);transform:translateY(-1px)}
+.bag-ribbon-track{position:relative;overflow:hidden}
+.bag-slant{position:absolute;inset:0 auto 0 0;left:var(--bag-ribbon-left,0%);width:var(--bag-ribbon-width,12.5%);display:flex;align-items:center;justify-content:center;background:var(--bag-ribbon-color,var(--accent));color:#fff;transition:left .22s cubic-bezier(.2,.8,.2,1),background-color .18s ease;white-space:nowrap;font-size:clamp(10px,1.1cqw,14px);font-weight:850;letter-spacing:.035em}
+.item-list{display:flex;flex-direction:column;gap:6px;min-height:0;flex:1 1 auto;overflow:auto}
+.item-icon{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);font-size:15px;font-weight:900;flex:0 0 auto}
+.item-description{align-self:stretch;display:flex;flex-direction:column;justify-content:center;min-height:96px;margin-top:8px;padding:12px 20px;border-left:0;background:rgba(207,127,24,.5);color:#241a09}
+.app[data-theme="night"][data-module="bag"] .item-description{border-left-color:#bd9755;background:rgba(181,142,73,.12);color:#f0e4cd}
+.app[data-module="bag"] .item-description p{color:inherit;opacity:.82}
+.item-description h3{margin:0 0 8px;font-size:clamp(15px,1.65cqw,20px)}
+.item-description p{margin:0;color:var(--muted);font-size:clamp(11px,1.2cqw,14px);line-height:1.7}
+.settings-list{max-width:700px;display:flex;flex-direction:column;gap:9px;margin:12px auto}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:50px;padding:0 16px;border-bottom:1px solid var(--line);background:var(--surface);font-size:clamp(12px,1.4cqw,16px);font-weight:800}
+.setting-note{font-weight:650;color:var(--muted);font-size:.86em}
+.map-area{position:relative;height:100%;min-height:240px;overflow:hidden;border:1px solid var(--line);border-radius:24px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 16%,var(--surface)),var(--surface))}
+.map-path{position:absolute;left:8%;top:42%;width:84%;height:30%;border-top:6px dashed color-mix(in srgb,var(--accent) 54%,transparent);transform:rotate(-12deg)}
+.map-point{position:absolute;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text);font-size:clamp(10px,1.05cqw,13px);font-weight:850}
+.map-point b{width:27px;height:27px;border:4px solid var(--surface);border-radius:50%;background:var(--accent);box-shadow:0 0 0 1px var(--line)}
+.empty-state{height:100%;display:grid;place-items:center;text-align:center;padding:20px}
+.empty-state h2{font-size:clamp(20px,2.2cqw,27px);margin:0 0 8px}
+.empty-state p{margin:0;color:var(--muted);font-size:clamp(12px,1.3cqw,16px);line-height:1.7}
+.feedback{position:absolute;left:50%;bottom:52px;transform:translateX(-50%);z-index:4;max-width:80%;padding:8px 14px;border-radius:999px;background:#14171d;color:#fff;font-size:12px;font-weight:750;opacity:0;pointer-events:none;transition:opacity .16s}
+.feedback.show{opacity:1}
+.design-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;max-width:1120px;margin:18px auto 0;padding:0 10px;color:#5d6674}
+.design-notes div{border-top:2px solid #d8dde5;padding-top:8px;font-size:13px;line-height:1.55}
+.design-notes strong{display:block;margin-bottom:4px;color:#29303a;font-size:13px}
+.source-note{max-width:1120px;margin:14px auto 0;padding:0 10px;color:#8992a0;font-size:11px}
+.app[data-theme="night"] .menu-entry .menu-label{text-shadow:none}
+.menu-entry:nth-child(6){grid-column:1;grid-row:2}
+.app[data-view="home"] .screen-content{height:calc(100% - 38px);padding:0;overflow:hidden}
+.app[data-view="team"] .screen-content,.app[data-view="party-detail"] .screen-content{height:calc(100% - 38px);padding:0;overflow:hidden}
+.party-screen{height:100%;display:grid;grid-template-columns:minmax(0,.96fr) minmax(0,1.04fr);grid-template-rows:58px minmax(0,1fr);grid-template-areas:"side banner" "side hero"}
+.party-side{grid-area:side;min-width:0;padding:16px 20px 14px;display:flex;flex-direction:column;gap:10px}
+.party-heading{display:flex;align-items:center;justify-content:space-between;color:var(--text);font-size:clamp(19px,3.2cqw,36px);font-weight:950;letter-spacing:.015em}
+.party-heading small{font-size:clamp(10px,1.15cqw,13px);font-weight:800;color:var(--muted)}
+.party-list{display:flex;flex-direction:column;gap:9px;min-width:0}
+.party-member{position:relative;width:100%;min-height:76px;display:grid;grid-template-columns:64px minmax(0,1fr) 62px;align-items:center;gap:10px;padding:8px 16px;border:0;border-radius:999px;background:#fff;color:#17191d;text-align:left;box-shadow:0 4px 10px rgba(23,31,43,.1)}
+.app[data-theme="night"] .party-member{background:#f0f3f7;color:#1b2028}
+.party-member[aria-pressed="true"],.party-member:hover,.party-member:focus-visible,.party-member.is-pointer-active,.party-member.is-focus-active{background:#08090b;color:#fff;box-shadow:0 7px 18px rgba(0,0,0,.24)}
+.app[data-theme="night"] .party-member[aria-pressed="true"],.app[data-theme="night"] .party-member:hover,.app[data-theme="night"] .party-member:focus-visible,.app[data-theme="night"] .party-member.is-pointer-active,.app[data-theme="night"] .party-member.is-focus-active{background:#08090b;color:#fff}
+.member-sprite{width:48px;height:48px;object-fit:contain;justify-self:center}
+.member-info{min-width:0;display:grid;grid-template-rows:auto 7px auto;gap:4px}
+.member-top,.member-bottom{display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0}
+.member-top strong{font-size:clamp(13px,1.65cqw,19px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.member-gender{width:20px;height:20px;display:grid;place-items:center;flex:0 0 auto;border-radius:50%;background:#1768dc;color:white;font-weight:900;font-size:13px}
+.member-hp{height:7px;border-radius:99px;background:#aeb0b2;overflow:hidden}
+.member-hp i{display:block;height:100%;border-radius:inherit;background:#36bc56}
+.member-hp i.low{background:#e34b4b}
+.member-bottom{font-size:clamp(11px,1.25cqw,14px);font-weight:750}
+.member-level{align-self:end;justify-self:end;font-size:clamp(14px,1.8cqw,21px);font-weight:900;white-space:nowrap}
+.party-banner,.detail-banner{min-width:0;display:grid;grid-template-columns:40px minmax(0,1fr) auto 38px;align-items:center;gap:clamp(6px,1.5cqw,18px);height:58px;padding:0 4% 0 7%;background:#050607;color:#fff;clip-path:polygon(5% 0,100% 0,100% 100%,0 100%)}
+.party-banner{grid-area:banner}
+.pokeball-mark{position:relative;width:28px;height:28px;border:3px solid currentColor;border-radius:50%;background:linear-gradient(#ef653e 0 43%,#fff 43% 57%,#ececec 57%);color:#fff}
+.pokeball-mark::before{content:"";position:absolute;left:-3px;right:-3px;top:10px;border-top:3px solid #111}
+.pokeball-mark::after{content:"";position:absolute;left:7px;top:7px;width:8px;height:8px;border:2px solid #111;border-radius:50%;background:#fff}
+.banner-name{font-size:clamp(15px,2.5cqw,30px);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.banner-level{font-size:clamp(14px,2.2cqw,26px);font-weight:800;white-space:nowrap}
+.banner-gender{width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:#1768dc;color:#fff;font-size:17px;font-weight:900}
+.party-hero,.detail-art{position:relative;min-height:0;grid-area:hero;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:var(--art-bg)}
+.party-hero::before,.model-rings{content:"";position:absolute;width:min(82%,410px);aspect-ratio:1;border:clamp(22px,4cqw,54px) solid var(--ring-primary);border-radius:50%;box-shadow:inset 0 0 0 clamp(26px,4cqw,52px) var(--ring-secondary),0 0 0 1px var(--ring-outline)}
+.party-hero::after,.model-rings::after{content:none}
+.party-hero .profile-sprite,.detail-art .profile-sprite{position:relative;z-index:1;width:min(40%,190px);max-height:66%;object-fit:contain;filter:drop-shadow(0 15px 14px rgba(18,28,40,.2))}
+.party-hero-info{position:relative;z-index:1;margin-top:6px;text-align:center;color:var(--text);display:flex;flex-direction:column;gap:4px}
+.party-hero-info strong{font-size:clamp(17px,2.2cqw,26px)}
+.party-hero-info span{color:var(--muted);font-size:clamp(11px,1.1cqw,13px)}
+.detail-action{position:absolute;right:14px;bottom:12px;z-index:2;min-height:38px;border:0;border-radius:999px;background:#fff;color:#17191d;padding:0 14px;font-weight:900;font-size:clamp(11px,1.2cqw,14px);box-shadow:0 3px 9px rgba(0,0,0,.12)}
+.detail-screen{height:100%;display:grid;grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);grid-template-rows:11.5% minmax(0,1fr);grid-template-areas:"tabs banner" "pane art"}
+.detail-tabs{grid-area:tabs;display:flex;align-items:center;justify-content:space-around;gap:5px;padding:0 10px;background:var(--swsh-red);overflow:hidden}
+.app[data-theme="night"] .detail-tabs{background:#26374b}
+.detail-tab-icon{position:relative;width:44px;height:44px;flex:0 0 auto;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:#fff}
+.detail-tab-icon svg{width:32px;height:32px;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.detail-tab-icon[aria-pressed="true"],.detail-tab-icon:hover,.detail-tab-icon:focus-visible,.detail-tab-icon.is-pointer-active,.detail-tab-icon.is-focus-active{background:var(--selected);color:var(--selected-text);transform:scale(1.04)}
+.detail-banner{grid-area:banner;height:100%}
+.detail-pane{grid-area:pane;min-width:0;min-height:0;overflow:auto;padding:0 2px 6px 0;background:transparent;color:var(--text)}
+.profile-overview{height:100%;display:flex;flex-direction:column;gap:3px}
+.profile-row{min-height:clamp(36px,3.7cqw,46px);display:grid;grid-template-columns:45% 55%;align-items:stretch;background:#fff;color:#111;border-bottom:3px solid #eee}
+.profile-row>span{display:flex;align-items:center;padding:4px 10px;font-size:clamp(12px,1.7cqw,20px)}
+.profile-row>span:first-child{background:#d8d8d8}
+.profile-row>span:last-child{font-weight:750}
+.profile-exp{padding:6px 10px;background:#fff;color:#111}
+.profile-exp-line{display:flex;justify-content:space-between;gap:10px;font-size:clamp(12px,1.5cqw,17px)}
+.profile-exp-track{height:8px;margin-top:6px;background:#666;overflow:hidden}
+.profile-exp-track i{display:block;height:100%;width:14%;background:#45c6ee}
+.profile-mark-row{min-height:42px;display:flex;justify-content:space-around;align-items:center;background:#fff;color:#bfc1c3;font-size:clamp(18px,2.8cqw,32px)}
+.profile-mark-row span:first-child{color:#25272b}
+.profile-mark-row span{line-height:1}
+.profile-type{display:inline-flex;align-items:center;gap:8px;min-width:100px;padding:4px 10px;border-radius:6px;background:#4b6352;color:#fff;font-weight:850}
+.profile-type i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#61b95b;font-size:12px;font-style:normal}
+.profile-moves{display:flex;flex-direction:column;gap:5px;padding:12px 10px 6px}
+.profile-move{min-height:clamp(48px,4.8cqw,58px);display:grid;grid-template-columns:minmax(0,1fr) minmax(82px,24%) minmax(82px,24%);align-items:stretch;overflow:hidden;border-radius:999px;background:#fff;color:#17191c;box-shadow:0 4px 9px rgba(26,32,42,.13)}
+.profile-move-name{align-self:center;padding:0 14px;font-size:clamp(14px,2.05cqw,24px);font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.profile-move-type{align-self:center;justify-self:stretch;display:flex;align-items:center;justify-content:center;gap:7px;min-height:28px;margin-right:-12px;padding:4px 16px;border-radius:7px;background:#51575e;color:#fff;font-size:clamp(11px,1.5cqw,17px);font-weight:800;z-index:1}
+.profile-move-type[data-type="草"]{background:#486a50}
+.profile-move-type[data-type="恶"]{background:#44454c}
+.profile-move-pp{display:flex;align-items:center;justify-content:center;background:#4f5053;color:#fff;clip-path:polygon(18% 0,100% 0,100% 100%,0 100%);padding:0 4px 0 13px;font-size:clamp(13px,2cqw,24px);white-space:nowrap}
+.profile-stats{height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto auto auto;gap:4px;background:#fff;color:#111}
+.radar-wrap{min-height:0;display:grid;place-items:center;padding:3px}
+.radar-chart{width:min(100%,310px);height:100%;max-height:350px}
+.radar-grid{fill:#dedede;stroke:#f6f6f6;stroke-width:2}.radar-data{fill:rgba(111,105,228,.55);stroke:#7c75ef;stroke-width:2}.radar-label{font:18px system-ui,"Microsoft YaHei",sans-serif;fill:#111;text-anchor:middle}
+.profile-stat-foot{min-height:36px;display:grid;grid-template-columns:36% 64%;align-items:center;background:#fff;border-top:3px solid #e5e5e5;font-size:clamp(12px,1.6cqw,18px)}
+.profile-stat-foot b{font-weight:750;padding:5px 10px}.profile-stat-foot span{padding:5px 10px;background:#d8d8d8}
+.profile-description{margin:8px 12px 12px;font-size:clamp(12px,1.45cqw,17px);line-height:1.55}
+.profile-info{height:100%;padding:22px 7%;background:#fff;color:#111;font-size:clamp(15px,2.1cqw,24px);line-height:1.85}.profile-info p{margin:0 0 15px}.profile-info .emphasis{color:#1768dc;font-weight:850}
+.profile-medals{height:100%;display:grid;place-items:center;background:#fff;color:#181a1d;font-size:clamp(20px,2.5cqw,30px);font-weight:750}
+.detail-art{grid-area:art}.detail-art .model-rings{width:min(84%,430px)}.detail-art .profile-sprite{width:min(48%,240px);max-height:70%}
+@media(max-width:700px){.demo{padding:16px 12px 22px}.demo-head{align-items:flex-start;flex-direction:column;gap:12px}.controls{width:100%;justify-content:space-between}.demo[data-layout="landscape"] .device{border-radius:12px}.design-notes{grid-template-columns:1fr;gap:9px;margin-top:14px}.design-notes div{padding-top:6px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+</style>
+
+<style>
+/* 队伍页按 pokelist_top_00 与 status BFLYT 的 1920×1080 比例重绘 */
+.app[data-module="bag"] .backdrop{background:#f5b719}
+.app[data-module="bag"] .backdrop::before{background:#e5a600;clip-path:polygon(44.2% 0,55.6% 0,30.5% 100%,19.1% 100%)}
+.app[data-module="bag"] .backdrop::after{content:"";background:linear-gradient(128deg,#fff8fa 0%,#f9e9f0 48%,#f6edf0 100%);clip-path:polygon(0 0,44.2% 0,19.1% 100%,0 100%)}
+.app[data-theme="night"][data-module="bag"] .backdrop{background:#403a2e}
+.app[data-theme="night"][data-module="bag"] .backdrop::before{background:#65502c}
+.app[data-theme="night"][data-module="bag"] .backdrop::after{background:linear-gradient(128deg,#34333a 0%,#3b353a 52%,#3e383d 100%)}
+.bag-layout{position:relative;isolation:isolate;height:100%;display:grid;grid-template-columns:35% minmax(0,65%);grid-template-rows:12% minmax(0,88%);grid-template-areas:"heading currency" "party content";gap:0;padding:1% 1.7% 1% 3.4%}
+.bag-layout::before{content:"";position:absolute;z-index:0;right:-4%;bottom:-14%;width:42%;height:74%;pointer-events:none;opacity:.12;background:#ffe755;mask-image:url("assets/bag/bag-mark.png");mask-repeat:no-repeat;mask-position:center;background-repeat:no-repeat;background-position:center;background-size:contain;mask-size:contain}
+.bag-heading{grid-area:heading;position:relative;z-index:1;display:flex;align-items:center;min-width:0;color:#15130d}
+.bag-heading img{display:block;width:min(86%,390px);height:88%;max-height:100%;object-fit:contain;object-position:left center}
+.bag-party-list{position:relative;z-index:1;grid-area:party;display:flex;flex-direction:column;align-items:flex-start;gap:1.4%;min-height:0;padding:0 8% 0 0}
+.bag-party-list .party-member{width:90%;height:clamp(58px,6.67cqw,76px);min-height:0;grid-template-columns:54px minmax(0,1fr) 54px;gap:7px;padding:6px 10px;border:0;border-radius:999px;background:linear-gradient(115deg,#fff 0%,#f5fbfc 100%);color:#111;box-shadow:0 7px 13px rgba(23,31,43,.12)}
+.bag-party-list .party-member[aria-pressed="true"],.bag-party-list .party-member:hover,.bag-party-list .party-member:focus-visible,.bag-party-list .party-member.is-pointer-active,.bag-party-list .party-member.is-focus-active{background:#000;color:#fff;box-shadow:0 8px 16px rgba(0,0,0,.2)}
+.bag-party-list .member-sprite{width:44px;height:44px}
+.bag-party-list .member-info{grid-template-rows:auto 6px auto;gap:3px}
+.bag-party-list .member-top strong{font-size:clamp(12px,1.35cqw,16px)}
+.bag-party-list .member-hp{height:6px;background:#8f8f8f}
+.bag-party-list .member-hp i{background:#00d515}
+.bag-party-list .member-bottom{font-size:clamp(10px,1.05cqw,12px)}
+.bag-party-list .member-level{font-size:clamp(13px,1.5cqw,18px)}
+.bag-money{grid-area:currency;position:relative;z-index:1;align-self:start;justify-self:end;padding:3px 2.3% 0 0;color:#17130b;font-size:clamp(12px,1.55cqw,19px);font-weight:750;white-space:nowrap}
+.bag-content{position:relative;z-index:1;grid-area:content;display:flex;flex-direction:column;min-width:0;min-height:0;padding:0 1.5% 0 1%}
+.app[data-theme="night"][data-module="bag"] .bag-heading{color:#f1e6cf}
+.app[data-theme="night"][data-module="bag"] .bag-heading img{filter:brightness(0) invert(1);opacity:.9}
+.bag-ribbon-track--landscape{height:34px;margin:0 35px 7px}
+.bag-slant--landscape{clip-path:polygon(16% 0,100% 0,84% 100%,0 100%)}
+.app[data-view="team"] .screen-content{padding:0;overflow:visible}
+.app[data-view="team"] .party-screen{height:calc(100% + 38px);display:grid;grid-template-columns:48.5% 51.5%;grid-template-rows:100%;grid-template-areas:"side hero"}
+.app[data-view="team"] .party-side{grid-area:side;padding:1.2% 0 0 4.5%;display:flex;flex-direction:column;gap:1.4%;min-width:0}
+.app[data-view="team"] .party-heading{height:15%;display:block;flex:0 0 auto}
+.app[data-view="team"] .party-heading span{display:block;width:min(86%,800px);height:100%;background:url("assets/pokelist/pokelist-title-black.png") center left/contain no-repeat;font-size:0}
+.app[data-theme="night"][data-view="team"] .party-heading span{background-image:url("assets/pokelist/pokelist_title_00^s.png");mix-blend-mode:screen}
+.app[data-view="team"] .party-heading small{display:none}
+.app[data-view="team"] .party-list{width:64%;display:flex;flex-direction:column;gap:1.4%;min-width:0}
+.app[data-view="team"] .party-member{height:clamp(58px,6.67cqw,76px);min-height:0;grid-template-columns:64px minmax(0,1fr) 62px;gap:10px;padding:8px 16px;border:0;border-radius:999px;background:linear-gradient(115deg,#ffffff 0%,#f5fbfc 100%);color:#111;box-shadow:0 7px 13px rgba(23,31,43,.12)}
+.app[data-view="team"] .party-member[aria-pressed="true"],.app[data-view="team"] .party-member:hover,.app[data-view="team"] .party-member:focus-visible,.app[data-view="team"] .party-member.is-pointer-active,.app[data-view="team"] .party-member.is-focus-active{background:#000;color:#fff;box-shadow:0 8px 16px rgba(0,0,0,.2)}
+.app[data-view="team"] .member-sprite{width:48px;height:48px}
+.app[data-view="team"] .member-info{grid-template-rows:auto 7px auto;gap:4px}
+.app[data-view="team"] .member-top strong{font-size:clamp(13px,1.65cqw,19px)}
+.app[data-view="team"] .member-hp{height:7px;background:#8f8f8f}
+.app[data-view="team"] .member-hp i{background:#00d515}
+.app[data-view="team"] .member-bottom{font-size:clamp(11px,1.25cqw,14px)}
+.app[data-view="team"] .party-hero{grid-area:hero;min-height:0;height:100%;padding:0;justify-content:center;background:transparent}
+.app[data-view="team"] .party-hero::before{left:64%;right:auto;top:70.6%;bottom:auto;width:min(86%,800px);height:min(71.5%,800px);aspect-ratio:auto;background:url("assets/pokelist/pokelist-watermark-full.png") center/contain no-repeat;border:0;box-shadow:none;opacity:.4;transform:translate(-50%,-50%) rotate(-25deg);transform-origin:center}
+.app[data-view="team"] .party-hero .model-rings{display:none}
+.app[data-view="team"] .party-hero .profile-sprite{width:min(54%,420px);max-height:60%;filter:drop-shadow(0 15px 14px rgba(18,28,40,.2))}
+.app[data-view="team"] .party-hero-info{margin-top:2%;gap:2px}
+.app[data-view="team"] .party-hero-info strong{font-size:clamp(18px,2.3cqw,30px)}
+.app[data-view="team"] .party-hero-info span{font-size:clamp(11px,1.3cqw,16px)}
+.swsh-preview-controls{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:0;width:max-content;margin:10px auto 0;padding:2.25px;border:1.5px solid #20242b;border-radius:999px;background:#f8f9fa;box-shadow:0 2.25px 0 rgba(37,19,25,.32)}
+.swsh-preview-controls button{display:grid;place-items:center;width:30px;height:30px;padding:0;border:0;border-radius:999px;background:transparent;color:#1f2a34;cursor:pointer}
+.swsh-preview-controls button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round}
+.swsh-preview-controls button:first-child svg{transform:rotate(180deg)}
+.swsh-preview-controls button:hover,.swsh-preview-controls button:focus-visible{background:#e3edf1;color:var(--swsh-red);outline:0}
+.swsh-preview-controls button:active{transform:translateY(1px)}
+.swsh-preview-ball{position:relative;display:block;flex:none;width:22px;height:22px;border:2px solid #20242b;border-radius:50%;background:linear-gradient(to bottom,var(--swsh-red) 0 46%,#20242b 46% 55%,#fff 55% 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
+.swsh-preview-ball::after{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;transform:translate(-50%,-50%);border:2px solid #20242b;border-radius:50%;background:#fff}
+.app[data-theme="night"] .swsh-preview-controls{background:#1b2540;border-color:#fff;box-shadow:0 2.25px 0 rgba(0,0,0,.28)}
+.app[data-theme="night"] .swsh-preview-controls button{color:#fff}
+.app[data-theme="night"] .swsh-preview-controls button:hover,.app[data-theme="night"] .swsh-preview-controls button:focus-visible{background:#303b61;color:#fff}
+.app[data-view="team"] .party-hero .detail-action{right:5%;bottom:5%;background:#fff;color:#111;box-shadow:0 5px 12px rgba(0,0,0,.12)}
+.app[data-view="team"] .party-banner{display:none}
+/* 详情页：顶部图标条、右侧黑色状态条和左侧白色资料 pane */
+.app[data-view="party-detail"] .screen-content{padding:0;overflow:hidden}
+.app[data-view="party-detail"] .selection-arrow{display:none}
+.app[data-view="party-detail"] .detail-screen{height:100%;grid-template-columns:48.5% 51.5%;grid-template-rows:11.5% minmax(0,1fr);grid-template-areas:"tabs banner" "pane art"}
+.app[data-view="party-detail"] .detail-tabs{background:transparent;padding:0 5%;gap:4%;justify-content:space-between;overflow:hidden}
+.app[data-view="party-detail"] .detail-tabs::before,.app[data-view="party-detail"] .detail-tabs::after{content:"";position:absolute;inset:0 auto auto 0;height:11.5%;pointer-events:none}
+.app[data-view="party-detail"] .detail-tabs{position:relative}
+.app[data-view="party-detail"] .detail-tab-icon{width:44px;height:44px;border:0;border-radius:0;background:transparent;color:transparent;background-position:center;background-repeat:no-repeat;background-size:contain;filter:none}
+.app[data-view="party-detail"] .detail-tab-icon[data-tab="0"]{background-image:url("assets/status/tab-info.png")}
+.app[data-view="party-detail"] .detail-tab-icon[data-tab="1"]{background-image:url("assets/status/tab-ability.png")}
+.app[data-view="party-detail"] .detail-tab-icon[data-tab="2"]{background-image:url("assets/status/tab-skill.png")}
+.app[data-view="party-detail"] .detail-tab-icon[data-tab="3"]{background-image:url("assets/status/tab-tnote.png")}
+.app[data-view="party-detail"] .detail-tab-icon[data-tab="4"]{background-image:url("assets/status/tab-ribbon.png")}
+.app[data-view="party-detail"] .detail-tab-icon[data-action="prev-tab"],.app[data-view="party-detail"] .detail-tab-icon[data-action="next-tab"]{width:34px;background-image:none;color:#fff;font-size:0}
+.app[data-view="party-detail"] .detail-tab-icon[data-action="prev-tab"]::after,.app[data-view="party-detail"] .detail-tab-icon[data-action="next-tab"]::after{content:"";display:block;width:0;height:0;border-top:18px solid transparent;border-bottom:18px solid transparent}
+.app[data-view="party-detail"] .detail-tab-icon[data-action="prev-tab"]::after{border-right:18px solid #fff}.app[data-view="party-detail"] .detail-tab-icon[data-action="next-tab"]::after{border-left:18px solid #fff}
+.app[data-view="party-detail"] .detail-tab-icon[aria-pressed="true"],.app[data-view="party-detail"] .detail-tab-icon:hover,.app[data-view="party-detail"] .detail-tab-icon:focus-visible,.app[data-view="party-detail"] .detail-tab-icon.is-pointer-active,.app[data-view="party-detail"] .detail-tab-icon.is-focus-active{background-color:transparent;filter:brightness(0);transform:none}
+.app[data-view="party-detail"] .detail-banner{height:65%;align-self:end;padding:0 6% 0 8%;background:#000;clip-path:polygon(6.1% 0,100% 0,100% 100%,2.4% 100%);grid-area:banner;grid-template-columns:40px minmax(0,1fr) auto 38px}
+.app[data-view="party-detail"] .detail-pane{padding:0 3% 0 4%;background:transparent;color:#111;overflow:hidden}
+.app[data-view="party-detail"] .profile-overview{gap:0}
+.app[data-view="party-detail"] .profile-row:nth-child(4),.app[data-view="party-detail"] .profile-exp:nth-child(6){margin-bottom:3px}
+.app[data-view="party-detail"] .detail-art{background:transparent}
+.app[data-view="party-detail"] .detail-art::before{content:"";position:absolute;left:64%;top:72%;width:min(86%,800px);height:min(86%,800px);background:url("assets/pokelist/pokelist-watermark-full.png") center/contain no-repeat;opacity:.4;transform:translate(-50%,-50%) rotate(-25deg)}
+.app[data-view="party-detail"] .detail-art .model-rings{display:none}
+.app[data-theme="night"][data-view="party-detail"] .detail-art{background:transparent}
+.app[data-view="party-detail"] .detail-art .profile-sprite{width:min(62%,460px);max-height:75%}
+.app[data-view="party-detail"] .profile-row{min-height:clamp(36px,4.25cqw,46px);background:linear-gradient(90deg,#fbfeff 0%,#f1f9fa 100%);border-bottom:5px solid #e5f0f2}
+.app[data-view="party-detail"] .profile-row>span:first-child,.app[data-view="party-detail"] .profile-stat-foot span{background:#dbdbda}
+.app[data-view="party-detail"] .profile-mark-row{background:linear-gradient(90deg,#fbfeff 0%,#f1f9fa 100%)}
+.app[data-view="party-detail"] .profile-move{border-radius:999px;background:#fff;color:#17191c;box-shadow:0 4px 9px rgba(26,32,42,.13)}
+
+.demo[data-layout="portrait"] .menu-grid{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));padding:8px 4px 34px;gap:2px 8px}
+.demo[data-layout="portrait"] .menu-entry .disc{width:clamp(60px,20cqw,92px);height:clamp(60px,20cqw,92px)}
+.demo[data-layout="portrait"] .home-hint{width:88%;bottom:46px;padding:8px 12px;font-size:12px}
+.demo[data-layout="portrait"] .screen-content{height:calc(100% - 38px);padding:0 3.8cqw 10px}
+.demo[data-layout="portrait"] .team-list,.demo[data-layout="portrait"] .list-pane{gap:5px}
+.demo[data-layout="portrait"] .team-row,.demo[data-layout="portrait"] .data-row,.demo[data-layout="portrait"] .item-row{min-height:44px}
+.demo[data-layout="portrait"] .team-stage{min-height:122px;display:grid;grid-template-columns:88px 1fr;justify-content:start;justify-items:start;text-align:left;padding:9px 14px 9px 10px;border-radius:16px}
+.demo[data-layout="portrait"] .team-stage::before{width:72px;grid-row:1 / 3;grid-column:1;position:absolute;left:16px;top:50%;transform:translateY(-50%)}
+.demo[data-layout="portrait"] .team-stage .big-sprite{width:74px;height:78px;max-height:none;grid-row:1 / 3;grid-column:1;margin:auto}
+.demo[data-layout="portrait"] .team-stage .stage-name,.demo[data-layout="portrait"] .team-stage .stage-sub{grid-column:2;margin:0;align-self:end}
+.demo[data-layout="portrait"] .team-stage .stage-sub{align-self:start}
+.demo[data-layout="portrait"] .team-stage .stage-actions{right:10px;bottom:8px}
+.demo[data-layout="portrait"] .team-stage .primary-button{min-height:30px;padding:0 10px;font-size:11px}
+.demo[data-layout="portrait"] .overview-grid{grid-template-columns:1fr;grid-template-rows:118px auto;gap:8px}
+.demo[data-layout="portrait"] .detail-stage{min-height:116px;padding:6px;flex-direction:row;gap:10px}
+.demo[data-layout="portrait"] .detail-stage::before{width:84px;left:18px}
+.demo[data-layout="portrait"] .detail-stage .big-sprite{width:82px;height:94px;max-height:100%;margin-left:15px}
+.demo[data-layout="portrait"] .detail-stage .stage-name{margin:0}
+.demo[data-layout="portrait"] .detail-stage .stage-sub{margin:0}
+.demo[data-layout="portrait"] .stat-list{grid-template-columns:1fr 1fr;gap:7px}
+.demo[data-layout="portrait"] .dex-focus{grid-template-columns:88px 1fr;gap:8px;min-height:108px;padding:8px 10px;background:var(--surface-2);border-radius:16px}
+.demo[data-layout="portrait"] .dex-focus .detail-stage{min-height:94px}
+.demo[data-layout="portrait"] .dex-focus .detail-stage .big-sprite{width:72px;height:82px}
+.demo[data-layout="portrait"] .dex-list{max-height:245px}
+.demo[data-layout="portrait"] .item-list{max-height:none;min-height:150px}
+.demo[data-layout="portrait"] .settings-list{margin:4px 0}
+.demo[data-layout="portrait"] .map-area{min-height:300px}
+
+/* 竖屏独立画板：不继承横屏的 party-screen 斜带，也不对横屏背景做缩放。 */
+.demo[data-layout="portrait"] .page-layout,.demo[data-layout="portrait"] .dex-layout{height:auto;min-height:100%;display:flex;flex-direction:column;gap:12px}
+.demo[data-layout=portrait] .bag-ribbon-track--landscape{display:none}
+.demo[data-layout="portrait"] .menu-grid{grid-template-rows:repeat(3,minmax(0,1fr))}
+.demo[data-layout="portrait"] .menu-entry:nth-child(5),.demo[data-layout="portrait"] .menu-entry:nth-child(6){grid-column:auto;grid-row:auto}
+.demo[data-layout="portrait"] .app[data-view="team"] .screen-content{overflow:visible;padding:0}
+/* Portrait background: full red field on the left with one dark parallel stripe.
+   Team and detail use the same portrait-only tokens; landscape geometry stays separate. */
+.demo[data-layout="portrait"] .app[data-module="team"]{--portrait-team-bg:radial-gradient(ellipse 72% 66% at 74% 48%,rgba(194,255,255,.88) 0%,rgba(194,255,255,0) 74%),linear-gradient(138deg,#c8dddd 0%,#eaffff 24%,#d4ffff 55%,#fbffff 79%,#dcebef 100%);--portrait-main-fill:var(--swsh-red);--portrait-stripe-fill:var(--swsh-red-dark);--portrait-main-shape:polygon(0 0,81.2% 0,3.2% 100%,0 100%);--portrait-stripe-shape:polygon(81% 0,99% 0,21% 100%,3% 100%)}
+.demo[data-layout="portrait"] .app[data-theme="night"][data-module="team"]{--portrait-team-bg:linear-gradient(132deg,#1b2b3b 0%,#20313e 52%,#263441 100%);--portrait-main-fill:#304258;--portrait-stripe-fill:#26374a}
+.demo[data-layout="portrait"] .app[data-module="team"] .backdrop{background:var(--portrait-team-bg)}
+.demo[data-layout="portrait"] .app[data-view="team"] .backdrop::before,.demo[data-layout="portrait"] .app[data-view="team"] .backdrop::after{content:none}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-screen{position:relative;height:calc(100% + 38px);display:grid;grid-template-columns:100%;grid-template-rows:13% 44% 43%;grid-template-areas:"brand" "hero" "side";overflow:hidden;isolation:isolate}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-screen::before,.demo[data-layout="portrait"] .app[data-view="team"] .party-screen::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-screen::before{background:var(--portrait-main-fill);clip-path:var(--portrait-main-shape)}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-screen::after{background:var(--portrait-stripe-fill);clip-path:var(--portrait-stripe-shape)}
+.demo[data-layout="portrait"] .app[data-view="party-detail"] .backdrop::before{content:"";background:var(--portrait-main-fill);clip-path:var(--portrait-main-shape)}
+.demo[data-layout="portrait"] .app[data-view="party-detail"] .backdrop::after{content:"";background:var(--portrait-stripe-fill);clip-path:var(--portrait-stripe-shape)}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-side{display:contents}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-heading{position:relative;z-index:1;grid-area:brand;display:flex;height:auto;justify-content:center;align-items:center;padding:8px 12px}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-heading span{width:78%;max-width:300px;height:100%;background-position:center;background-size:contain}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-heading small{display:none}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-hero{position:relative;z-index:1;grid-area:hero;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;padding:8px 12px 10px;background:transparent}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-hero::before{display:none}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-hero .profile-sprite{width:180px;height:180px;max-width:58%;max-height:66%;object-fit:contain;flex:0 0 auto}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-hero-info{margin:4px 0 0;gap:1px;flex:0 0 auto}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-hero-info strong{font-size:16px}.demo[data-layout="portrait"] .app[data-view="team"] .party-hero-info span{font-size:10px}
+.demo[data-layout="portrait"] .app[data-view="team"] .swsh-preview-controls{margin:5px auto 0;flex:0 0 auto}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-list{position:relative;z-index:1;grid-area:side;width:86%;max-width:330px;min-height:0;margin:0 auto;padding:6px 0 10px;display:flex;flex-direction:column;gap:9px;overflow-y:auto;scrollbar-width:none}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-list::-webkit-scrollbar{display:none}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-member{min-height:54px;height:auto;grid-template-columns:38px minmax(0,1fr) 46px;padding:5px 9px;gap:6px}
+.demo[data-layout="portrait"] .app[data-view="team"] .member-sprite{width:34px;height:34px}
+.demo[data-layout="portrait"] .app[data-view="team"] .member-info{grid-template-rows:auto 5px auto;gap:2px}
+.demo[data-layout="portrait"] .app[data-view="team"] .member-top strong{font-size:13px}
+.demo[data-layout="portrait"] .app[data-view="team"] .member-bottom{font-size:10px}
+.demo[data-layout="portrait"] .app[data-view="team"] .member-level{font-size:14px}
+.demo[data-layout="portrait"] .app[data-view="team"] .party-banner{display:none}
+/* Portrait detail is its own layout: a large centered sprite panel above a fixed-size tab panel. */
+.demo[data-layout="portrait"] .detail-screen{grid-template-columns:minmax(0,1fr);grid-template-rows:46px 42px minmax(190px,1fr) minmax(210px,38%);grid-template-areas:"tabs" "banner" "art" "pane"}.demo[data-layout="portrait"] .detail-tabs{justify-content:space-around;padding:0 6px}.demo[data-layout="portrait"] .detail-tab-icon{width:36px;height:36px}.demo[data-layout="portrait"] .detail-tab-icon svg{width:25px;height:25px}.demo[data-layout="portrait"] .detail-banner{clip-path:none;padding:0 12px;grid-template-columns:30px minmax(0,1fr) auto 26px}.demo[data-layout="portrait"] .detail-banner .pokeball-mark{width:23px;height:23px}
+.demo[data-layout="portrait"] .detail-art{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:10px 12px}.demo[data-layout="portrait"] .app[data-view="party-detail"] .detail-art::before{content:none}.demo[data-layout="portrait"] .detail-art .model-rings{display:none}.demo[data-layout="portrait"] .detail-art .profile-sprite{width:min(76%,340px);height:min(82%,420px);max-width:76%;max-height:82%;margin:0;object-fit:contain}.demo[data-layout="portrait"] .detail-pane{display:flex;flex-direction:column;justify-content:flex-end;min-height:0;overflow:hidden;padding:0 8px 8px}.demo[data-layout="portrait"] .detail-pane>*{max-height:100%;min-height:0;margin-top:auto}.demo[data-layout="portrait"] .profile-overview,.demo[data-layout="portrait"] .profile-info,.demo[data-layout="portrait"] .profile-medals{height:auto}.demo[data-layout="portrait"] .profile-row{min-height:32px}.demo[data-layout="portrait"] .profile-row>span{font-size:12px;padding:3px 8px}.demo[data-layout="portrait"] .profile-exp{padding:5px 8px}.demo[data-layout="portrait"] .profile-exp-line{font-size:11px}.demo[data-layout="portrait"] .profile-mark-row{min-height:30px;font-size:21px}.demo[data-layout="portrait"] .profile-moves{padding:7px 4px}.demo[data-layout="portrait"] .profile-move{min-height:43px;grid-template-columns:minmax(0,1fr) 28% 23%}.demo[data-layout="portrait"] .profile-move-name{font-size:13px;padding:0 9px}.demo[data-layout="portrait"] .profile-move-type{font-size:10px;min-height:23px;padding:3px 7px;gap:4px}.demo[data-layout="portrait"] .profile-move-type i{width:13px;height:13px}.demo[data-layout="portrait"] .profile-move-pp{font-size:13px}.demo[data-layout="portrait"] .profile-stats{grid-template-rows:minmax(0,1fr) auto auto auto;gap:2px}.demo[data-layout="portrait"] .radar-wrap{min-height:0;padding:0}.demo[data-layout="portrait"] .radar-chart{width:min(100%,230px);height:100%;max-height:190px}.demo[data-layout="portrait"] .radar-label{font-size:18px}.demo[data-layout="portrait"] .profile-stat-foot{min-height:30px;font-size:12px}.demo[data-layout="portrait"] .profile-description{font-size:12px;margin:6px 9px}.demo[data-layout="portrait"] .profile-info{padding:12px 14px;font-size:14px;line-height:1.65}.demo[data-layout="portrait"] .profile-info p{margin-bottom:9px}.demo[data-layout="portrait"] .profile-medals{min-height:0;font-size:19px}
+
+
+.bag-layout{position:relative;isolation:isolate;height:100%;min-height:0;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(210px,.7fr);grid-template-rows:minmax(0,1fr);gap:clamp(10px,1.5cqw,20px);padding:1.2% 2% 1.2% 3%}
+.bag-left{position:relative;z-index:1;grid-column:1;min-width:0;min-height:0;display:flex;flex-direction:column;gap:clamp(6px,1cqw,12px)}
+.bag-heading{display:flex;align-items:center;gap:10px;min-height:46px;color:#15130d}
+.bag-heading img{display:block;width:min(72%,340px);height:100%;max-height:54px;object-fit:contain;object-position:left center}
+.bag-money{margin-left:auto;color:#17130b;font-size:clamp(12px,1.45cqw,18px);font-weight:750;white-space:nowrap}
+.bag-ribbon-track--landscape{height:34px;margin:0 35px 7px}
+.bag-slant--landscape{clip-path:polygon(16% 0,100% 0,84% 100%,0 100%)}
+.bag-ribbon-track--portrait{height:28px;margin:0 25px 6px}
+.bag-slant--portrait{clip-path:polygon(20% 0,100% 0,80% 100%,0 100%);font-size:clamp(10px,3cqw,13px)}
+.demo[data-layout=landscape] .bag-ribbon-track--portrait,.demo[data-layout=portrait] .bag-ribbon-track--landscape{display:none}
+.item-description{position:relative;z-index:1;grid-column:2;align-self:stretch;display:flex;flex-direction:column;justify-content:center;min-width:0;min-height:96px;margin:0;padding:12px 18px;border-left:0;background:rgba(207,127,24,.5);color:#241a09}
+.app[data-theme=night][data-module=bag] .bag-heading{color:#f1e6cf}
+.app[data-theme=night][data-module=bag] .bag-heading img{filter:brightness(0) invert(1);opacity:.9}
+.app[data-theme=night][data-module=bag] .item-description{background:rgba(181,142,73,.12);color:#f0e4cd}
+.demo[data-layout=portrait] .bag-layout{height:auto;min-height:100%;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:8px;padding:2% 3.8cqw 10px}
+.demo[data-layout=portrait] .bag-left{grid-column:1;min-height:0}
+.demo[data-layout=portrait] .bag-heading{min-height:42px}
+.demo[data-layout=portrait] .bag-heading img{max-height:42px}
+.demo[data-layout=portrait] .item-list{min-height:150px;max-height:none}
+.demo[data-layout=portrait] .item-description{grid-column:1;min-height:72px;padding:8px 12px}
+</style>
+</head>
+<body>
+<main class="demo" id="demo" data-layout="landscape">
+  <header class="demo-head">
+    <div>
+      <div class="eyebrow">SWORD / SHIELD · UI STUDY</div>
+      <h1>剑盾 HUD 交互样稿</h1>
+      <p class="intro">静态示例，不连接角色卡；切换横竖屏与明暗主题，直接试操作。</p>
+    </div>
+    <div class="controls">
+      <div class="segmented" role="group" aria-label="预览方向">
+        <button type="button" data-layout-choice="landscape" aria-pressed="true">横屏 16:9</button>
+        <button type="button" data-layout-choice="portrait" aria-pressed="false">手机竖屏</button>
+      </div>
+      <button class="theme-toggle" type="button" id="themeToggle" aria-pressed="false">切换暗色</button>
+    </div>
+  </header>
+
+  <section class="stage-wrap" aria-label="可交互 HUD 预览">
+    <div class="device" id="device">
+      <div class="app" id="app" data-view="home" data-module="home" data-theme="day">
+        <div class="backdrop" aria-hidden="true"></div>
+        <svg class="selection-arrow" id="selectionArrow" viewBox="0 0 52 52" aria-hidden="true" focusable="false"><path class="arrow-glyph" d="M10 6C7 4 3 6 2 9C1 12 2 15 5 17L16 26L5 35C2 37 1 40 2 43C4 46 8 47 11 44L31 29C34 27 34 24 31 22Z"></path></svg>
+        <section class="screen-content" id="screenContent" aria-live="polite"></section>
+        <footer class="actionbar" id="actionbar"></footer>
+        <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="design-notes" aria-label="设计取舍">
+    <div><strong>方向：按屏幕适配</strong>大屏沿用剑盾的横向菜单关系；手机纵向重排，触控尺寸和文字不随整屏缩小。</div>
+    <div><strong>手机：保留神韵，调整结构</strong>原版偏 16:9 横屏，大图标和并排资料直接压进手机会显得拥挤；竖屏改成单列页面与分层返回。</div>
+    <div><strong>弦九：只保留功能接口</strong>沿用数据读取、业务动作和宿主写回契约；视觉模板、布局、CSS 与主题由剑盾版自己负责。</div>
+  </section>
+  <p class="source-note">交互：点击菜单与条目；队伍先选中再点“查看详情”；Esc / Backspace 返回，方向键移动，Enter 确认。图标和精灵图仅用于本地样稿。</p>
+</main>
+
+<script>
+"use strict";
+const MENU = [
+  {key:"dex",label:"图鉴",icon:"xmenu_button_icon_pokedex_00^s-render.png",title:"POKÉDEX"},
+  {key:"team",label:"宝可梦",icon:"xmenu_button_icon_pokemon_00^s-render.png",title:"POKÉMON"},
+  {key:"bag",label:"包包",icon:"xmenu_button_icon_bag_00^s-render.png",title:"BAG"},
+  {key:"records",label:"记录",icon:"xmenu_button_icon_report_00^s-render.png",title:"RECORDS"},
+  {key:"map",label:"城镇地图",icon:"xmenu_button_icon_map_00^s-render.png",title:"MAP"},
+  {key:"settings",label:"设置",icon:"xmenu_button_icon_config_00^s-render.png",title:"OPTIONS"}
+];
+const PARTY = [
+  {name:"敲音猴",dex:"#810",level:8,gender:"♂",types:["草"],hp:"19 / 26",exp:"328",nextExp:"91",trainer:"伯劳",trainerId:"852516",metDate:"2026年11月04日",metPlace:"化朗镇",metLevel:"Lv.5",ability:"茂盛",abilityDescription:"HP 减少的时候，草属性的招式威力会提高。",nature:"胆小",held:"无",stats:[19,14,14,11,11,17],sprite:"assets/pokemon/poke_icon_0810_00s_n.png",moves:[["抓","一般",34,35],["叫声","一般",39,40],["木枝突刺","草",35,40],["挑衅","恶",20,20]]},
+  {name:"泪眼蜥",dex:"#816",level:7,gender:"♀",types:["水"],hp:"18 / 23",exp:"226",nextExp:"74",trainer:"伯劳",trainerId:"852516",metDate:"2026年11月04日",metPlace:"化朗镇",metLevel:"Lv.5",ability:"激流",abilityDescription:"HP 减少的时候，水属性的招式威力会提高。",nature:"认真",held:"无",stats:[26,16,15,27,18,24],sprite:"assets/pokemon/poke_icon_0816_00s_n.png",moves:[["拍击","一般",33,35],["水枪","水",24,25],["瞪眼","一般",30,30],["水之波动","水",18,20]]},
+  {name:"空位",dex:"—",level:"—",gender:"",types:[],hp:"空位",sprite:"",ability:"—",nature:"—",held:"—",stats:[0,0,0,0,0,0],moves:[]},
+  {name:"空位",dex:"—",level:"—",gender:"",types:[],hp:"空位",sprite:"",ability:"—",nature:"—",held:"—",stats:[0,0,0,0,0,0],moves:[]},
+  {name:"空位",dex:"—",level:"—",gender:"",types:[],hp:"空位",sprite:"",ability:"—",nature:"—",held:"—",stats:[0,0,0,0,0,0],moves:[]},
+  {name:"空位",dex:"—",level:"—",gender:"",types:[],hp:"空位",sprite:"",ability:"—",nature:"—",held:"—",stats:[0,0,0,0,0,0],moves:[]}
+];
+const DEX = [
+  {no:"001",name:"敲音猴",caught:true,seen:true,index:0},
+  {no:"002",name:"藏饱栗鼠",caught:false,seen:true,index:1},
+  {no:"003",name:"狙射树枭",caught:false,seen:false,index:0},
+  {no:"004",name:"炎兔儿",caught:false,seen:false,index:1},
+  {no:"005",name:"腾蹴小将",caught:false,seen:false,index:0},
+  {no:"006",name:"闪焰王牌",caught:false,seen:false,index:1}
+];
+const BAGS = [
+  {name:"回复",icon:"回复.png",color:"#ffa6c4",items:[["伤药","回复少量 HP。",4],["解麻药","治愈麻痹状态。",2],["解毒药","治愈中毒状态。",3]]},
+  {name:"精灵球",icon:"精灵球.png",color:"#ff9494",items:[["精灵球","捕捉野生宝可梦的道具。",12],["超级球","比精灵球更容易捕捉。",5],["高级球","捕捉能力较强的球。",2]]},
+  {name:"战斗道具",icon:"战斗道具.png",color:"#ffb98b",items:[["攻击增强剂","战斗中提升攻击。",2],["速度增强剂","战斗中提升速度。",1]]},
+  {name:"树果",icon:"树果.png",color:"#86c270",items:[["樱子果","治愈麻痹状态。",3],["桃桃果","治愈中毒状态。",2]]},
+  {name:"道具",icon:"道具.png",color:"#94c8ff",items:[["全满药","回复 HP 并治愈异常状态。",1],["经验糖果 S","给予宝可梦少量经验。",4]]},
+  {name:"招式学习器",icon:"招式学习器.png",color:"#c49dff",items:[["招式学习器 01","让宝可梦学会新的招式。",1],["招式记录 12","记录可学习的招式。",2]]},
+  {name:"重要物品",icon:"重要物品.png",color:"#ffdf94",items:[["宝可梦图鉴","记录遇见和捕获的宝可梦。",1],["自行车","可以快速移动的折叠自行车。",1]]},
+  {name:"食材",icon:"食材.png",color:"#7fd4c0",items:[["咖喱食材","用于露营烹饪。",4],["新鲜香草","提升料理风味。",2]]}
+];
+const TABS = ["概要","数值","招式","信息","奖章"];
+const TAB_SVGS = [
+  '<svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="14"/><path d="M4 18h28M18 4v10m0 8v10"/><circle cx="18" cy="18" r="5"/></svg>',
+  '<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M18 3 32 11v14l-14 8L4 25V11z"/><path d="M18 10v16m-7-12 14 8m0-8-14 8"/></svg>',
+  '<svg viewBox="0 0 36 36" aria-hidden="true"><path d="m18 3 4 9 10 1-7 7 2 11-9-5-9 5 2-11-7-7 10-1z"/><path d="M8 30h20"/></svg>',
+  '<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M8 4h20v28H8zM13 11h10M13 17h10M13 23h6"/><path d="m23 25 7-12 3 2-7 12-4 2z"/></svg>',
+  '<svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="13" r="9"/><path d="m12 21-3 12 9-5 9 5-3-12M18 8v10m-5-5h10"/></svg>'
+];
+const STAT_NAMES = ["HP","攻击","防御","特攻","特防","速度"];
+const TYPE_COLORS = {"草":"#61a94a","水":"#408bd1","一般":"#8c929c"};
+const S = {view:"home",stack:[],menu:0,party:0,tab:0,dex:0,bag:0,item:0,theme:"day"};
+let manualLayout=false;
+const $ = function(sel,root){return (root||document).querySelector(sel);};
+const app = $("#app"), demo = $("#demo");
+const selectionArrow=$("#selectionArrow",app),selectionSelector=".menu-entry,.party-member,.detail-tab-icon[data-tab],.data-row,.item-row,.bag-cats button";
+let hoveredSelection=null,focusedSelection=null;
+function selectionTarget(node){if(!node||!node.closest)return null;const target=node.closest(selectionSelector);return target&&app.contains(target)?target:null;}
+function committedSelection(){
+  if(S.view==="home")return app.querySelector('.menu-entry[aria-pressed="true"]');
+  if(S.view==="team")return app.querySelector('.party-member[aria-pressed="true"]');
+  if(S.view==="party-detail")return app.querySelector('.detail-tab-icon[data-tab][aria-pressed="true"]');
+  if(S.view==="dex")return app.querySelector('.data-row[aria-pressed="true"]');
+  if(S.view==="bag")return app.querySelector('.item-row[aria-pressed="true"]')||app.querySelector('.bag-cats button[aria-pressed="true"]');
+  return null;
+}
+function updateSelectionArrow(target){
+  if(!selectionArrow)return;
+  if(target&&!app.contains(target))target=null;
+  target=target||(hoveredSelection&&app.contains(hoveredSelection)?hoveredSelection:null)||(focusedSelection&&app.contains(focusedSelection)?focusedSelection:null)||committedSelection();
+  if(!target||!app.contains(target)){selectionArrow.classList.remove("is-visible");return;}
+  const anchor=target.matches(".menu-entry")?target.querySelector(".disc"):target;
+  if(!anchor){selectionArrow.classList.remove("is-visible");return;}
+  const frame=app.getBoundingClientRect(),rect=anchor.getBoundingClientRect(),width=selectionArrow.offsetWidth||52,height=selectionArrow.offsetHeight||52;
+  const left=rect.left-frame.left-width+26;
+  const top=rect.top-frame.top+(rect.height-height)/2;
+  const x=Math.round(Math.max(2,Math.min(frame.width-width-2,left))),y=Math.round(Math.max(2,Math.min(frame.height-height-2,top)));
+  selectionArrow.style.transform="translate3d("+x+"px,"+y+"px,0)";
+  selectionArrow.classList.add("is-visible");
+}
+function setHoveredSelection(target){
+  if(hoveredSelection===target){updateSelectionArrow(target);return;}
+  if(hoveredSelection&&app.contains(hoveredSelection))hoveredSelection.classList.remove("is-pointer-active");
+  hoveredSelection=target&&app.contains(target)?target:null;
+  if(hoveredSelection&&focusedSelection&&focusedSelection!==hoveredSelection){if(app.contains(focusedSelection))focusedSelection.classList.remove("is-focus-active");focusedSelection=null;}
+  if(hoveredSelection)hoveredSelection.classList.add("is-pointer-active");
+  updateSelectionArrow();
+}
+function setFocusedSelection(target){
+  if(focusedSelection&&app.contains(focusedSelection))focusedSelection.classList.remove("is-focus-active");
+  focusedSelection=target&&app.contains(target)?target:null;
+  if(focusedSelection&&hoveredSelection&&hoveredSelection!==focusedSelection){if(app.contains(hoveredSelection))hoveredSelection.classList.remove("is-pointer-active");hoveredSelection=null;}
+  if(focusedSelection)focusedSelection.classList.add("is-focus-active");
+  updateSelectionArrow();
+}
+function esc(value){return String(value).replace(/[&<>\"']/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch];});}
+function monSprite(mon,cls){return mon.sprite ? '<img class="'+cls+'" src="'+esc(mon.sprite)+'" alt="">' : '<span class="'+cls+' empty-mon" aria-hidden="true">◌</span>';}
+function selectedMenu(){return MENU[S.menu];}
+function setLayout(layout,manual){if(manual)manualLayout=true;demo.dataset.layout=layout;document.querySelectorAll("[data-layout-choice]").forEach(function(btn){btn.setAttribute("aria-pressed",String(btn.dataset.layoutChoice===layout));});render();}
+function setTheme(theme){S.theme=theme;app.dataset.theme=theme;$("#themeToggle").textContent=theme==="day"?"切换暗色":"切换白天";$("#themeToggle").setAttribute("aria-pressed",String(theme==="night"));}
+function feedback(message){const box=$("#feedback");box.textContent=message;box.classList.add("show");clearTimeout(feedback.timer);feedback.timer=setTimeout(function(){box.classList.remove("show");},1500);}
+function pushView(view){S.stack.push(S.view);S.view=view;render();}
+function goBack(){if(S.stack.length){S.view=S.stack.pop();render();}else if(S.view!=="home"){S.view="home";render();}}
+function openMenuItem(item){if(item.key==="team"){pushView("team");return;}if(item.key==="dex"){pushView("dex");return;}if(item.key==="bag"){pushView("bag");return;}if(item.key==="settings"){pushView("settings");return;}if(item.key==="map"){pushView("map");return;}if(item.key==="records"){pushView(item.key);return;}}
+function activeModule(){return S.view==="party-detail"?"team":S.view;}
+function renderHome(){
+  const buttons=MENU.map(function(m,i){return '<button class="menu-entry selection-target" type="button" data-menu="'+i+'" aria-pressed="'+String(i===S.menu)+'" aria-label="'+esc(m.label)+'"><span class="disc"><img class="menu-icon-source" src="assets/menu/original/'+esc(m.icon)+'" alt=""></span><span class="menu-label">'+esc(m.label)+'</span></button>';}).join("");
+  return '<div class="home-screen"><div class="menu-grid" role="group" aria-label="主菜单">'+buttons+'</div><div class="home-hint" id="homeHint">'+esc(selectedMenu().label)+' · 按确认打开，返回键回到这里</div></div>';
+}
+function pokemonBanner(mon,cls){return '<div class="'+cls+'"><span class="pokeball-mark" aria-hidden="true"></span><strong class="banner-name">'+esc(mon.name)+'</strong><span class="banner-level">Lv.'+esc(mon.level)+'</span><span class="banner-gender">'+esc(mon.gender)+'</span></div>';}
+function partyHeroHTML(mon){return '<section class="party-hero"><div class="model-rings" aria-hidden="true"></div>'+monSprite(mon,"profile-sprite")+'<div class="party-hero-info"><strong>'+esc(mon.name)+'</strong><span>'+esc(mon.dex)+' · '+esc(mon.types.join(" / "))+'</span></div><div class="swsh-preview-controls" role="group" aria-label="切换队伍宝可梦"><button type="button" data-action="party-prev" aria-label="预览上一只宝可梦"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button><span class="swsh-preview-ball" aria-hidden="true"></span><button type="button" data-action="party-next" aria-label="预览下一只宝可梦"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button></div></section>';}
+function renderParty(){
+  const mon=PARTY[S.party];
+  const rows=PARTY.map(function(p,i){return {p:p,i:i};}).filter(function(row){return !!row.p.sprite;}).map(function(row){
+    const p=row.p,parts=p.hp.split("/").map(function(v){return Number(v.trim());}),ratio=parts[1]?Math.round(parts[0]/parts[1]*100):0;
+    return '<button class="party-member selection-target" type="button" data-party="'+row.i+'" aria-pressed="'+String(row.i===S.party)+'" aria-label="'+esc(p.name+"，等级 "+p.level)+'"><img class="member-sprite" src="'+esc(p.sprite)+'" alt=""><span class="member-info"><span class="member-top"><strong>'+esc(p.name)+'</strong><i class="member-gender">'+esc(p.gender)+'</i></span><span class="member-hp"><i class="'+(ratio<30?'low':'')+'" style="width:'+ratio+'%"></i></span><span class="member-bottom"><span>'+esc(p.hp)+'</span><span>'+esc(p.types.join(" / "))+'</span></span></span><span class="member-level">Lv.'+esc(p.level)+'</span></button>';
+  }).join("");
+  return '<div class="party-screen"><section class="party-side"><div class="party-heading"><span aria-label="POKÉMON"></span><small>'+PARTY.filter(function(p){return !!p.sprite;}).length+' / 06</small></div><div class="party-list">'+rows+'</div></section>'+partyHeroHTML(mon)+'</div>';
+}
+function previewParty(i){
+  const mon=PARTY[i];if(!mon||!mon.sprite||i===S.party)return;
+  S.party=i;
+  app.querySelectorAll(".party-member").forEach(function(button){button.setAttribute("aria-pressed",String(Number(button.dataset.party)===i));});
+  const banner=app.querySelector(".party-banner"),hero=app.querySelector(".party-hero");
+  if(banner)banner.outerHTML=pokemonBanner(mon,"party-banner");
+  if(hero)hero.outerHTML=partyHeroHTML(mon);
+}
+function radarMarkup(values,hp){
+  const center={x:150,y:132},radius=91;
+  const angles=[-90,-30,30,90,150,210];
+  const rings=[1,.75,.5,.25].map(function(r){return angles.map(function(a){const rad=a*Math.PI/180;return (center.x+Math.cos(rad)*radius*r).toFixed(1)+","+(center.y+Math.sin(rad)*radius*r).toFixed(1);}).join(" ");}).map(function(points){return '<polygon class="radar-grid" points="'+points+'"></polygon>';}).join("");
+  const max=Math.max.apply(null,values.concat([60]));
+  const points=values.map(function(v,i){const rad=angles[i]*Math.PI/180,radiusValue=radius*Math.max(.12,v/max);return (center.x+Math.cos(rad)*radiusValue).toFixed(1)+","+(center.y+Math.sin(rad)*radiusValue).toFixed(1);}).join(" ");
+  const labels=[['HP',0,150,20],['攻击',1,250,75],['防御',2,245,220],['速度',5,150,258],['特防',4,55,220],['特攻',3,48,75]].map(function(label){return '<text class="radar-label" x="'+label[2]+'" y="'+label[3]+'">'+label[0]+' '+(label[1]===0?hp:values[label[1]])+'</text>';}).join("");
+  return '<svg class="radar-chart" viewBox="0 0 300 270" role="img" aria-label="能力雷达图">'+rings+angles.map(function(a){const rad=a*Math.PI/180;return '<line x1="150" y1="132" x2="'+(150+Math.cos(rad)*radius)+'" y2="'+(132+Math.sin(rad)*radius)+'" stroke="#f7f7f7" stroke-width="2"></line>';}).join("")+'<polygon class="radar-data" points="'+points+'"></polygon>'+labels+'</svg>';
+}
+function renderDetail(){
+  const mon=PARTY[S.party];
+  const tabs=TABS.map(function(tab,i){return '<button class="detail-tab-icon selection-target" type="button" data-tab="'+i+'" aria-pressed="'+String(i===S.tab)+'" aria-label="'+tab+'" title="'+tab+'"></button>';}).join("");
+  let pane="";
+  if(S.tab===0){pane='<div class="profile-overview"><div class="profile-row"><span>名字</span><span>'+esc(mon.name)+'</span></div><div class="profile-row"><span>属性</span><span><b class="profile-type"><i>✿</i>'+esc(mon.types.join(" / "))+'</b></span></div><div class="profile-row"><span>初训家</span><span>'+esc(mon.trainer)+'</span></div><div class="profile-row"><span>ID No.</span><span>'+esc(mon.trainerId)+'</span></div><div class="profile-exp"><div class="profile-exp-line"><span>现在的经验值</span><b>'+esc(mon.exp)+'</b></div></div><div class="profile-exp"><div class="profile-exp-line"><span>距离下一级　还有</span><b>'+esc(mon.nextExp)+'</b></div><div class="profile-exp-track"><i></i></div></div><div class="profile-mark-row" aria-label="奖章标记"><span>◉</span><span>●</span><span>▲</span><span>■</span><span>♥</span><span>★</span><span>◆</span></div></div>';}
+  if(S.tab===1){pane='<div class="profile-stats"><div class="radar-wrap">'+radarMarkup(mon.stats,mon.hp)+'</div><div class="profile-stat-foot"><span>极巨化等级</span><b>▰ ▰ ▰ ▰ ▱ ▱ ▱ ▱ ▱ ▱</b></div><div class="profile-stat-foot"><span>特性</span><b>'+esc(mon.ability)+'</b></div><p class="profile-description">'+esc(mon.abilityDescription)+'</p></div>';}
+  if(S.tab===2){pane='<div class="profile-moves">'+mon.moves.map(function(move){return '<div class="profile-move"><strong class="profile-move-name">'+esc(move[0])+'</strong><span class="profile-move-type" data-type="'+esc(move[1])+'"><i aria-hidden="true"></i>'+esc(move[1])+'</span><span class="profile-move-pp">'+esc(move[2])+'/'+esc(move[3])+'</span></div>';}).join("")+'</div>';}
+  if(S.tab===3){pane='<div class="profile-info"><p><span class="emphasis">'+esc(mon.nature)+'</span>的性格。</p><p>'+esc(mon.metDate)+'<br>在<span class="emphasis">'+esc(mon.metPlace)+'</span>，<br>遇见了当时'+esc(mon.metLevel)+'的它。</p><p>身体强壮。</p></div>';}
+  if(S.tab===4){pane='<div class="profile-medals">没有奖章</div>';}
+  return '<div class="detail-screen"><nav class="detail-tabs" role="tablist" aria-label="宝可梦详情分页"><button class="detail-tab-icon" type="button" data-action="prev-tab" aria-label="上一页">‹</button>'+tabs+'<button class="detail-tab-icon" type="button" data-action="next-tab" aria-label="下一页">›</button></nav>'+pokemonBanner(mon,"detail-banner")+'<section class="detail-pane">'+pane+'</section><section class="detail-art"><div class="model-rings" aria-hidden="true"></div>'+monSprite(mon,"profile-sprite")+'</section></div>';
+}
+function renderDex(){
+  const rows=DEX.map(function(d,i){const p=PARTY[d.index];const name=d.caught?d.name:(d.seen?d.name:"??????");return '<button class="data-row selection-target" type="button" data-dex="'+i+'" aria-pressed="'+String(i===S.dex)+'">'+(d.caught?monSprite(p,"sprite-mini"):'<span class="sprite-mini empty-mon" aria-hidden="true">?</span>')+'<span class="dex-number">No.'+d.no+'</span><span class="row-name">'+esc(name)+'</span><span class="row-meta">'+(d.caught?'●':(d.seen?'◌':'—'))+'</span></button>';}).join("");
+  return '<div class="dex-layout"><div class="list-pane"><div class="section-label"><span>伽勒尔图鉴</span><span>001–006</span></div><div class="dex-list">'+rows+'</div></div><div class="dex-focus">'+dexFocusHTML(DEX[S.dex])+'</div></div>';
+}
+function dexFocusHTML(d){const p=PARTY[d.index],known=d.caught||d.seen,name=known?d.name:"未知宝可梦";return '<div class="detail-stage">'+(d.caught?monSprite(p,"big-sprite"):'<span class="big-sprite empty-mon">?</span>')+'<span class="stage-name">'+esc(name)+'</span></div><div class="dex-data"><div class="dex-number">No.'+d.no+'</div><h2>'+esc(d.caught||d.seen?d.name:"??????")+'</h2><div class="count-pair"><span class="count-chip">遇见 '+(d.seen?"✓":"—")+'</span><span class="count-chip">捕获 '+(d.caught?"✓":"—")+'</span></div><p class="stage-sub">选中条目保持编号、名称与状态列对齐。点选条目查看同页资料。</p></div>';}
+function bagIconMarkup(bag){return '<img class="bag-cat-icon" src="assets/bag-categories/'+esc(bag.icon)+'" alt="">';}
+function bagRibbonMarkup(layout,bag){
+  const width=100/BAGS.length,left=S.bag*width;
+  return '<div class="bag-ribbon-track bag-ribbon-track--'+esc(layout)+'" aria-hidden="true"><span class="bag-slant bag-slant--'+esc(layout)+'" style="--bag-ribbon-left:'+left+'%;--bag-ribbon-width:'+width+'%;--bag-ribbon-color:'+esc(bag.color)+'">'+esc(bag.name)+'</span></div>';
+}
+function renderBag(){
+  const bag=BAGS[S.bag],items=bag.items;
+  const cats=BAGS.map(function(b,i){return '<button class="selection-target" type="button" data-bag="'+i+'" aria-label="'+esc(b.name)+'" aria-pressed="'+String(i===S.bag)+'" style="--bag-cat-color:'+b.color+'">'+bagIconMarkup(b)+'<span>'+esc(b.name)+'</span></button>';}).join("");
+  const rows=bagRowsMarkup(items);
+  const selected=items[S.item];
+  const nav='<div class="bag-category-nav" style="--bag-cat-color:'+bag.color+'"><button type="button" data-action="bag-prev" aria-label="上一类"></button><div class="bag-cats" role="tablist" aria-label="背包分类">'+cats+'</div><button type="button" data-action="bag-next" aria-label="下一类"></button></div>';
+  return '<div class="bag-layout"><div class="bag-left"><div class="bag-heading"><img src="assets/bag/bag-title.png" alt="BAG"><span class="bag-money">₽ 31,400</span></div>'+nav+bagRibbonMarkup('landscape',bag)+bagRibbonMarkup('portrait',bag)+'<div class="item-list">'+rows+'</div></div><div class="item-description">'+bagDescriptionMarkup(selected)+'</div></div>';
+}
+function bagRowsMarkup(items){return items.map(function(it,i){return '<button class="item-row selection-target" type="button" data-item="'+i+'" aria-pressed="'+String(i===S.item)+'"><span class="item-icon">✦</span><span class="row-name">'+esc(it[0])+'</span><span class="row-meta">×'+it[2]+'</span></button>';}).join("");}
+function bagDescriptionMarkup(item){return '<h3>'+esc(item[0])+'</h3><p>'+esc(item[1])+'</p><p style="margin-top:9px">持有数量：×'+item[2]+'</p>';}
+function updateDexSelection(i){if(!DEX[i]||S.dex===i)return;S.dex=i;app.querySelectorAll(".data-row").forEach(function(row){row.setAttribute("aria-pressed",String(Number(row.dataset.dex)===i));});const focus=app.querySelector(".dex-focus");if(focus)focus.innerHTML=dexFocusHTML(DEX[i]);updateSelectionArrow();}
+function updateBagRibbon(){
+  const bag=BAGS[S.bag];if(!bag)return;
+  const width=100/BAGS.length,left=S.bag*width;
+  app.querySelectorAll(".bag-slant").forEach(function(ribbon){
+    ribbon.style.setProperty("--bag-ribbon-left",left+"%");
+    ribbon.style.setProperty("--bag-ribbon-width",width+"%");
+    ribbon.style.setProperty("--bag-ribbon-color",bag.color);
+    ribbon.textContent=bag.name;
+  });
+  const nav=app.querySelector(".bag-category-nav");
+  if(nav)nav.style.setProperty("--bag-cat-color",bag.color);
+}
+function updateBagCategory(i){if(!BAGS[i])return;S.bag=i;S.item=0;app.querySelectorAll(".bag-cats button").forEach(function(button){button.setAttribute("aria-pressed",String(Number(button.dataset.bag)===i));});updateBagRibbon();const list=app.querySelector(".item-list");if(list)list.innerHTML=bagRowsMarkup(BAGS[i].items);updateBagSelection(0);}
+function updateBagSelection(i){const bag=BAGS[S.bag];if(!bag||!bag.items[i])return;S.item=i;app.querySelectorAll(".item-row").forEach(function(row){row.setAttribute("aria-pressed",String(Number(row.dataset.item)===i));});const box=app.querySelector(".item-description");if(box)box.innerHTML=bagDescriptionMarkup(bag.items[i]);updateSelectionArrow();}
+function renderSettings(){return '<div class="settings-list"><div class="section-label"><span>显示设置</span><span>主题色由 HUD 管理</span></div><div class="setting-row"><span>HUD 主题</span><button class="primary-button" type="button" data-action="theme">'+(S.theme==="day"?"白天":"黑夜")+'　切换</button></div><div class="setting-row"><span>界面缩放</span><span class="setting-note">根据容器宽度重排</span></div><div class="setting-row"><span>操作提示</span><span class="setting-note">确认 A　返回 B</span></div><div class="setting-row"><span>配色管理</span><span class="setting-note">使用主题方案，不开放单独调色</span></div></div>';}
+function renderMap(){return '<div class="map-area" aria-label="示意地图"><div class="map-path"></div><span class="map-point" style="left:16%;top:27%"><b></b>木杆镇</span><span class="map-point" style="left:46%;top:53%"><b></b>机擎市</span><span class="map-point" style="left:76%;top:29%"><b></b>拳关市</span><span class="map-point" style="left:69%;top:72%"><b></b>旷野地带</span></div>';}
+function renderPlaceholder(key){const item=MENU.find(function(m){return m.key===key;});const label=item?item.label:"菜单";return '<div class="empty-state"><div><h2>'+esc(label)+'</h2><p>此处为交互样稿占位，不连接真实游戏数据。</p></div></div>';}
+function actionKey(key){return '<img class="action-key" src="assets/menu/original/button_icon_'+key+'_00^t.png" alt="'+key+'">';}
+function actionMarkup(){if(S.view==="home")return '<span class="action">'+actionKey("A")+'确定</span><span class="action">'+actionKey("R")+'记录</span><span class="action">'+actionKey("B")+'返回</span>';if(S.view==="team")return '<span class="action">'+actionKey("A")+'确定</span><span class="action">'+actionKey("Y")+'替换宝可梦</span><button class="action action-back" type="button" data-action="back">'+actionKey("B")+'返回</button>';if(S.view==="party-detail")return '<span class="action">'+actionKey("A")+'持有物</span><span class="action">'+actionKey("X")+'标记</span><button class="action action-back" type="button" data-action="back">'+actionKey("B")+'返回</button>';if(S.view==="dex")return '<span class="action">'+actionKey("A")+'选择条目</span><button class="action action-back" type="button" data-action="back">'+actionKey("B")+'返回菜单</button>';return '<span class="action">'+actionKey("A")+'确认</span><button class="action action-back" type="button" data-action="back">'+actionKey("B")+'返回</button>';}
+function render(){
+  const view=S.view,module=activeModule();
+  app.dataset.view=view;app.dataset.module=module;app.dataset.theme=S.theme;
+  let content="";
+  if(view==="home")content=renderHome();
+  else if(view==="team")content=renderParty();
+  else if(view==="party-detail")content=renderDetail();
+  else if(view==="dex")content=renderDex();
+  else if(view==="bag")content=renderBag();
+  else if(view==="settings")content=renderSettings();
+  else if(view==="map")content=renderMap();
+  else content=renderPlaceholder(view);
+  $("#screenContent").innerHTML=content;$("#actionbar").innerHTML=actionMarkup();
+  if(hoveredSelection&&!app.contains(hoveredSelection))hoveredSelection=null;
+  if(focusedSelection&&!app.contains(focusedSelection))focusedSelection=null;
+  updateSelectionArrow();
+}
+function selectParty(i){if(!PARTY[i])return;S.party=i;render();}
+function stepParty(direction){const available=PARTY.map(function(p,i){return p.sprite?i:-1;}).filter(function(i){return i>=0;});if(!available.length)return;let at=available.indexOf(S.party);at=(at+direction+available.length)%available.length;selectParty(available[at]);}
+function selectDex(i){updateDexSelection(i);}
+function openDetails(){if(!PARTY[S.party].sprite){feedback("空位没有宝可梦资料");return;}S.tab=0;pushView("party-detail");}
+document.addEventListener("pointerover",function(event){
+  const target=selectionTarget(event.target);if(!target||target===selectionTarget(event.relatedTarget))return;
+  setHoveredSelection(target);
+  if(target.dataset.menu!==undefined&&S.view==="home"){
+    const i=Number(target.dataset.menu);S.menu=i;
+    app.querySelectorAll(".menu-entry").forEach(function(button){button.setAttribute("aria-pressed",String(Number(button.dataset.menu)===i));});
+    const hint=app.querySelector("#homeHint");if(hint)hint.textContent=selectedMenu().label+" · 按确认打开，返回键回到这里";
+    return;
+  }
+  if(target.dataset.party!==undefined&&S.view==="team")previewParty(Number(target.dataset.party));
+  if(target.dataset.dex!==undefined&&S.view==="dex")updateDexSelection(Number(target.dataset.dex));
+  if(target.dataset.bag!==undefined&&S.view==="bag")updateBagCategory(Number(target.dataset.bag));
+  if(target.dataset.item!==undefined&&S.view==="bag")updateBagSelection(Number(target.dataset.item));
+});
+document.addEventListener("pointerout",function(event){
+  const from=selectionTarget(event.target),to=selectionTarget(event.relatedTarget);
+  if(from&&from!==to&&from===hoveredSelection)setHoveredSelection(to);
+});
+document.addEventListener("focusin",function(event){const target=selectionTarget(event.target);if(target)setFocusedSelection(target);});
+document.addEventListener("focusout",function(event){
+  const from=selectionTarget(event.target),to=selectionTarget(event.relatedTarget);
+  if(from&&from!==to&&from===focusedSelection)setFocusedSelection(to);
+});
+document.addEventListener("click",function(event){
+  const target=event.target.closest("button");if(!target)return;
+  if(target.dataset.layoutChoice){setLayout(target.dataset.layoutChoice,true);return;}
+  if(target.id==="themeToggle"||target.dataset.action==="theme"){setTheme(S.theme==="day"?"night":"day");render();return;}
+  if(target.dataset.action==="back"){goBack();return;}
+  if(target.dataset.action==="detail"){openDetails();return;}
+  if(target.dataset.action==="party-prev"){stepParty(-1);return;}
+  if(target.dataset.action==="party-next"){stepParty(1);return;}
+  if(target.dataset.action==="bag-prev"){updateBagCategory((S.bag+BAGS.length-1)%BAGS.length);return;}
+  if(target.dataset.action==="bag-next"){updateBagCategory((S.bag+1)%BAGS.length);return;}
+  if(target.dataset.action==="prev-tab"){S.tab=(S.tab+TABS.length-1)%TABS.length;render();return;}
+  if(target.dataset.action==="next-tab"){S.tab=(S.tab+1)%TABS.length;render();return;}
+  if(target.dataset.menu!==undefined){S.menu=Number(target.dataset.menu);if(S.view==="home")render();openMenuItem(MENU[S.menu]);return;}
+  if(target.dataset.party!==undefined){const i=Number(target.dataset.party);if(i===S.party)openDetails();else selectParty(i);return;}
+  if(target.dataset.tab!==undefined){S.tab=Number(target.dataset.tab);render();return;}
+  if(target.dataset.dex!==undefined){selectDex(Number(target.dataset.dex));return;}
+  if(target.dataset.bag!==undefined){updateBagCategory(Number(target.dataset.bag));return;}
+  if(target.dataset.item!==undefined){updateBagSelection(Number(target.dataset.item));return;}
+});
+document.addEventListener("keydown",function(event){
+  if(event.altKey||event.ctrlKey||event.metaKey)return;
+  const k=event.key;
+  if(k==="Escape"||k==="Backspace"||k.toLowerCase()==="b"){event.preventDefault();goBack();return;}
+  if(S.view==="home"){
+    if(k==="ArrowRight"||k.toLowerCase()==="d"){S.menu=(S.menu+1)%MENU.length;render();event.preventDefault();}
+    else if(k==="ArrowLeft"||k.toLowerCase()==="a"){S.menu=(S.menu+MENU.length-1)%MENU.length;render();event.preventDefault();}
+    else if(k==="ArrowDown"){S.menu=Math.min(MENU.length-1,S.menu+(demo.dataset.layout==="portrait"?2:4));render();event.preventDefault();}
+    else if(k==="ArrowUp"){S.menu=Math.max(0,S.menu-(demo.dataset.layout==="portrait"?2:4));render();event.preventDefault();}
+    else if(k==="Enter"||k.toLowerCase()==="z"){openMenuItem(selectedMenu());event.preventDefault();}
+  }else if(S.view==="team"){
+    if(k==="ArrowDown"){S.party=Math.min(PARTY.length-1,S.party+1);render();event.preventDefault();}
+    else if(k==="ArrowUp"){S.party=Math.max(0,S.party-1);render();event.preventDefault();}
+    else if(k==="Enter"||k.toLowerCase()==="z"||k.toLowerCase()==="a"){openDetails();event.preventDefault();}
+  }else if(S.view==="party-detail"){
+    if(k==="ArrowRight"){S.tab=(S.tab+1)%TABS.length;render();event.preventDefault();}
+    else if(k==="ArrowLeft"){S.tab=(S.tab+TABS.length-1)%TABS.length;render();event.preventDefault();}
+  }else if(S.view==="dex"){
+    if(k==="ArrowDown"){S.dex=Math.min(DEX.length-1,S.dex+1);render();event.preventDefault();}
+    else if(k==="ArrowUp"){S.dex=Math.max(0,S.dex-1);render();event.preventDefault();}
+  }else if(S.view==="bag"){
+    if(k==="ArrowDown"){S.item=Math.min(BAGS[S.bag].items.length-1,S.item+1);render();event.preventDefault();}
+    else if(k==="ArrowUp"){S.item=Math.max(0,S.item-1);render();event.preventDefault();}
+    else if(k==="ArrowRight"){updateBagCategory((S.bag+1)%BAGS.length);event.preventDefault();}
+    else if(k==="ArrowLeft"){updateBagCategory((S.bag+BAGS.length-1)%BAGS.length);event.preventDefault();}
+  }
+});
+setLayout(window.innerWidth<700?"portrait":"landscape",false);setTheme("day");render();
+window.addEventListener("resize",function(){if(!manualLayout)setLayout(window.innerWidth<700?"portrait":"landscape",false);});
+</script>
+</body>
+</html>
