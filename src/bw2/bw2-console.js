@@ -14,6 +14,10 @@ function bw2ResizeConsole(){
   bw2SyncActionSize(app);bw2SyncNearbyCarousel(app);bw2SyncTrainerLayout(app);
   var metrics=bw2ConsoleMetrics(root);bw2SyncDetailScreens(app,metrics);bw2SyncPageScreens(app,metrics);bw2SyncInteractionScreens(app,metrics);
   try{if(window.frameElement)window.frameElement.style.height=(root.getBoundingClientRect().height+32)+'px';}catch(e){}
+  // Keep the first paint atomic. The native nearby renderer has its own
+  // defaults, so revealing the shell before sizing/theme synchronization
+  // produces a one-frame flash of the upstream cards.
+  root.classList.remove('bw2-layout-pending');
 }
 function bw2OpenScale(){
   clearBack();overlay.innerHTML='<div class="modal"><div class="modal-head"><div class="modal-name">界面等比缩放</div><button class="close" data-close>✕</button></div><div class="modal-body"><div class="dim">整套界面一起缩放，保持上下屏和按钮比例。超出可用空间时自动缩小。</div><div style="display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0"><button class="btn-small" data-inline-h-minus>－</button><input type="number" id="inline-h-num" aria-label="界面缩放百分比" value="'+bw2ScalePercent+'" min="50" max="150" step="5" style="width:85px;padding:8px;text-align:center"><span>%</span><button class="btn-small" data-inline-h-plus>＋</button></div><div class="action-btns"><button class="act-btn" data-inline-h-apply>应用</button><button class="act-btn" data-inline-h-reset>恢复 100%</button></div></div></div>';overlay.classList.add('open');
@@ -21,7 +25,7 @@ function bw2OpenScale(){
 function bw2ScaleStep(d){var el=document.getElementById('inline-h-num');if(el)el.value=Math.max(50,Math.min(150,(Number(el.value)||100)+d));}
 function bw2ScaleApply(reset){var el=document.getElementById('inline-h-num');bw2ScalePercent=reset?100:Math.max(50,Math.min(150,Number(el&&el.value)||100));try{localStorage.setItem('pk_bw2_scale',String(bw2ScalePercent));}catch(e){}overlay.classList.remove('open');bw2ResizeConsole();}
 function bw2ConsoleHTML(){
-  return '<div class="hud bw2-console" data-bw2-console>'+ 
+  return '<div class="hud bw2-console bw2-layout-pending" data-bw2-console>'+
     '<div class="bw2-console-lid"><div class="bw2-console-bezel" aria-hidden="true"><i></i><span>POKÉMON</span><i></i></div>'+ 
     '<section class="bw2-screen bw2-display-area" aria-label="上屏显示区"><div class="bw2-display-caption"><strong data-bw2-display-title>队伍</strong><span data-bw2-display-status></span></div>'+ 
     '<div class="hud-inner" id="hud-inner"><div class="tab-panel active" id="tab-1">'+bw2PanelHTML('1')+'</div><div class="tab-panel" id="tab-2"></div><div class="tab-panel" id="tab-3"></div></div></section></div>'+ 
