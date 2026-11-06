@@ -72,7 +72,7 @@ function bw2CloseInteractions(){
 function bw2SyncInteractionScreens(app,metrics){
   if(!app)return;var root=app.querySelector('.bw2-console');if(!root)return;
   metrics=metrics||bw2ConsoleMetrics(root);var r=metrics.root,screen=metrics.upper,scale=metrics.scale;
-  [overlay,subOverlay].forEach(function(layer){if(!layer)return;var modal=layer.querySelector('.modal'),upper=!!(modal&&!modal.classList.contains('bw2-detail'));if(layer.classList.contains('bw2-upper-dialog')!==upper)layer.classList.toggle('bw2-upper-dialog',upper);if(!upper)return;
+  [overlay,subOverlay].forEach(function(layer){if(!layer)return;var modal=layer.querySelector('.modal'),dex=layer.classList.contains('bw2-dex-overlay'),upper=!!(modal&&!modal.classList.contains('bw2-detail')&&!dex);if(layer.classList.contains('bw2-upper-dialog')!==upper)layer.classList.toggle('bw2-upper-dialog',upper);if(!upper)return;
     var values={'--bw2-dialog-left':(screen.left-r.left)/scale+'px','--bw2-dialog-top':(screen.top-r.top)/scale+'px','--bw2-dialog-width':screen.width/scale+'px','--bw2-dialog-height':screen.height/scale+'px'};Object.keys(values).forEach(function(key){if(layer.style.getPropertyValue(key)!==values[key])layer.style.setProperty(key,values[key]);});
   });
 }

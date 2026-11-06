@@ -11,7 +11,9 @@ try{for(const [channel,oldUi] of targets){
  const release=fs.readFileSync(path.join(root,'versions',channel,manifest.ui,'hud.js'),'utf8');
  const old=fs.readFileSync(path.join(root,'versions',channel,oldUi,'hud.js'),'utf8');
  const folder=channel==='swsh'?path.join(root,'src/swsh/HUD美化版-交付'):path.join(root,'src/bw2','黑白2双版本-v'+manifest.ui,'完整版');
- const template=fs.readFileSync(path.join(folder,channel==='swsh'?'剑盾版预览.html':'预览与测试.html'),'utf8');
+ let templatePath=path.join(folder,channel==='swsh'?'剑盾版预览.html':'预览与测试.html');
+ if(channel==='bw2'&&!fs.existsSync(templatePath))templatePath=path.join(root,'src/bw2','黑白2双版本-v'+require('../src/bw2/package.json').version,'完整版','预览与测试.html');
+ const template=fs.readFileSync(templatePath,'utf8');
  for(const installedCore of [old.match(/var PK_VER='([^']+)'/)[1],'3.3.27']){
   // The second case simulates the reported cached core version; updater code is unchanged.
   let script=old.replace(/var PK_VER='[^']+';/,"var PK_VER='"+installedCore+"';");

@@ -153,6 +153,26 @@ function bw2RefreshPanels(app){
 function bw2BindUI(app){
   if(app._bw2Bound)return;app._bw2Bound=true;app.classList.add('bw2-host');
   bw2BindPopupUI(app);
+  // render() binds the console before the upstream page overlay is created.
+  // Attach after that synchronous setup so Dex-list entries get the same
+  // dual-screen surface as the other Dex entry points.
+  hudScope.setTimeout(function(){
+    if(!pageOverlay||pageOverlay._bw2DexClickBound)return;pageOverlay._bw2DexClickBound=true;
+    hudScope.listen(pageOverlay,'click',function(e){
+      var cell=e.target.closest&&e.target.closest('.dex-cell[data-name]');
+      if(cell&&pageOverlay.contains(cell)){e.preventDefault();e.stopImmediatePropagation();showPokemonInfo(cell.getAttribute('data-name'),cell.getAttribute('data-id'));overlay.classList.add('bw2-dex-overlay');hudScope.setTimeout(function(){bw2BindDexClose(overlay);bw2PageIsolation();},0);}
+    },true);
+  },0);
+  // The upstream overlay listener closes the modal itself, but it does not
+  // know about the BW2 full-canvas marker.  Handle the close in capture phase
+  // so the marker is cleared before any delegated upstream handler runs.
+  if(overlay)hudScope.listen(overlay,'click',function(e){
+    var close=e.target&&e.target.closest&&e.target.closest('.modal-head .close:is([data-close],[data-move-back])');
+    if(close&&overlay.classList.contains('bw2-dex-overlay')){
+      overlay.classList.remove('bw2-dex-overlay');
+      bw2PageIsolation();
+    }
+  },true);
   hudScope.listen(WIN,'resize',bw2RequestLayout);
   hudScope.cleanup(function(){if(pageOverlay&&pageOverlay.parentElement===document.body)pageOverlay.remove();});
   hudScope.listen(app,'click',function(e){
@@ -222,7 +242,12 @@ function bw2OpenDexForCard(card){
   var base=typeof pkmFormParse==='function'?(pkmFormParse(raw).base||''):raw;
   if(!base)base=raw.replace(/^(闪光|头目|霸主|搭档)\s*/,'');
   if(!base||typeof showPokemonInfo!=='function')return;
-  overlay.classList.add('bw2-dex-overlay');showPokemonInfo(base,0,1);bw2PageIsolation();
+  overlay.classList.add('bw2-dex-overlay');showPokemonInfo(base,0,1);bw2BindDexClose(overlay);bw2PageIsolation();
+}
+function bw2BindDexClose(el){
+  var close=el&&el.querySelector('.modal-head .close:is([data-close],[data-move-back])');
+  if(!close||close._bw2DexCloseBound)return;close._bw2DexCloseBound=true;
+  close.addEventListener('click',function(){el.classList.remove('bw2-dex-overlay');bw2PageIsolation();},{once:true,capture:true});
 }
 
 /* PERF P04: merge host-event bursts; never alter persistence queue or asset guards. */

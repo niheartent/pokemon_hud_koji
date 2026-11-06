@@ -21,6 +21,19 @@ replace(originalMenu,'var MENU='+JSON.stringify(consoleMenu)+';');
 replaceFunction('pageOverlayPopout','function pageOverlayPopout(on){return bw2PagePopout(on);}');
 replaceFunction('hudSyncModalIsolation',functions.hudSyncModalIsolation.replace('function hudSyncModalIsolation()','function bw2NativeModalIsolation()')+'\nfunction hudSyncModalIsolation(){return bw2PageIsolation();}');
 replaceFunction('actionHTML','function actionHTML(raw,key){return bw2ActionHTML(raw,key);}');
+// Nearby cards can render before the remote type dictionary arrives. Keep the
+// BW2 presentation deterministic by resolving the standard Chinese labels
+// locally; the upstream dictionary still handles additional/custom types.
+replaceFunction('typeSlug',`function typeSlug(t){
+  t=t2s(String(t||'').trim());
+  if(!t)return '';
+  if(t==='星晶'||t==='星晶属性')return 'stellar';
+  if(/^[a-z]+$/i.test(t))return t.toLowerCase();
+  var fallback={一般:'normal',火:'fire',水:'water',电:'electric',草:'grass',冰:'ice',格斗:'fighting',毒:'poison',地面:'ground',飞行:'flying',超能力:'psychic',虫:'bug',岩石:'rock',幽灵:'ghost',龙:'dragon',恶:'dark',钢:'steel',妖精:'fairy'};
+  if(fallback[t])return fallback[t];
+  for(var en in TYPE_CN){if(TYPE_CN[en]===t)return en;}
+  return '';
+}`);
 replaceFunction('breedingHTML','function breedingHTML(){return bw2BreedingHTML();}');
 replaceFunction('boxHTML','function boxHTML(){return bw2BoxHTML();}');
 replaceFunction('typeChartHTML','function typeChartHTML(){return bw2TypeChartHTML();}');

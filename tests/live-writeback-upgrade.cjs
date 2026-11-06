@@ -9,7 +9,9 @@ for(const [channel,from] of [['swsh','1.6.11'],['swsh','1.6.12'],['swsh','1.6.13
  const manifest=JSON.parse(fs.readFileSync(path.join(root,'updates',channel+'.json'))),release=fs.readFileSync(path.join(root,'versions',channel,manifest.ui,'hud.js'),'utf8');
  const old=fs.readFileSync(path.join(root,'versions',channel,from,'hud.js'),'utf8');
  const folder=channel==='swsh'?path.join(root,'src/swsh/HUD美化版-交付'):path.join(root,'src/bw2/黑白2双版本-v'+manifest.ui+'/完整版');
- const template=fs.readFileSync(path.join(folder,channel==='swsh'?'剑盾版预览.html':'预览与测试.html'),'utf8');
+ let templatePath=path.join(folder,channel==='swsh'?'剑盾版预览.html':'预览与测试.html');
+ if(channel==='bw2'&&!fs.existsSync(templatePath))templatePath=path.join(root,'src/bw2/黑白2双版本-v'+require('../src/bw2/package.json').version+'/完整版/预览与测试.html');
+ const template=fs.readFileSync(templatePath,'utf8');
  for(const core of [manifest.core,'5.3.2']){
   const candidate=upstream.replace(/var PK_VER='[^']+';/,"var PK_VER='"+core+"';"),installed=process.env.UPSTREAM_CANDIDATE?composeOld(old,candidate):old.replace(/var PK_VER='[^']+';/,"var PK_VER='"+core+"';");
   const marker=installed.lastIndexOf('try{ensureHud();}catch(e){}');assert(marker>0);

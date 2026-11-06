@@ -46,16 +46,35 @@ function closeTo(actual,expected,label){assert.ok(Math.abs(actual-expected)<1.5,
   const typeTag=await page.locator('#pkm-moves .type-chip').first().evaluate(node=>({width:parseFloat(getComputedStyle(node).width),fontSize:parseFloat(getComputedStyle(node).fontSize),first:node.firstElementChild&&node.firstElementChild.classList.contains('type-ic')}));
   assert.equal(typeTag.first,true,'type icon precedes its label');
   assert.ok(typeTag.width>0&&Math.abs(typeTag.width/typeTag.fontSize-5.65)<0.03,'type tags use the same fixed three-character-width token');
-
   await page.locator('.bw2-dex-overlay .close').click();
   await page.reload();await page.locator('.bw2-console').waitFor();
   await page.locator('.tab-btn[data-tab="1"]').click();
+  const nearbyType=await page.locator('.nb-cell .nb-typebar .type-chip').first().evaluate(node=>({width:parseFloat(getComputedStyle(node).width),fontSize:parseFloat(getComputedStyle(node).fontSize),shrink:getComputedStyle(node).flexShrink,iconPosition:getComputedStyle(node.firstElementChild).position}));
+  assert.ok(Math.abs(nearbyType.width/nearbyType.fontSize-5.65)<0.03,'nearby type tags keep the same fixed width: '+JSON.stringify(nearbyType));
+  assert.equal(nearbyType.shrink,'0','nearby type tags cannot compress');
+  assert.equal(nearbyType.iconPosition,'static','nearby type icon participates in left-to-right label layout');
   await page.locator('.nb-cell').first().click();
   await page.locator('.bw2-encounter').waitFor();
+  const encounterGeometry=await page.evaluate(()=>{
+   const root=document.querySelector('.bw2-console'),upper=root.querySelector('.bw2-display-area'),overlay=root.querySelector('.pkm-hud-overlay.open'),modal=overlay.querySelector('.bw2-encounter');
+   const rect=node=>{const r=node.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom};};
+   return {upper:rect(upper),overlay:rect(overlay),modal:rect(modal),className:overlay.className};
+  });
+  assert.ok(encounterGeometry.className.includes('bw2-upper-dialog'),'nearby action dialog uses upper-screen mode');
+  for(const key of ['left','top','right','bottom'])closeTo(encounterGeometry.overlay[key],encounterGeometry.upper[key],'nearby action overlay occupies upper screen at '+key);
+  for(const key of ['left','top','right','bottom'])closeTo(encounterGeometry.modal[key],encounterGeometry.upper[key],'nearby action surface occupies upper screen at '+key);
   await page.locator('.bw2-encounter [data-pkm-dex]').click();
   await page.locator('.bw2-dex-overlay.open .modal-name').waitFor();
   assert.equal((await page.locator('.bw2-dex-overlay .modal-name').innerText()).trim(),'咕咕','nearby Pokémon opens its matching Dex entry');
+  const nearbyDexGeometry=await page.evaluate(()=>{
+   const root=document.querySelector('.bw2-console'),overlay=root.querySelector('.bw2-dex-overlay'),modal=overlay.querySelector('.modal');
+   const rect=node=>{const r=node.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom};};
+   return {root:rect(root),overlay:rect(overlay),modal:rect(modal)};
+  });
+  for(const key of ['left','top','right','bottom'])closeTo(nearbyDexGeometry.overlay[key],nearbyDexGeometry.root[key],'nearby-to-Dex overlay switches to both screens at '+key);
+  for(const key of ['left','top','right','bottom'])closeTo(nearbyDexGeometry.modal[key],nearbyDexGeometry.root[key],'nearby-to-Dex content switches to both screens at '+key);
   await page.locator('.bw2-dex-overlay .close').click();
+  assert.equal(await page.locator('.bw2-console > .pkm-hud-overlay:not(.pkm-hud-sub)').evaluate(node=>node.classList.contains('bw2-dex-overlay')),false,'closing Dex detail clears full-screen mode');
   await page.reload();await page.locator('.bw2-console').waitFor();
   await page.locator('.tab-btn[data-tab="4"]').click();
   const menuShell=await page.locator('.bw2-console').evaluate(node=>{const r=node.getBoundingClientRect();return [r.left,r.top,r.width,r.height];});
@@ -68,8 +87,26 @@ function closeTo(actual,expected,label){assert.ok(Math.abs(actual-expected)<1.5,
   });
   for(const key of ['left','top','right','bottom'])closeTo(pageGeometry.dex[key],pageGeometry.root[key],'menu Dex fills both BW2 screens at '+key);
   assert.deepEqual(pageGeometry.shell,menuShell,'opening the Dex menu does not scale the underlying console');
+  // The page-list data endpoint is intentionally mocked in this browser test;
+  // seed one representative entry so the real delegated click path is tested.
+  await page.evaluate(()=>{const grid=document.querySelector('#pokedex-grid');if(grid)grid.innerHTML='<div class="dex-cell" data-name="咕咕" data-id="163"><span class="dex-name">咕咕</span></div>';});
+  const dexCell=page.locator('.page-overlay.open .dex-cell[data-name]').first();
+  await dexCell.waitFor();
+  const dexName=await dexCell.getAttribute('data-name');
+  await dexCell.click();
+  await page.locator('.bw2-dex-overlay.open .modal').waitFor();
+  assert.equal((await page.locator('.bw2-dex-overlay .modal-name').innerText()).trim(),dexName,'Dex-list entry opens the selected Pokémon');
+  const dexEntryGeometry=await page.evaluate(()=>{
+   const root=document.querySelector('.bw2-console'),overlay=root.querySelector('.bw2-dex-overlay'),modal=overlay.querySelector('.modal');
+   const rect=node=>{const r=node.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom};};
+   return {root:rect(root),overlay:rect(overlay),modal:rect(modal)};
+  });
+  for(const key of ['left','top','right','bottom'])closeTo(dexEntryGeometry.overlay[key],dexEntryGeometry.root[key],'Dex-list detail covers both screens at '+key);
+  for(const key of ['left','top','right','bottom'])closeTo(dexEntryGeometry.modal[key],dexEntryGeometry.root[key],'Dex-list detail content covers both screens at '+key);
+  await page.locator('.bw2-dex-overlay .close').click();
+  assert.equal(await page.locator('.bw2-console > .pkm-hud-overlay:not(.pkm-hud-sub)').evaluate(node=>node.classList.contains('bw2-dex-overlay')),false,'closing Dex-list detail restores normal overlay mode');
   await page.locator('.page-overlay.open [data-page-close]').click();
   assert.deepEqual(errors,[],'Dex interactions produce no browser errors');
-  console.log(JSON.stringify({passed:true,fullCanvasOverlay:true,underlyingShellUnchanged:true,learnsetColumnsAligned:true,nearbyDexEntry:true,errors}));
+  console.log(JSON.stringify({passed:true,fullCanvasOverlay:true,underlyingShellUnchanged:true,learnsetColumnsAligned:true,nearbyUpperScreen:true,nearbyDexFullScreen:true,dexListFullScreen:true,errors}));
  }finally{await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

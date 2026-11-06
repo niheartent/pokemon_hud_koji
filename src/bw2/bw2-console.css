@@ -175,7 +175,6 @@
 .bw2-host .bw2-home-nearby .nb-cell{flex:0 0 var(--bw2-nearby-edge,112px)!important;width:var(--bw2-nearby-edge,112px)!important;min-width:var(--bw2-nearby-edge,112px)!important;height:var(--bw2-nearby-edge,112px)!important;max-height:var(--bw2-nearby-edge,112px);aspect-ratio:1;gap:2px;padding:4px 3px}
 .bw2-host .bw2-home-nearby .nb-name{line-height:1.1}
 .bw2-host .bw2-home-nearby .nb-count{line-height:1.1}
-.bw2-host .bw2-home-nearby .nb-type-chip,.bw2-host .bw2-home-nearby .type-chip{padding:2px 4px;min-width:0}
 .bw2-host .bw2-home-nearby .bw2-nearby-arrows{position:relative}
 .bw2-host .bw2-home-nearby .bw2-nearby-arrows .nb-grid{width:100%;margin:0}
 .bw2-host .bw2-nearby-arrow{position:absolute;z-index:5;top:50%;bottom:auto;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;width:40px;height:48px;padding:0;border:0;border-radius:0;background:transparent!important;box-shadow:none!important;color:#fff;cursor:pointer;touch-action:manipulation}
@@ -243,6 +242,7 @@
 /* One upper-screen surface for ordinary dialogs; detail keeps the two screens. */
 .bw2-host .bw2-console>.pkm-hud-overlay.bw2-upper-dialog{inset:auto;left:var(--bw2-dialog-left,8px);top:var(--bw2-dialog-top,20px);width:var(--bw2-dialog-width,584px);height:var(--bw2-dialog-height,383px);padding:0;background:#121625;align-items:stretch;justify-content:stretch}
 .bw2-host .bw2-upper-dialog>.bw2-popup{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;min-height:0;border:1px solid #c9e6fb88;background:#121625}
+.bw2-host .bw2-upper-dialog>.bw2-encounter{display:flex;flex-direction:column;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;min-height:0;overflow:hidden}
 .bw2-host .bw2-upper-dialog>.bw2-popup>.modal-head{margin:0;padding:5px 12px;min-height:38px;border:0;border-bottom:1px solid #c9e6fb55}
 .bw2-host .bw2-upper-dialog>.bw2-popup>.modal-body{margin:0;padding:12px;border:0;min-height:0;max-height:none;flex:1;overflow:auto}
 .bw2-host .bw2-console:has(>.pkm-hud-overlay.open>.bw2-detail)>.pkm-hud-page-overlay,.bw2-host .bw2-console:has(>.bw2-upper-dialog.open)>.pkm-hud-page-overlay{visibility:hidden;pointer-events:none!important}

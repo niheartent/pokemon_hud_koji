@@ -103,8 +103,8 @@
 
 /* All BW2 type labels share one three-character name column: icon left,
    label right, identical dimensions in detail, moves and nearby cards. */
-.bw2-host :is(.koji-detail-type-chip,.type-chip,.move-type,.nb-type-chip){box-sizing:border-box;display:inline-flex;align-items:center;justify-content:flex-start;gap:.28em;width:5.65em;min-width:5.65em;height:1.8em;padding:0 .38em;border-radius:0;white-space:nowrap;overflow:hidden;line-height:1}
-.bw2-host :is(.koji-detail-type-chip,.type-chip,.move-type,.nb-type-chip) .type-ic{flex:0 0 1em;width:1em;height:1em;margin:0}
+.bw2-host :is(.koji-detail-type-chip,.type-chip,.move-type,.nb-type-chip){box-sizing:border-box;display:inline-flex;align-items:center;justify-content:flex-start;gap:.28em;flex:0 0 5.65em;width:5.65em;min-width:5.65em;height:1.8em;padding:0 .38em;border-radius:0;white-space:nowrap;overflow:hidden;line-height:1}
+.bw2-host :is(.koji-detail-type-chip,.type-chip,.move-type,.nb-type-chip) .type-ic{position:static;left:auto;top:auto;transform:none;display:block;flex:0 0 1em;width:1em;height:1em;margin:0}
 .bw2-host :is(.koji-detail-type-chip,.type-chip,.move-type,.nb-type-chip){text-align:left}
 .bw2-host .mv-c3 :is(.type-chip,.move-type){width:5.65em;min-width:5.65em;justify-content:flex-start}
 
