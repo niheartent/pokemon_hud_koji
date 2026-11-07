@@ -11,6 +11,11 @@ try{
  await page.addInitScript(()=>localStorage.setItem('pk_swsh_dark_theme','0'));
  await page.goto('http://swsh-preview.test');await page.locator('.swsh-team').waitFor();
  assert.equal(await page.locator('.swsh-party-list .card-frame').count(),6);
+ // A partner ribbon must appear once in Sword/Shield's badge strip, never beside the name.
+ const partnerRow=page.locator('.swsh-party-list .card-frame[data-slot="1"]');
+ await page.evaluate(async()=>{previewState.队伍['1'].名字='搭档君主蛇';await __SWSH_TEST.refresh();});
+ assert.equal(await partnerRow.locator('.swsh-party-mark[data-party-mark="partner"]').count(),1);
+ assert.equal(await partnerRow.locator('.koji-partner-ribbon').count(),0);
  await page.locator('.swsh-party-list .card-frame[data-slot="2"]').hover();assert.equal(await page.locator('.swsh-selected').getAttribute('data-slot'),'2');
  await page.locator('[data-party-step="1"]').click();assert.equal(await page.locator('.swsh-selected').getAttribute('data-slot'),'3');
  await page.locator('[data-party-step="-1"]').click();assert.equal(await page.locator('.swsh-selected').getAttribute('data-slot'),'2');
