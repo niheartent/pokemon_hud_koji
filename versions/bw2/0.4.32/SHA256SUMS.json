@@ -1,0 +1,28 @@
+{
+  "files": [
+    {
+      "file": "hud.js",
+      "sha256": "a6022a4ff784d751b99c4fe9442f0e142dcbb43bc3d9ffeb847db114f95d86b5"
+    },
+    {
+      "file": "hud.json",
+      "sha256": "84de09d8646426a8095d30645e7b2a6011b78364f8178bc4ec4dadc18681310b"
+    },
+    {
+      "file": "independent/hud.js",
+      "sha256": "fbdd2caeab08113b802f159a94981ce486c51c7a0b4d84ef291767360fcd5961"
+    },
+    {
+      "file": "independent/hud.json",
+      "sha256": "8ad38fd6350d9a7ca95bf38279ac481abef0fe45e41c6cd83256c1f623475b01"
+    },
+    {
+      "file": "Acorn-LICENSE.txt",
+      "sha256": "76a876cf886ff9be2a8b5e2e86514fed06223c8c9f0c1e9ee9606e93841e00b7"
+    },
+    {
+      "file": "README.md",
+      "sha256": "ef119966f43ace431bdddcbc969979f76729d7da7fd92eac7a90c3691969f8d2"
+    }
+  ]
+}

@@ -349,3 +349,5 @@
 }
 .koji-tc-image .dim{font-size:.72rem;margin-top:4px}
 .item-entry.item-no-click{cursor:default}.item-entry.item-no-click:hover{background:transparent}
+
+.swsh-party-list .swsh-party-mark[data-party-mark="partner"] img{object-fit:contain;filter:drop-shadow(0 0 1px rgba(20,40,60,.35));}.swsh-dark .swsh-party-list .swsh-party-mark[data-party-mark="partner"] img{filter:brightness(1.08) drop-shadow(0 0 1px rgba(210,225,255,.35));}

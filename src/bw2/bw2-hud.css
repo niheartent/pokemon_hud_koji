@@ -20,3 +20,5 @@
 .bw2-host .swsh-icon-detail{stroke-width:1.35}
 .bw2-host .bw2-menu-button .menu-label{font-size:17px;font-weight:800}
 .bw2-host .bw2-menu-button:focus-visible{outline:none;box-shadow:inset 0 0 0 3px #40d7e7}
+
+.bw2-host .koji-partner-ribbon{display:inline-block;object-fit:contain;flex:0 0 auto;vertical-align:middle;margin-left:3px;filter:drop-shadow(0 0 1px rgba(40,25,80,.45));}
