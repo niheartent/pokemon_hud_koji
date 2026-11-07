@@ -43,3 +43,22 @@
 .bw2-host .bw2-encounter-info .nb-pillbar{display:flex;flex-wrap:wrap;gap:5px}
 .bw2-host .bw2-encounter-side .action-btns{display:grid;grid-template-columns:1fr;gap:10px;margin:0}
 .bw2-host .bw2-encounter-side .act-btn{min-height:44px;font-size:16px}
+
+/* Partner allocation is a BW2-owned dialog. The calculator and write-back
+   remain upstream services; only the surface is themed here. */
+.bw2-host .bw2-partner-modal{width:min(100%,500px)!important;max-width:500px!important;max-height:calc(100% - 28px);border:1px solid #8996a0;border-radius:3px;background:#121625;color:#e3ebf3;box-shadow:0 14px 32px #0008;overflow:hidden}
+.bw2-host .bw2-partner-modal>.modal-head{display:flex;align-items:center;min-height:42px;padding:7px 12px;background:#252a2b;border-bottom:1px solid #c9e6fb55;color:#e7eceb}
+.bw2-host .bw2-partner-modal>.modal-head .modal-name{flex:1;min-width:0;font-size:15px;font-weight:800;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bw2-host .bw2-partner-modal>.modal-head .close{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:0;background:transparent;color:#d9e4e8;font-size:22px;line-height:1;cursor:pointer}
+.bw2-host .bw2-partner-modal>.modal-body{padding:14px;overflow:auto;background:#121625}
+.bw2-host .bw2-partner-modal [data-ptbox]{display:flex;flex-direction:column;gap:12px;padding:12px;border:1px solid #657687;background:#1b2430;color:#dce7ef;border-radius:2px;font-size:13px}
+.bw2-host .bw2-partner-modal [data-ptbox]>div:first-child{display:flex!important;align-items:center;gap:5px;line-height:1.5;color:#b9c9d5}
+.bw2-host .bw2-partner-modal [data-ptbox]>div:first-child b{color:#e7f1f3;font-size:14px}
+.bw2-host .bw2-partner-modal [data-ptbox]>div:nth-child(2){display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;margin-top:0!important}
+.bw2-host .bw2-partner-modal [data-ptbox]>div:nth-child(2) label{display:flex;align-items:center;justify-content:space-between;gap:7px;padding:7px 8px;border:1px solid #526777;background:#273341;color:#dce7ef;font-size:13px}
+.bw2-host .bw2-partner-modal [data-ptbox] input[data-pt]{box-sizing:border-box;width:4.4em!important;padding:4px 5px!important;border:1px solid #8da4b2!important;border-radius:0!important;background:#121b25!important;color:#f2f6f7!important;font:inherit!important;text-align:right}
+.bw2-host .bw2-partner-modal [data-ptbox]>div:last-child{display:grid!important;grid-template-columns:1fr 1fr;gap:8px;margin-top:0!important}
+.bw2-host .bw2-partner-modal [data-ptbox] .act-btn{min-height:36px;padding:7px 10px;border:1px solid #8299a8;background:#344957;color:#edf4f5;font-weight:800;cursor:pointer}
+.bw2-host .bw2-partner-modal [data-ptbox] .act-btn:first-child{background:#52717a;border-color:#a9c4cb;color:#fff}
+.bw2-host .bw2-partner-modal [data-ptbox] .dim{color:#aebfca}
+@media(max-width:430px){.bw2-host .bw2-partner-modal [data-ptbox]>div:nth-child(2){grid-template-columns:repeat(2,minmax(0,1fr))!important}.bw2-host .bw2-partner-modal>.modal-body{padding:10px}}

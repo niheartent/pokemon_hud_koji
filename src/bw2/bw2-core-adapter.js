@@ -51,6 +51,10 @@ replaceFunction('inlineHApply','function inlineHApply(){return bw2ScaleApply(fal
 replaceFunction('inlineHReset','function inlineHReset(){return bw2ScaleApply(true);}');
 replace("var inlineOpt=(winMode==='0')?'<label class=\"set-opt\" style=\"cursor:default\">内嵌模式高度：<b>'+inlineH+'</b> px</label><button class=\"act-btn\" data-inline-h-open>📏 调整内嵌模式高度</button>':'';","var inlineOpt='<label class=\"set-opt\">界面缩放：<b>'+bw2ScalePercent+'</b> %</label><button class=\"act-btn\" data-inline-h-open>等比放大／缩小</button>';");
 replaceFunction('detailHTML',functions.detailHTML.replace('function detailHTML(c)','function bw2LegacyDetailHTML(c)')+'\nfunction detailHTML(c){return bw2DetailHTML(c);}');
+// Keep the partner calculator's domain logic and persistence, but give its
+// modal an owned BW2 presentation boundary instead of the upstream generic
+// dialog. This also lets future upstream calculator changes flow through.
+if(functions.pkmPartnerOpen)replaceFunction('pkmPartnerOpen',functions.pkmPartnerOpen.replace('<div class="modal">','<div class="modal bw2-partner-modal">'));
 replaceFunction('refreshHudPanels','function refreshHudPanels(app){return bw2RefreshPanels(app);}');
 let render=functions.render;
 render=fragment(render,'  if(inline)applyInlineH(app);','  bw2BindUI(app);pkBeautyBindUpdateUI(app);');
