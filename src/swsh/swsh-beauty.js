@@ -49,24 +49,5 @@ function swshApplyTheme(app){
   var inline=document.getElementById('pkm-hud-inline');if(inline)inline.classList.toggle('swsh-dark',swshDarkTheme);
 }
 
-var swshHudWidth=null;
-try{var swshSavedWidth=parseInt(localStorage.getItem('pk_swsh_hud_width'),10);if(swshSavedWidth>=480&&swshSavedWidth<=900)swshHudWidth=swshSavedWidth;}catch(e){}
-function swshWidthDisplayValue(){return swshHudWidth===null?(winMode==='0'?600:650):swshHudWidth;}
-function swshApplyWidth(){
-  var roots=[document.getElementById('pkm-hud-win'),document.getElementById('pkm-hud-inline')];
-  for(var i=0;i<roots.length;i++){var root=roots[i];if(!root)continue;if(swshHudWidth===null)root.style.removeProperty('--swsh-hud-width');else root.style.setProperty('--swsh-hud-width',swshHudWidth+'px');}
-}
-function swshCenterWidth(){
-  var win=document.getElementById('pkm-hud-win');if(!win||!win.classList.contains('open'))return;
-  try{var vp=vpSize(),want=Math.max(4,vp.ox+(vp.w-win.offsetWidth)/2);win.style.left=want+'px';var rect=win.getBoundingClientRect();win.style.left=(want+(want-rect.x))+'px';}catch(e){}
-}
-function swshSetHudWidth(value){
-  var n=Number(value);if(!Number.isFinite(n))return;
-  swshHudWidth=Math.max(480,Math.min(900,Math.round(n/10)*10));
-  try{localStorage.setItem('pk_swsh_hud_width',String(swshHudWidth));}catch(e){}
-  swshApplyWidth();swshCenterWidth();resizeFrame();
-}
-function swshResetHudWidth(){
-  swshHudWidth=null;try{localStorage.removeItem('pk_swsh_hud_width');}catch(e){}
-  swshApplyWidth();swshCenterWidth();resizeFrame();
-}
+// Remove the retired Sword/Shield width preference; the core's panel-width control remains authoritative.
+try{localStorage.removeItem('pk_swsh_hud_width');}catch(e){}

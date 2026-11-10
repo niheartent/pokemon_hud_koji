@@ -26,8 +26,10 @@ try{
  await page.locator('.tab-btn[data-tab="4"]').click();await page.locator('#tab-4 [data-page="settings"]').click();await page.locator('.page-overlay.open').waitFor();
  const settings=await page.locator('.page-overlay.open').innerText();assert(settings.includes(manifest.core)&&settings.includes(manifest.ui),settings);
  await page.locator('[data-toggle="swsh-dark"]').check();assert.equal(await page.locator('#pkm-hud-inline').evaluate(el=>el.classList.contains('swsh-dark')),true);
- await page.locator('[data-swsh-hud-width]').evaluate(el=>{el.value='800';el.dispatchEvent(new Event('input',{bubbles:true}));});assert.equal(await page.evaluate(()=>localStorage.getItem('pk_swsh_hud_width')),'800');
- await page.locator('[data-swsh-hud-width-reset]').click();assert.equal(await page.evaluate(()=>localStorage.getItem('pk_swsh_hud_width')),null);
+ assert.equal(await page.locator('[data-swsh-hud-width]').count(),0);
+ assert.equal(await page.locator('[data-swsh-hud-width-reset]').count(),0);
+ assert.equal(await page.locator('[data-width-open]').count(),1,'有效的内嵌面板宽度设置仍保留');
+ assert.equal(await page.evaluate(()=>localStorage.getItem('pk_swsh_hud_width')),null,'旧版剑盾 HUD 宽度缓存已清除');
  await page.locator('[data-pk-check-update]').click();await page.waitForFunction(()=>document.querySelector('[data-pk-do-update]').style.display==='block');
  const compatible=await page.locator('.page-overlay.open').innerText();assert(compatible.includes('已合成并检查')); 
  const logs=page.locator('[data-swsh-update-logs]');assert.equal((await logs.locator('.swsh-update-log-text').first().textContent()).trim(),logFixture);assert.equal(await logs.locator('img').count(),0);assert.equal(await page.evaluate(()=>!!window.__logExecuted),false);assert.equal(await logs.locator('details').first().getAttribute('open'),'');await logs.locator('details').nth(1).locator('summary').click();assert((await logs.innerText()).includes('修复白天主题的训练家'));

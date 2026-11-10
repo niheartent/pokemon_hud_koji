@@ -91,7 +91,7 @@ function swshBaseViewsSettings(html){
     var box=check.closest('.set-opts');if(box){var row=swshDOM('<div class="info-row"><span class="k">HUD 美化版</span><span class="v">v'+PK_BEAUTY_VER+'</span></div><div class="dim" style="font-size:.72rem">先检查上游接口，通过后才可安装。普通文案、排版和功能改动保留。</div>');var first=box.querySelector('.info-row');while(row.firstChild)box.insertBefore(row.firstChild,first?first.nextSibling:check);}
     if(box){var logs=document.createElement('div');logs.setAttribute('data-swsh-update-logs','');logs.innerHTML=swshUpdateLogHTML();box.appendChild(logs);}
   }
-  var toggle=dom.querySelector('[data-toggle="winmode"]'),mode=toggle&&toggle.closest('.set-opts');if(mode){var title=mode.previousElementSibling,extras=swshDOM('<div class="set-title">界面配色</div><div class="set-opts"><label class="set-opt"><input type="checkbox" data-toggle="swsh-dark"'+(swshDarkTheme?' checked':'')+'>暗色模式（关闭使用白天配色）</label></div><div class="set-title">HUD 宽度</div><div class="set-opts"><label class="swsh-width-control"><input type="range" data-swsh-hud-width aria-label="HUD 宽度" min="480" max="900" step="10" value="'+swshWidthDisplayValue()+'"><output data-swsh-hud-width-value>'+swshWidthDisplayValue()+' px</output></label><button type="button" class="act-btn" data-swsh-hud-width-reset>恢复默认宽度</button></div>');while(extras.firstChild)mode.parentNode.insertBefore(extras.firstChild,title||mode);}
+  var toggle=dom.querySelector('[data-toggle="winmode"]'),mode=toggle&&toggle.closest('.set-opts');if(mode){var title=mode.previousElementSibling,extras=swshDOM('<div class="set-title">界面配色</div><div class="set-opts"><label class="set-opt"><input type="checkbox" data-toggle="swsh-dark"'+(swshDarkTheme?' checked':'')+'>暗色模式（关闭使用白天配色）</label></div>');while(extras.firstChild)mode.parentNode.insertBefore(extras.firstChild,title||mode);}
   return dom.innerHTML;
 }
 teamHTML=function(){return swshDecorate(swshBaseViews.teamHTML,swshBaseViewsTeam,arguments,this,'team',swshTeamDependency);};
@@ -126,9 +126,8 @@ function swshCurrentApp(){return document.getElementById(winMode==='0'?'pkm-hud-
 function swshBindAdapter(app){
   if(!app||app._swshAdapterBound)return;app._swshAdapterBound=true;
   hudScope.listen(app,'mouseover',function(e){var target=e.target.nodeType===1?e.target:e.target.parentElement,row=target&&target.closest('.swsh-party-list .card-frame[data-slot]');if(row)swshSelectPartyCard(app,row);});
-  hudScope.listen(app,'click',function(e){var copy=e.target.closest('[data-pk-show-content],[data-pk-copy-content],[data-pk-copy-content-close]');if(copy){if(!pkBeautyPreparedContent||pkBeautyPreparedVer!==pkLatestVer){e.preventDefault();e.stopImmediatePropagation();pkSetUpdateMsg('请先检查美化兼容性，再复制已合成的脚本');return;}pkLatestContent=pkBeautyPreparedContent;}var step=e.target.closest('[data-party-step]');if(step){e.preventDefault();e.stopImmediatePropagation();swshStepPartyCard(app,step);return;}if(e.target.closest('[data-swsh-hud-width-reset]')){swshResetHudWidth();var slider=app.querySelector('[data-swsh-hud-width]'),output=app.querySelector('[data-swsh-hud-width-value]');if(slider)slider.value=swshWidthDisplayValue();if(output)output.textContent=swshWidthDisplayValue()+' px';}},true);
+  hudScope.listen(app,'click',function(e){var copy=e.target.closest('[data-pk-show-content],[data-pk-copy-content],[data-pk-copy-content-close]');if(copy){if(!pkBeautyPreparedContent||pkBeautyPreparedVer!==pkLatestVer){e.preventDefault();e.stopImmediatePropagation();pkSetUpdateMsg('请先检查美化兼容性，再复制已合成的脚本');return;}pkLatestContent=pkBeautyPreparedContent;}var step=e.target.closest('[data-party-step]');if(step){e.preventDefault();e.stopImmediatePropagation();swshStepPartyCard(app,step);return;}},true);
   hudScope.listen(app,'change',function(e){if(e.target.matches('[data-toggle="swsh-dark"]')){swshDarkTheme=e.target.checked;try{localStorage.setItem('pk_swsh_dark_theme',swshDarkTheme?'1':'0');}catch(_){}swshApplyTheme(app);}});
-  hudScope.listen(app,'input',function(e){if(e.target.matches('[data-swsh-hud-width]')){swshSetHudWidth(e.target.value);var output=app.querySelector('[data-swsh-hud-width-value]');if(output)output.textContent=swshHudWidth+' px';}});
   var observer=hudScope.observe(new MutationObserver(function(records){
     var relevant=records.some(function(record){var target=record.target.nodeType===1?record.target:record.target.parentElement;
       if(target&&target.closest('.cmd-panel'))return true;
@@ -136,7 +135,7 @@ function swshBindAdapter(app){
     });if(relevant)swshDecorateCommands(app);
   }));observer.observe(app,{childList:true,subtree:true,characterData:true});
 }
-render=function(){swshGuardPanels(swshCurrentApp());var result=swshBaseViews.render.apply(this,arguments),app=swshCurrentApp();swshGuardPanels(app);swshApplyTheme(app);swshApplyWidth();swshBindAdapter(app);return result;};
+render=function(){swshGuardPanels(swshCurrentApp());var result=swshBaseViews.render.apply(this,arguments),app=swshCurrentApp();swshGuardPanels(app);swshApplyTheme(app);swshBindAdapter(app);return result;};
 pkSetUpdateMsg=function(){var result=swshBaseViews.pkSetUpdateMsg.apply(this,arguments);swshRefreshUpdateLog();return result;};
 pkCheckUpdate=function(){pkBeautyPreparedContent=null;pkBeautyPreparedVer=null;document.querySelectorAll('[data-pk-show-content]').forEach(function(button){button.style.display='none';});return swshBaseViews.pkCheckUpdate.apply(this,arguments);};
 showNoticeModal=function(ver,notice){

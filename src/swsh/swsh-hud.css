@@ -271,15 +271,9 @@
 :is(#pkm-hud-win,#pkm-hud-inline).swsh-dark .cmd-tip{border-color:#8192b4;background:#303b60;color:#fff}
 @media(max-width:520px){#pkm-hud-win .cmd-btn,#pkm-hud-inline .cmd-btn{min-height:42px;padding:4px 9px}#pkm-hud-win .cmd-tip,#pkm-hud-inline .cmd-tip{flex-basis:32px;width:32px;height:32px}}
 
-/* Width preference respects the viewport and reflows the content when compact. */
-#pkm-hud-win{width:min(94vw,var(--swsh-hud-width,650px))}
-#pkm-hud-inline .hud{max-width:min(100%,var(--swsh-hud-width,600px))}
 #pkm-hud-win .hud,#pkm-hud-inline .hud{container:pkm-hud-layout / inline-size}
 #pkm-hud-win .swsh-focus-art,#pkm-hud-inline .swsh-focus-art{height:clamp(235px,32cqw,310px)}
 #pkm-hud-win .swsh-focus-art .pk-img,#pkm-hud-inline .swsh-focus-art .pk-img{width:min(100%,clamp(205px,28cqw,270px));height:clamp(220px,30cqw,290px)}
-.swsh-width-control{display:flex;align-items:center;gap:10px;width:100%}
-.swsh-width-control input[type=range]{flex:1;min-width:0;accent-color:#cf6d7c}
-.swsh-width-control output{flex:0 0 58px;text-align:right;font-size:.78rem;font-weight:800}
 /* Occupied and empty slots reserve the same space in the six-slot party. */
 .swsh-party-list{--swsh-party-row-height:68px}
 .swsh-party-list>.card-frame,.swsh-party-list>.empty-frame{min-height:var(--swsh-party-row-height);flex-shrink:0}

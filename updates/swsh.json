@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "channel": "swsh",
-  "ui": "1.7.5",
+  "ui": "1.7.6",
   "core": "5.9.2",
   "testedCore": [
     "3.3.19",
     "5.9.2"
   ],
-  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.5/versions/swsh/1.7.5/hud.js",
-  "sha256": "169c431afce259fde508964669fe9ced5d91359a6ebf936f9685213b51ba75f3",
-  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.5/versions/swsh/1.7.5/hud.json",
-  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.7.5",
-  "notes": "# 剑盾 v1.7.5\n\n- 修复队伍宝可梦搭档标记重复：名字旁不再显示第二枚，保留剑盾右侧标识栏中的单枚图标。\n- 黑白版展示入口独立，不需要随此修复改动。\n\n验证：完整构建及仓库回归测试通过。\n\n# 剑盾 v1.7.4\n\n- 跟进弦九 v5.9.6 的最佳伙伴缎带标记，并按剑盾队伍徽章布局显示。\n- 白天与暗色主题沿用剑盾自身的徽章质感与颜色，不复用原版页面样式。\n- 搭档加点按钮同步移除旧前置图标，保留原有计算与写回。\n\n验证：`npm run build:swsh`、`npm run test:swsh`。\n\n# 剑盾 v1.7.3\n\n- 回滚 v1.7.2 中依据网络类型、流量设置和 CPU 核数切换样式的方案；这些条件不能代表 HUD 操作是否流畅。\n- 酒馆同一轮短时连续事件现在共用一个固定 50 毫秒刷新窗口，避免事件处理器重复触发整套 HUD 刷新；后续事件仍会单独刷新。\n- 刷新窗口不会随着后续事件重置，最迟在首次事件后 50 毫秒触发；白天／暗色视觉效果保持原样。\n- 保留剑盾本地布局、双色主题和弦九核心 v5.9.2 的功能接口。\n\n验证：通过 VM 事件源测试验证事件爆发只触发一次刷新、不会重复绑定、后续独立事件仍会刷新；完整测试与发布校验结果以 CI 为准。该模拟测试验证刷新调度逻辑，不代表真实设备帧率测量。\n"
+  "script": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.6/versions/swsh/1.7.6/hud.js",
+  "sha256": "7b2349e69a15f32559ec16e98dd3b1f8e4591a45beeb76bc5c6206943001eb4a",
+  "import": "https://raw.githubusercontent.com/niheartent/pokemon_hud_koji/swsh-v1.7.6/versions/swsh/1.7.6/hud.json",
+  "release": "https://github.com/niheartent/pokemon_hud_koji/releases/tag/swsh-v1.7.6",
+  "notes": "# 剑盾 v1.7.6\n\n- 移除设置中已失效的独立“HUD 宽度”控件。\n- 保留“调节面板宽度”作为唯一有效的宽度设置，并自动清理旧版剑盾宽度缓存。\n\n验证：剑盾构建及设置页回归测试通过。\n\n# 剑盾 v1.7.5\n\n- 修复队伍宝可梦搭档标记重复：名字旁不再显示第二枚，保留剑盾右侧标识栏中的单枚图标。\n- 黑白版展示入口独立，不需要随此修复改动。\n\n验证：完整构建及仓库回归测试通过。\n\n# 剑盾 v1.7.4\n\n- 跟进弦九 v5.9.6 的最佳伙伴缎带标记，并按剑盾队伍徽章布局显示。\n- 白天与暗色主题沿用剑盾自身的徽章质感与颜色，不复用原版页面样式。\n- 搭档加点按钮同步移除旧前置图标，保留原有计算与写回。\n\n验证：`npm run build:swsh`、`npm run test:swsh`。\n\n# 剑盾 v1.7.3\n\n- 回滚 v1.7.2 中依据网络类型、流量设置和 CPU 核数切换样式的方案；这些条件不能代表 HUD 操作是否流畅。\n- 酒馆同一轮短时连续事件现在共用一个固定 50 毫秒刷新窗口，避免事件处理器重复触发整套 HUD 刷新；后续事件仍会单独刷新。\n- 刷新窗口不会随着后续事件重置，最迟在首次事件后 50 毫秒触发；白天／暗色视觉效果保持原样。\n- 保留剑盾本地布局、双色主题和弦九核心 v5.9.2 的功能接口。\n\n验证：通过 VM 事件源测试验证事件爆发只触发一次刷新、不会重复绑定、后续独立事件仍会刷新；完整测试与发布校验结果以 CI 为准。该模拟测试验证刷新调度逻辑，不代表真实设备帧率测量。\n"
 }
